@@ -1,0 +1,17 @@
+{
+  "name": "rizal-digital-exhibition",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "build": "node build.js"
+  },
+  "devDependencies": {
+    "netlify-plugin-cache": "^1.0.3",
+    "pagefind": "^1.5.2",
+    "sharp": "^0.35.3"
+  }
+}

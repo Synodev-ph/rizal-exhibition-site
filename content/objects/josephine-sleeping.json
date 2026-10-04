@@ -1,0 +1,52 @@
+{
+  "id": "josephine-sleeping",
+  "section": "artist",
+  "category": "of-clay-and-resistance",
+  "order": 8,
+  "title": {
+    "en": "Josephine Sleeping"
+  },
+  "objectType": {
+    "en": "Sculpture",
+    "fil": "Eskultura",
+    "de": "Skulptur"
+  },
+  "description": {
+    "en": "Dubbed Rizal’s Mona Lisa, Josephine Sleeping was molded in Dapitan, personally signed by Rizal. In 2024, the National Museum of the Philippines acquired the statuette, which is currently exhibited in the Spoliarium Gallery.",
+    "fil": "Tinaguriang Mona Lisa ni Rizal, ang Josephine Sleeping ay inanyuan sa Dapitan at personal na nilagdaan ni Rizal. Noong 2024, nakuha ng Pambansang Museo ng Pilipinas ang estatwilya, na nakatanghal sa kasalukuyan sa Spoliarium Gallery.",
+    "de": "Josephine Sleeping, Rizals „Mona Lisa“ genannt, wurde in Dapitan modelliert und von Rizal eigenhändig signiert. 2024 erwarb das Nationalmuseum der Philippinen die Statuette, die derzeit in der Spoliarium-Galerie ausgestellt ist."
+  },
+  "images": [
+    {
+      "src": "josephine-sleeping/front.webp",
+      "alt": "Pale reclining figure of a sleeping woman wrapped in drapery, modelled in the round",
+      "deepZoom": true
+    },
+    {
+      "src": "josephine-sleeping/view-1.webp",
+      "alt": "Josephine Sleeping, alternate view 1"
+    },
+    {
+      "src": "josephine-sleeping/view-2.webp",
+      "alt": "Josephine Sleeping, alternate view 2"
+    },
+    {
+      "src": "josephine-sleeping/view-3.webp",
+      "alt": "Josephine Sleeping, alternate view 3"
+    },
+    {
+      "src": "josephine-sleeping/view-4.webp",
+      "alt": "Josephine Sleeping, alternate view 4"
+    }
+  ],
+  "rights": "National Museum of the Philippines",
+  "author": "Nicole Lasquety",
+  "model3d": {
+    "src": "josephine-sleeping.glb",
+    "poster": "josephine-sleeping/model-poster.webp",
+    "altText": "Interactive 3D model of Rizal's Josephine Sleeping, the reclining figure free to rotate and zoom",
+    "credit": "3D model: photogrammetry by the National Museum of the Philippines"
+  },
+  "related": [],
+  "featured": false
+}

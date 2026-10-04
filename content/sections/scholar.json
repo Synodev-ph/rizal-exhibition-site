@@ -1,0 +1,44 @@
+{
+  "id": "scholar",
+  "title": {
+    "en": "Rizal as Scholar",
+    "fil": "Si Rizal bilang Iskolar",
+    "de": "Rizal als Gelehrter"
+  },
+  "intro": {
+    "en": "Throughout his life as a scholar, José Rizal not only travelled the world, but also encountered, befriended, and learned from exchanges with some of history's notable figures. This not only made him an expert in different fields; it also revealed Rizal's character outside his love for country, always seeking and craving knowledge.",
+    "fil": "Sa buong buhay niya bilang iskolar, hindi lamang naglakbay si José Rizal sa mundo, kundi nakilala, nakipagkaibigan, at natuto rin mula sa palitan ng kaisipan kasama ang ilan sa mga kilalang personalidad ng kasaysayan. Hindi lamang ito naging dahilan upang siya ay maging dalubhasa sa iba't ibang larangan; inilarawan din nito ang pagkatao ni Rizal higit pa sa kanyang pagmamahal sa bayan, laging naghahanap at nauuhaw sa kaalaman.",
+    "de": "Sein ganzes Leben als Gelehrter bereiste José Rizal nicht nur die Welt, sondern begegnete einigen bedeutenden Persönlichkeiten der Geschichte, freundete sich mit ihnen an und lernte aus dem Austausch mit ihnen. Das machte ihn nicht nur zum Experten auf verschiedenen Gebieten; es offenbarte auch Rizals Charakter jenseits seiner Vaterlandsliebe – stets auf der Suche nach Wissen und danach dürstend."
+  },
+  "heroImage": {
+    "src": "sections/scholar.webp",
+    "alt": "Gold-toned stylized portrait of the young José Rizal against painterly brushstrokes"
+  },
+  "categories": [
+    {
+      "id": "science-and-ethnography",
+      "label": {
+        "en": "Science and Ethnography",
+        "fil": "Agham at Etnograpiya",
+        "de": "Wissenschaft und Ethnografie"
+      }
+    },
+    {
+      "id": "teachers-and-mentors",
+      "label": {
+        "en": "Teachers and Mentors",
+        "fil": "Mga Guro at Tagapayo",
+        "de": "Lehrer und Mentoren"
+      }
+    },
+    {
+      "id": "friends-and-hosts",
+      "label": {
+        "en": "Friends and Hosts",
+        "fil": "Mga Kaibigan at Punong-Abala",
+        "de": "Freunde und Gastgeber"
+      }
+    }
+  ],
+  "status": "live"
+}

@@ -1,0 +1,36 @@
+{
+  "id": "ethnographer",
+  "title": {
+    "en": "Rizal as Ethnographer",
+    "fil": "Si Rizal bilang Etnograpo",
+    "de": "Rizal als Ethnograf"
+  },
+  "intro": {
+    "en": "During his trip to Europe in 1888, José Rizal sent 21 objects from London to Berlin, pieces of culture representing communities from all across the country. His ethnographic contributions painted a full picture of the Philippine archipelago and its culture.",
+    "fil": "Sa kanyang paglalakbay sa Europa noong 1888, nagpadala si José Rizal ng 21 bagay mula London patungong Berlin, mga bahagi ng kultura na kumakatawan sa mga pamayanan mula sa iba't ibang panig ng bansa. Ang kanyang mga ambag sa etnograpiya ay lumikha ng isang buong larawan ng kapuluang Pilipino at ng kultura nito.",
+    "de": "Auf seiner Europareise im Jahr 1888 sandte José Rizal 21 Objekte von London nach Berlin – Kulturzeugnisse, die Gemeinschaften aus dem ganzen Land repräsentieren. Seine ethnografischen Beiträge zeichneten ein umfassendes Bild des philippinischen Archipels und seiner Kultur."
+  },
+  "heroImage": {
+    "src": "sections/ethnographer-crown.webp",
+    "alt": "Close-up of the salakot crown, its horn panels joined by silver seams and star- and flower-shaped studs"
+  },
+  "categories": [
+    {
+      "id": "clothing",
+      "label": {
+        "en": "Articles of Clothing",
+        "fil": "Mga Kasuotan",
+        "de": "Kleidungsstücke"
+      }
+    },
+    {
+      "id": "daily-life",
+      "label": {
+        "en": "Technologies of Daily Life",
+        "fil": "Mga Teknolohiya ng Araw-araw na Buhay",
+        "de": "Technologien des Alltags"
+      }
+    }
+  ],
+  "status": "live"
+}

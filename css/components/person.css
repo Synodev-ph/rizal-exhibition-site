@@ -1,0 +1,114 @@
+.person__layout {
+  display: grid;
+  gap: var(--space-xl);
+}
+
+@media (min-width: 60rem) {
+  .person__layout {
+    grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+    gap: var(--space-2xl);
+    align-items: start;
+  }
+
+  .person__portrait-col {
+    position: sticky;
+    top: var(--space-2xl);
+  }
+}
+
+.person-portrait {
+  margin: 0;
+  background: var(--exhibit-frame);
+}
+
+.person-portrait__img {
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  object-fit: contain;
+  background: var(--exhibit-frame);
+}
+
+.person-portrait__credit {
+  margin-top: var(--space-xs);
+  font-size: var(--step--1);
+  color: var(--black-cow);
+}
+
+.person__name {
+  margin-bottom: var(--space-2xs);
+  color: var(--heading-on-light);
+}
+
+.person__role {
+  font-size: var(--step-1);
+  color: var(--black-cow);
+  margin-bottom: var(--space-2xs);
+}
+
+.person__lifespan {
+  font-size: var(--step--1);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--accent-on-light);
+  margin-bottom: var(--space-l);
+}
+
+.person__lifespan:has(+ .person__byline) {
+  margin-bottom: var(--space-2xs);
+}
+
+.person__byline {
+  margin-block: 0 var(--space-l);
+  font-size: var(--step--1);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--black-cow);
+}
+
+.person__quote {
+  margin: 0 0 var(--space-l);
+  max-width: var(--measure);
+  padding-inline-start: var(--space-m);
+  border-inline-start: 3px solid var(--accent-on-light);
+}
+
+.person__quote-text {
+  margin: 0;
+  font-size: var(--step-1);
+  font-style: italic;
+  color: var(--heading-on-light);
+}
+
+.person__quote-text > p {
+  margin: 0;
+}
+
+.person__quote-source {
+  margin-block-start: var(--space-xs);
+  font-size: var(--step--1);
+  color: var(--black-cow);
+}
+
+.person__quote-source cite {
+  font-style: normal;
+}
+
+.person__bio {
+  max-width: var(--measure);
+  display: grid;
+  gap: var(--space-m);
+}
+
+.related-row {
+  margin-top: var(--space-2xl);
+  padding-top: var(--space-l);
+  border-top: 1px solid color-mix(in srgb, var(--black-cow) 20%, transparent);
+}
+
+.related-row__heading {
+  color: var(--accent-on-light);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  font-size: var(--section-title);
+  margin-bottom: var(--space-l);
+}

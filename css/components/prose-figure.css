@@ -1,0 +1,16 @@
+.prose-figure {
+  margin-block: var(--space-xl);
+  margin-inline: 0;
+}
+
+.prose-figure__img {
+  width: 100%;
+  height: auto;
+  background: color-mix(in srgb, var(--black-cow) 12%, transparent);
+}
+
+.prose-figure__caption {
+  margin-block-start: var(--space-xs);
+  font-size: var(--step--1);
+  color: var(--black-cow);
+}
