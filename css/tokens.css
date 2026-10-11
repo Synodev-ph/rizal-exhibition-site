@@ -1,12 +1,21 @@
+/* Design tokens — the only place colours, type, and spacing values live.
+   Source: client art direction (spec, UI/UX section). Usage rules:
+   - --squash (gold): accent on DARK backgrounds only — fails contrast on light.
+   - --falu-red: accent on LIGHT backgrounds only; decorative on dark.
+   - --deep-cove: headings/accents on light; alternative dark surface. */
+
 :root {
+  /* Colour — primary */
   --chinese-black: #151616;
   --black-cow: #4d4c4c;
   --ghost-white: #f8f9fb;
 
+  /* Colour — accents */
   --squash: #f2ac1d;
   --falu-red: #761113;
   --deep-cove: #0f103e;
 
+  /* Semantic colour roles */
   --bg-dark: var(--chinese-black);
   --bg-light: var(--ghost-white);
   --text-on-dark: var(--ghost-white);
@@ -15,12 +24,26 @@
   --accent-on-light: var(--falu-red);
   --heading-on-light: var(--deep-cove);
   --surface-secondary: var(--black-cow);
+  /* The ground an exhibit image is shown against. Exhibit images are never
+     cropped to fill their box (`object-fit: contain`), so whatever the work's
+     proportions, this colour frames it. Kept a shade off the page so a work on a
+     white or transparent ground still reads as a framed object, not a bleed. */
   --exhibit-frame: #eceef2;
+  /* The letterbox behind a contained exhibit photo. Matches the studio backdrop
+     the collection's own photography is shot on (#585848), so the frame is
+     invisible against a full-bleed shot and only shows where an image's
+     proportions differ from its box. */
   --exhibit-frame-dark: #585848;
 
+  /* Typography.
+     Alice ships in Regular 400 only — hierarchy comes from size, spacing,
+     case, and colour, never faux-bold (font-synthesis: none in base.css).
+     Body: Figtree stands in for Gotham until the licence is confirmed
+     (open question #1) — swapping is this one line. */
   --font-heading: "Alice", "Iowan Old Style", "Times New Roman", serif;
   --font-body: "Figtree", "Avenir Next", "Segoe UI", system-ui, sans-serif;
 
+  /* Fluid type scale (minor third-ish, 360px → 1280px viewport) */
   --step--1: clamp(0.93rem, 0.9rem + 0.18vw, 1.2rem);
   --step-0: clamp(1rem, 0.96rem + 0.2vw, 1.13rem);
   --step-1: clamp(1.2rem, 1.13rem + 0.31vw, 1.42rem);
@@ -29,8 +52,10 @@
   --step-4: clamp(2.07rem, 1.85rem + 1.02vw, 2.77rem);
   --step-5: clamp(2.49rem, 2.16rem + 1.45vw, 3.46rem);
 
-  --section-title: 2.625rem;
+  /* Section-title heading size — every h2 that titles a content section. */
+  --section-title: 2.625rem; /* 42px */
 
+  /* Spacing scale */
   --space-2xs: 0.25rem;
   --space-xs: 0.5rem;
   --space-s: 0.75rem;
@@ -40,16 +65,26 @@
   --space-2xl: 4rem;
   --space-3xl: 6rem;
 
+  /* Layout */
   --container-max: 1440px;
   --measure: 65ch;
 
+  /* Motion (every use gated behind prefers-reduced-motion) */
   --ease: cubic-bezier(0.25, 0.1, 0.25, 1);
   --duration-quick: 150ms;
   --duration-slow: 400ms;
 
+  /* Focus */
   --focus-ring-on-dark: var(--squash);
   --focus-ring-on-light: var(--deep-cove);
 
+  /* 3D model stage — flat warm neutral behind interactive 3D objects, shared by
+     the home 3D teaser, the object page's inline gallery, the fullscreen dialog
+     viewer, and the pull-quote band. It was a 45° gradient; it is now the
+     midpoint of that ramp, flat, so an object reads against one even ground.
+     Kept as a linear-gradient() with equal stops because it is consumed both as
+     `background` and as `background-image` (home.css), and the latter cannot
+     take a bare colour. */
   --model-stage-start: #4b4840;
   --model-stage-end: #4b4840;
   --model-stage-gradient: linear-gradient(

@@ -1,3 +1,13 @@
+// @ts-check
+// Object detail page — the core template of the site. One generated page per
+// object at /<section>/<object-id>/ (e.g. /ethnographer/salakot/). Objects and
+// people are always real pages with their own URL, never modals (spec).
+//
+// Layout: gallery (left) + metadata (right) on desktop, stacked on mobile.
+// The only pop-up is the zoom viewer, which feature 09 wires onto the gallery
+// thumbnails; until then a thumbnail is a plain link to the full image so the
+// page works with JS disabled.
+
 import {
   objectCard,
   personCard,
@@ -12,6 +22,16 @@ import { imageUrl, modelUrl, renderImage, viewerImage, viewerModel } from "./med
 import { icons } from "../icons.js";
 import { pick, t } from "../i18n.js";
 
+/**
+ * @typedef {import("../types.js").Site} Site
+ * @typedef {import("../types.js").Section} Section
+ * @typedef {import("../types.js").ContentObject} ContentObject
+ * @typedef {import("../types.js").Person} Person
+ */
+
+// --- SEO slots (full package in feature 12) --------------------------------
+
+/** @param {ContentObject} object @param {Site} site */
 export function objectTitle(object, site) {
   const siteTitle = pick(site.siteTitle);
   const lead = objectName(object);
@@ -22,29 +42,51 @@ export function objectTitle(object, site) {
   return seoTitle(lead, siteTitle);
 }
 
+/** The name an object is referred to by in breadcrumbs, pagers and cards: its
+ *  own/vernacular title when it has one, otherwise the English descriptor. */
 export function objectName(object) {
   return object.title.tl || object.title.en;
 }
 
+/** @param {ContentObject} object */
 export function objectDescription(object) {
   const plain = pick(object.description).replace(/\s+/g, " ").trim();
   if (plain.length <= 155) return plain;
   return plain.slice(0, 152).replace(/\s+\S*$/, "") + "…";
 }
 
+// --- page fragments --------------------------------------------------------
+
+/**
+ * Serialise data as a JSON <script>, escaping `<` so it can't break out of the
+ * element (still valid JSON). The zoom viewer (js/viewer.js) reads it on intent.
+ * @param {string} className @param {unknown} data
+ */
 function jsonScript(className, data) {
   const json = JSON.stringify(data).replace(/</g, "\\u003c");
   return `<script type="application/json" class="${className}">${json}</script>`;
 }
 
+/** @param {Site} site @param {ContentObject} object */
 function renderGallery(site, object) {
+  // The gallery's media = an optional 3D model (always first) followed by the
+  // photos. One stacked slide per medium; only the first (slide 0) is shown.
+  // Clicking a thumbnail swaps which slide is active (js/main.js); the zoom
+  // button opens the <dialog> viewer at whichever medium is showing. Slide 0 is
+  // the eager LCP element and carries the grid→hero view-transition name — the
+  // 3D poster when a model exists, else the first photo.
   const model = object.model3d;
   const hasModel = Boolean(model);
 
+  /** @type {string[]} */
   const slides = [];
+  /** @type {string[]} */
   const thumbItems = [];
 
   if (model) {
+    // Slide 0: the 3D view. The poster shows until the visitor launches it, at
+    // which point js/main.js lazy-loads <model-viewer> + the GLB over it. Without
+    // JS the poster stands in and the photo thumbnails still reach every image.
     const posterImage = { src: model.poster, alt: model.altText };
     const posterPic = renderImage({
       site,
@@ -56,6 +98,12 @@ function renderGallery(site, object) {
       dataVt: vtName("obj", object.id),
     });
     const modelCredit = model.credit ? ` data-credit="${esc(model.credit)}"` : "";
+    // Slide 0 is a render (poster) of the 3D model. Clicking "View in 3D" loads
+    // the interactive <model-viewer> in place — the visitor orbits/zooms it right
+    // here in the gallery (js/main.js loads the library + GLB on that intent, so
+    // neither is in the base bundle). The magnifying-glass zoom button then takes
+    // that same model fullscreen in the dialog viewer. Without JS the poster
+    // render stands in and the photo thumbnails still reach every full image.
     slides.push(`<div class="object-gallery__slide object-gallery__slide--model" data-slide="0"${modelCredit}>
         <div class="object-gallery__model" data-model="${esc(modelUrl(site, model.src))}" data-model-poster="${esc(imageUrl(site, model.poster))}" data-model-alt="${esc(model.altText)}">
           ${posterPic}
@@ -79,6 +127,8 @@ function renderGallery(site, object) {
       className: "object-gallery__thumb-img",
       sizes: "5rem",
     });
+    // No-JS fallback links to the model's poster render (viewable), not the raw
+    // GLB; with JS the click selects slide 0 and the viewer shows the live model.
     thumbItems.push(
       `<li><a class="object-gallery__thumb object-gallery__thumb--model" href="${esc(imageUrl(site, model.poster))}" aria-current="true" data-slide="0"><span class="object-gallery__thumb-badge" aria-hidden="true">3D</span>${posterThumb}<span class="visually-hidden">${esc(t("model3dLabel"))}</span></a></li>`,
     );
@@ -87,7 +137,7 @@ function renderGallery(site, object) {
   const offset = hasModel ? 1 : 0;
   object.images.forEach((img, i) => {
     const idx = offset + i;
-    const isHero = idx === 0;
+    const isHero = idx === 0; // only when there is no model
     const pic = renderImage({
       site,
       image: img,
@@ -107,21 +157,30 @@ function renderGallery(site, object) {
       className: "object-gallery__thumb-img",
       sizes: "5rem",
     });
+    // Stays an <a href> so a no-JS user still reaches each full image; with JS
+    // the click swaps the main slide instead (data-slide).
     thumbItems.push(
       `<li><a class="object-gallery__thumb" href="${esc(imageUrl(site, img.src))}"${current} data-slide="${idx}">${thumb}</a></li>`,
     );
   });
 
+  // Credit follows the active medium. Rendered when any medium has one; hidden
+  // when the shown medium has none (js/main.js keeps it in sync on swap).
   const firstCredit = hasModel ? model.credit ?? null : object.images[0].credit ?? null;
   const anyCredit = (hasModel && Boolean(model.credit)) || object.images.some((img) => img.credit);
   const caption = anyCredit
     ? `\n    <figcaption class="object-gallery__credit" data-gallery-credit${firstCredit ? "" : " hidden"}>${esc(firstCredit ?? "")}</figcaption>`
     : "";
 
+  // Zoom affordance: opens the <dialog> viewer at the current medium. A real
+  // button (keyboard-operable); without JS it does nothing and the thumbnails
+  // below still link each image to its full-resolution file.
   const zoomBtn = `<button class="object-gallery__zoom" type="button" data-viewer-zoom>
       ${icons.zoom}<span class="visually-hidden">${esc(t("zoomInto", { name: object.title.en }))}</span>
     </button>`;
 
+  // Thumbnail strip shows whenever there is more than one medium (a lone photo
+  // with a model still gets a strip: the 3D entry + that photo).
   const thumbs =
     thumbItems.length > 1
       ? `
@@ -130,6 +189,9 @@ ${thumbItems.join("\n")}
   </ul>`
       : "";
 
+  // Viewer descriptor: the 3D entry first (when present), then every image
+  // (full URL + inline deep-zoom source when tiled). data-viewer marks the
+  // region js/main.js binds its handlers to.
   const viewerData = jsonScript("object-gallery__data", [
     ...(model ? [viewerModel(site, model)] : []),
     ...object.images.map((img) => viewerImage(site, img)),
@@ -146,7 +208,11 @@ ${thumbItems.join("\n")}
 </div>`;
 }
 
+/** @param {ContentObject} object */
 function renderMeta(object) {
+  // Labels are translated (t); values are localised content (pick), except the
+  // accession number which is a plain identifier. Object type is a strong search
+  // signal — boost it above the other rows for Pagefind (feature 11).
   const rows = [
     { key: "metaObjectType", value: pick(object.objectType), boost: true },
     { key: "metaMaterials", value: pick(object.materials) },
@@ -166,6 +232,7 @@ ${items}
   </dl>`;
 }
 
+/** @param {Site} site @param {ContentObject[]} explore */
 function renderExplore(site, explore) {
   if (!explore.length) return "";
   const cards = explore.map((obj) => objectCard(site, obj)).join("\n");
@@ -179,6 +246,17 @@ ${cards}
 </section>`;
 }
 
+/**
+ * @param {object} p
+ * @param {Site} p.site
+ * @param {ContentObject} p.object
+ * @param {Section} p.section
+ * @param {ContentObject} [p.prev]
+ * @param {ContentObject} [p.next]
+ * @param {ContentObject[]} p.explore - objects for the "Explore Other Collection" grid
+ * @param {Person[]} [p.relatedPeople] - people who reference this object (reverse
+ *   cross-link, so the person↔object link is navigable both ways)
+ */
 export function renderObject({
   site,
   object,

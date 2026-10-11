@@ -1,12 +1,30 @@
-// Hero video only autoplays when reduced motion is off
+// Site enhancements (vanilla ES module). The site is fully usable without
+// this file — JS only layers behaviour on top (spec: progressive enhancement).
+// Nav toggle, scroll reveals, and the viewers arrive with their features
+// (05, 06, 09, 10).
+
+// Hero background video: play only when motion is welcome. The markup carries
+// no `autoplay`, so reduced-motion users and JS-off users keep the poster still
+// (spec: all motion behind prefers-reduced-motion). Muted + inline so browser
+// autoplay policies allow programmatic play().
 const heroVideo = document.querySelector(".hero__video");
 if (heroVideo instanceof HTMLVideoElement &&
     window.matchMedia("(prefers-reduced-motion: no-preference)").matches) {
-  heroVideo.play().catch(() => {});
+  heroVideo.play().catch(() => {
+    /* Autoplay blocked (e.g. Low Power Mode) — the poster still remains. */
+  });
 }
 
-
-// Animate the signature once it scrolls into view
+// Pull-quote signature (home page): swap the static SVG for the live site's
+// hand-drawn autograph animation once the quote scrolls into view — but only
+// when motion is welcome, so reduced-motion and JS-off visitors keep the SVG
+// permanently (spec: all motion behind prefers-reduced-motion). The WebP is
+// authored to loop once, so after it draws itself it simply holds on the
+// finished signature — no JS-driven stop/freeze needed. Deferred via
+// data-anim-src (rather than a plain src) so reduced-motion visitors never
+// even fetch it, and unhidden only on `load`: an <img> keeps painting its
+// previous image while a new src downloads, so revealing it any earlier
+// stretches the 1x1 placeholder across the whole 240px box.
 const signatureWrap = document.querySelector(".pullquote__signature");
 const signatureAnim = signatureWrap?.querySelector(".pullquote__signature-anim");
 if (
@@ -22,10 +40,19 @@ if (
       (entries, obs) => {
         for (const entry of entries) {
           if (!entry.isIntersecting) continue;
-          signatureAnim.src = animSrc;
-          signatureAnim.hidden = false;
-          signatureSvg?.setAttribute("hidden", "");
           obs.disconnect();
+          // Swap only once the WebP has actually decoded; a failed fetch
+          // simply leaves the SVG in place.
+          signatureAnim.addEventListener(
+            "load",
+            () => {
+              signatureAnim.hidden = false;
+              signatureSvg?.setAttribute("hidden", "");
+            },
+            { once: true },
+          );
+          signatureAnim.src = animSrc; // stays display:none until then
+          break;
         }
       },
       { threshold: 0.4 },
@@ -34,8 +61,10 @@ if (
   }
 }
 
-
-// Mobile nav
+// Navigation: mobile hamburger menu + accessible Jose-Rizal submenu disclosure
+// (feature 06). This is functional (not decorative) enhancement, so it runs
+// regardless of motion preference. Without JS the parent links and footer still
+// reach every section, so the menu degrades gracefully.
 const nav = document.querySelector(".site-nav");
 if (nav) {
   const menuToggle = nav.querySelector(".site-nav__toggle");
@@ -48,7 +77,7 @@ if (nav) {
   menuToggle?.addEventListener("click", () => {
     const open = menuToggle.getAttribute("aria-expanded") === "true";
     menuToggle.setAttribute("aria-expanded", String(!open));
-    if (open) closeDropdowns();
+    if (open) closeDropdowns(); // closing the panel collapses its submenus too
   });
 
   for (const toggle of dropdownToggles) {
@@ -59,6 +88,7 @@ if (nav) {
     });
   }
 
+  // Escape collapses the open submenu and returns focus to its button.
   nav.addEventListener("keydown", (event) => {
     if (event.key !== "Escape") return;
     const open = dropdownToggles.find((t) => t.getAttribute("aria-expanded") === "true");
@@ -68,13 +98,17 @@ if (nav) {
     }
   });
 
+  // A click anywhere outside the nav closes any open submenu.
   document.addEventListener("click", (event) => {
-    if (!nav.contains( (event.target))) closeDropdowns();
+    if (!nav.contains(/** @type {Node} */ (event.target))) closeDropdowns();
   });
 }
 
-
-// Scroll reveals
+// Section-page scroll reveals (feature 05). Cards fade/slide in as they enter
+// the viewport — but only when motion is welcome, and only as an enhancement:
+// the .reveal-ready gate is added by JS, so JS-off and reduced-motion users
+// always see the cards. Scoped to .section-body so detail-page grids are left
+// alone.
 const revealTargets = document.querySelectorAll(
   ".section-body .collection-card, .section-body .essay-card",
 );
@@ -93,13 +127,21 @@ if (
         }
       }
     },
+    // No negative bottom margin: trimming the root by 10% held back the cards
+    // sitting just inside the fold on load, so the first row stayed invisible
+    // until the visitor scrolled. Reveals now fire the moment a card is on
+    // screen, including at load.
     { rootMargin: "0px", threshold: 0.1 },
   );
   for (const el of revealTargets) observer.observe(el);
 }
 
-
-// Section tabs
+// Category tabs (Ethnographer): progressive-enhancement panel switching. Tab
+// links stay plain <a href="#id"> anchors, so with JS off every panel stays
+// visible/stacked (spec: fully readable without JS). With JS, only the panel
+// matching location.hash is shown; clicking a tab lets the browser update the
+// hash natively (no preventDefault), and a hashchange listener does the swap
+// — so back/forward and direct #category-... links work for free.
 const tabBar = document.querySelector(".section-tabs");
 const sectionPanels = document.querySelectorAll(".section-panel");
 if (tabBar && sectionPanels.length) {
@@ -119,6 +161,10 @@ if (tabBar && sectionPanels.length) {
   window.addEventListener("hashchange", () => activatePanel(location.hash.slice(1)));
 }
 
+// About page — "Messages" video grid (feature 07): load the player only on
+// click. The poster + caption stand without JS; clicking a play button swaps the
+// poster for a <video> streaming from data-video (self-hosted MP4 — open question
+// #10). Guarding on data-video means a button with no source yet does nothing.
 for (const button of document.querySelectorAll(".message-card__play")) {
   button.addEventListener("click", () => {
     const src = button.getAttribute("data-video");
@@ -135,12 +181,19 @@ for (const button of document.querySelectorAll(".message-card__play")) {
     video.append(source);
     media.replaceChildren(video);
     video.focus();
-    video.play?.().catch(() => {});
+    video.play?.().catch(() => {
+      /* Source not available yet (message videos pending, open question #10). */
+    });
   });
 }
 
-
-// Video modal
+// Hero video CTAs (site.json heroCtas[].video): each is a real link to the
+// video file — works with JS off, the browser plays it natively — that JS
+// intercepts and opens in a native <dialog> instead, so visitors stay on the
+// page. One dialog serves them all; the source is set per click. Same accessible shape as the zoom viewer (09): built-in focus trap,
+// Esc via the `cancel` event, backdrop click, and a #watch history entry so
+// the back button closes it — but far simpler (no deep zoom), so it lives here
+// rather than as its own lazy-loaded module.
 let videoDialog;
 let videoDialogEl;
 let videoDialogHistoryPushed = false;
@@ -149,6 +202,7 @@ function buildVideoDialog() {
   if (videoDialog) return;
   videoDialog = document.createElement("dialog");
   videoDialog.className = "video-dialog";
+  // Fallback only — openVideoDialog relabels it with the CTA that opened it.
   videoDialog.setAttribute("aria-label", "Watch the video");
   videoDialog.innerHTML = `
     <button class="video-dialog__close" type="button">
@@ -161,20 +215,39 @@ function buildVideoDialog() {
 
   videoDialog.addEventListener("click", (event) => {
     if (event.target.closest(".video-dialog__close")) closeVideoDialog();
-    else if (event.target === videoDialog) closeVideoDialog();
+    else if (event.target === videoDialog) closeVideoDialog(); // backdrop click
   });
   videoDialog.addEventListener("cancel", (event) => {
-    event.preventDefault();
+    event.preventDefault(); // keep dialog.close() routed through closeVideoDialog
     closeVideoDialog();
   });
 }
 
-function openVideoDialog(src) {
+// Which encode to pull when a CTA ships two (data-video = 1080p,
+// data-video-small = 720p). Several <source> children would not do this: both
+// rungs are H.264/MP4, so the browser takes the first it can decode and the
+// 1080p always wins — bandwidth-aware selection needs HLS/DASH and a JS player
+// this site does not carry. So the choice is made on the one signal available
+// up front: how many real pixels the screen has. `screen` rather than the
+// dialog's own box (min(92vw, 60rem)) because fullscreen is one tap away, and
+// a video that turned soft on the way there would be the wrong trade.
+const FULL_RUNG_MIN_WIDTH = 1920;
+
+function pickVideoRung(src, small) {
+  if (!small) return src;
+  const physical = window.screen.width * (window.devicePixelRatio || 1);
+  return physical >= FULL_RUNG_MIN_WIDTH ? src : small;
+}
+
+function openVideoDialog(src, small, label) {
   if (!src) return;
   buildVideoDialog();
-  videoDialogEl.src = src;
+  if (label) videoDialog.setAttribute("aria-label", label);
+  videoDialogEl.src = pickVideoRung(src, small);
   videoDialog.showModal();
-  videoDialogEl.play().catch(() => {});
+  videoDialogEl.play().catch(() => {
+    /* Autoplay blocked — the visible native controls let the visitor start it. */
+  });
   history.pushState({ video: true }, "", "#watch");
   videoDialogHistoryPushed = true;
 }
@@ -184,11 +257,11 @@ function closeVideoDialog() {
   videoDialogEl?.pause();
   if (videoDialogEl) {
     videoDialogEl.removeAttribute("src");
-    videoDialogEl.load();
+    videoDialogEl.load(); // stop buffering/playback, free the resource
   }
   if (videoDialogHistoryPushed) {
     videoDialogHistoryPushed = false;
-    history.back();
+    history.back(); // pop the #watch entry → URL returns to the page beneath
   } else if (location.hash === "#watch") {
     history.replaceState(null, "", location.pathname + location.search);
   }
@@ -201,14 +274,29 @@ window.addEventListener("popstate", () => {
   }
 });
 
-const heroVideoCta = document.querySelector(".hero-btn[data-video]");
-heroVideoCta?.addEventListener("click", (event) => {
-  event.preventDefault();
-  openVideoDialog(heroVideoCta.getAttribute("data-video"));
-});
+// Every video CTA in the hero, not just the first — the hero now carries two
+// (the intro AVP and "Rizal as Artist") beside the "Read more" link, and they
+// share the one dialog, which takes its source per click.
+for (const cta of document.querySelectorAll(".hero-btn[data-video]")) {
+  cta.addEventListener("click", (event) => {
+    event.preventDefault();
+    openVideoDialog(
+      cta.getAttribute("data-video"),
+      cta.getAttribute("data-video-small"),
+      // The button's own label names the dialog, so a screen reader hears
+      // which of the two videos opened rather than a generic "Watch the video".
+      cta.textContent.trim(),
+    );
+  });
+}
 
-
-// Object gallery + viewer
+// Object gallery + zoom viewer (feature 09). Two behaviours, both enhancement:
+//   - Thumbnails swap which image the main gallery box shows (inline), and mark
+//     the active thumbnail. They stay <a href> links, so a no-JS user still
+//     reaches every full-resolution image.
+//   - The zoom button opens the deep-zoom <dialog> at whichever image is showing.
+//     The viewer module (and OpenSeadragon) dynamic-imports only on that intent,
+//     so the base bundle stays tiny and nothing loads until the user zooms.
 const gallery = document.querySelector(".object-gallery[data-viewer]");
 if (gallery) {
   const slides = [...gallery.querySelectorAll(".object-gallery__slide")];
@@ -217,6 +305,8 @@ if (gallery) {
   const zoomBtn = gallery.querySelector("[data-viewer-zoom]");
   let current = 0;
 
+  // Show image i in the main box: reveal its slide, mark its thumbnail, and move
+  // the credit line to match.
   const setActive = (i) => {
     current = Math.max(0, Math.min(slides.length - 1, i));
     slides.forEach((slide, n) => (slide.hidden = n !== current));
@@ -233,20 +323,30 @@ if (gallery) {
 
   for (const thumb of thumbs) {
     thumb.addEventListener("click", (event) => {
-      event.preventDefault();
+      event.preventDefault(); // take over the <a href> fallback with an inline swap
       setActive(Number(thumb.getAttribute("data-slide")) || 0);
     });
   }
 
+  /** @type {Promise<typeof import("./viewer.js")> | undefined} */
   let viewerModule;
   const loadViewer = () => (viewerModule ??= import("./viewer.js"));
 
+  /** @type {Promise<any> | undefined} */
   let modelViewerModule;
+  // The vendored @google/model-viewer ESM (self-registers <model-viewer>);
+  // resolved next to the hashed main bundle (dist/assets → ../vendor/…). Loaded
+  // on intent (first "View in 3D" / hover), so it never enters the base bundle.
   const loadModelViewer = () =>
     (modelViewerModule ??= import(
       new URL("../vendor/model-viewer/model-viewer.min.js", import.meta.url).href
     ));
 
+  // 3D model (feature 10) — inline. Slide 0 shows a poster render with a "View in
+  // 3D" button; clicking it lazy-loads <model-viewer> and streams the GLB (with a
+  // % indicator) into the gallery box, where the visitor orbits/zooms it in place.
+  // The magnifying-glass zoom button (below) takes that same model fullscreen in
+  // the dialog viewer. Without JS the poster stands in (progressive enhancement).
   const modelMount = gallery.querySelector(".object-gallery__model");
   if (modelMount) {
     const launch = modelMount.querySelector(".object-gallery__model-launch");
@@ -257,10 +357,13 @@ if (gallery) {
     const prompt = modelMount.querySelector("[data-model-prompt]");
     let started = false;
 
+    // Once loaded, flash the interaction hints so the visitor knows the model is
+    // interactive: "Drag to rotate" (1.5s) then "Scroll to zoom" (1.5s), then fade
+    // — or dismiss the moment they start interacting.
     const promptItems = prompt ? [...prompt.querySelectorAll("[data-prompt]")] : [];
     let hinted = false;
     const showDragPrompt = (mv) => {
-      if (!prompt || !promptItems.length || hinted) return;
+      if (!prompt || !promptItems.length || hinted) return; // once per activation
       hinted = true;
       const showItem = (i) => promptItems.forEach((el, n) => el.classList.toggle("is-active", n === i));
       const timers = [];
@@ -273,9 +376,9 @@ if (gallery) {
         setTimeout(() => (prompt.hidden = true), 300);
       };
       prompt.hidden = false;
-      showItem(0);
+      showItem(0); // "Drag to rotate"
       requestAnimationFrame(() => prompt.classList.add("is-visible"));
-      timers.push(setTimeout(() => showItem(1), 1500));
+      timers.push(setTimeout(() => showItem(1), 1500)); // → "Scroll to zoom"
       timers.push(setTimeout(dismiss, 3000));
       mv.addEventListener("pointerdown", dismiss, { once: true });
     };
@@ -284,10 +387,16 @@ if (gallery) {
       if (started) return;
       started = true;
       launch?.setAttribute("hidden", "");
+      // Replace the poster with the model (model-viewer's own `poster` attribute
+      // covers the load), so the live model fills the full gallery box rather
+      // than appearing small beneath the still.
       posterPic?.setAttribute("hidden", "");
       if (progress) progress.hidden = false;
       loadModelViewer()
         .then((mod) => {
+          // Point model-viewer at the vendored meshopt decoder (our GLBs are
+          // meshopt-compressed; model-viewer ships no default location, so an
+          // unset one would silently fail to decode).
           mod.ModelViewerElement.meshoptDecoderLocation = new URL(
             "../vendor/model-viewer/meshopt_decoder.js",
             import.meta.url,
@@ -298,20 +407,24 @@ if (gallery) {
           mv.setAttribute("alt", modelMount.getAttribute("data-model-alt") || "");
           const poster = modelMount.getAttribute("data-model-poster");
           if (poster) mv.setAttribute("poster", poster);
-          mv.setAttribute("camera-controls", "");
+          mv.setAttribute("camera-controls", ""); // orbit + zoom in place
           mv.setAttribute("touch-action", "pan-y");
           mv.setAttribute("interaction-prompt", "none");
+          // Canonical framing + lighting. The poster is captured with these exact
+          // values at 4/3, so the model reveals with no jump from the still.
+          // Keep the two in sync.
           mv.setAttribute("camera-orbit", "20deg 70deg auto");
           mv.setAttribute("shadow-intensity", "1");
           mv.setAttribute("shadow-softness", "0.9");
           mv.setAttribute("exposure", "1.05");
+          // AR on supporting devices only (the button self-hides elsewhere).
           mv.setAttribute("ar", "");
           mv.setAttribute("ar-modes", "webxr scene-viewer quick-look");
           mv.addEventListener("progress", (event) => {
-            const total =  (event).detail?.totalProgress ?? 0;
+            const total = /** @type {CustomEvent} */ (event).detail?.totalProgress ?? 0;
             const pct = Math.round(total * 100);
             if (percent) percent.textContent = `${pct}%`;
-            if (bar) bar.style.width = `${pct}%`;
+            if (bar) bar.style.width = `${pct}%`; // 0 → 100 fill
           });
           mv.addEventListener("load", () => {
             if (bar) bar.style.width = "100%";
@@ -323,6 +436,7 @@ if (gallery) {
           mv.focus?.();
         })
         .catch(() => {
+          // Library or model failed to load — restore the poster affordance.
           started = false;
           launch?.removeAttribute("hidden");
           posterPic?.removeAttribute("hidden");
@@ -332,14 +446,20 @@ if (gallery) {
 
     launch?.addEventListener("click", (event) => {
       event.preventDefault();
-      event.stopPropagation();
+      event.stopPropagation(); // load inline; don't also open the fullscreen dialog
       activateModel();
     });
+    // Warm the library on first hover so the click feels instant.
     launch?.addEventListener("pointerenter", loadModelViewer, { once: true });
   }
 
+  // Fullscreen zoom is desktop-only: on mobile the magnifier is hidden
+  // (viewer.css) and tapping the image must not open the dialog. Checked at event
+  // time so it tracks rotation / resize; below 52rem is the site's mobile view.
   const fullscreenAllowed = () => window.matchMedia("(min-width: 52rem)").matches;
 
+  // onChange keeps the page gallery on whatever image the viewer last showed, so
+  // navigating inside the dialog and closing it leaves the page on that image.
   const openViewer = () =>
     fullscreenAllowed()
       ? loadViewer().then((m) => m.open(gallery, current, { onChange: setActive }))
@@ -348,6 +468,9 @@ if (gallery) {
     if (fullscreenAllowed()) loadViewer();
   };
   zoomBtn?.addEventListener("click", openViewer);
+  // Clicking a photo in the main box also zooms it (the image shows a zoom-in
+  // cursor). The 3D slide is exempt: you drag the model to orbit it, so a click
+  // there must NOT open fullscreen — that is the magnifying-glass button's job.
   const stage = gallery.querySelector(".object-gallery__slides");
   stage?.addEventListener("click", (event) => {
     if (event.target instanceof Element && event.target.closest(".object-gallery__slide--model")) {
@@ -355,9 +478,13 @@ if (gallery) {
     }
     openViewer();
   });
+  // Warm the module (and OpenSeadragon) on first hover of the zoom surface, so
+  // the click feels instant — but never on mobile, where the viewer is disabled.
   zoomBtn?.addEventListener("pointerenter", warmViewer, { once: true });
   stage?.addEventListener("pointerenter", warmViewer, { once: true });
 
+  // Deep link: /<object>/#view=<n> selects that image and (on desktop) opens the
+  // viewer. On mobile it still selects the image inline, but never opens fullscreen.
   const deep = location.hash.match(/^#view=(\d+)$/);
   if (deep) {
     const i = Math.max(0, Number(deep[1]) - 1);
@@ -368,8 +495,18 @@ if (gallery) {
   }
 }
 
-
-// Search (Pagefind UI is loaded on first open)
+// Search (feature 11): the Pagefind UI. Two entry points share one lazy loader:
+//   - the header search panel (primary UX) — a disclosure the nav search icon
+//     drops below itself, with a close button; Pagefind boots on first open
+//     ("on search intent"), never before.
+//   - the /search/ page — the no-JS fallback destination; with JS on, it mounts
+//     the same UI inline.
+// Pagefind runs entirely in the browser over a static index under /pagefind/:
+// the query never reaches a server (no injection surface), and the UI renders
+// queries/excerpts as text, so a typed payload can't execute. Assets resolve
+// next to the hashed main bundle (dist/assets → ../pagefind/…), staying
+// basePath-relative (rule 7). No other page loads Pagefind.
+/** @type {Promise<void> | undefined} */
 let pagefindReady;
 function ensurePagefind() {
   if (pagefindReady) return pagefindReady;
@@ -388,32 +525,42 @@ function ensurePagefind() {
   return pagefindReady;
 }
 
+/** Boot a Pagefind UI into `selector` (once the library has loaded). */
 function mountPagefind(selector) {
   return ensurePagefind().then(() => {
-    new  (window).PagefindUI({
+    // PagefindUI is a global registered by the loaded UI bundle.
+    new /** @type {any} */ (window).PagefindUI({
       element: selector,
       showImages: false,
       showSubResults: true,
       translations: { placeholder: "Search the exhibition" },
     });
+    // The UI input carries a placeholder but no programmatic label; give it an
+    // accessible name so the empty field still passes axe.
     document
       .querySelector(`${selector} .pagefind-ui__search-input`)
       ?.setAttribute("aria-label", "Search the exhibition");
   });
 }
 
+// The /search/ page mounts its own inline UI (the no-JS fallback destination).
 if (document.getElementById("search")) mountPagefind("#search");
 
+// Header search panel — the primary search UX (feature 11 revision). Without JS
+// the icon stays a plain link to /search/; here we upgrade it into a disclosure
+// that drops the panel below the icon.
 const searchToggle = document.querySelector(".site-nav__search");
 const searchPanel = document.getElementById("site-search");
 if (searchToggle instanceof HTMLElement && searchPanel) {
   const closeBtn = searchPanel.querySelector(".site-search__close");
   const focusInput = () =>
-     (
+    /** @type {HTMLElement | null} */ (
       searchPanel.querySelector(".pagefind-ui__search-input")
     )?.focus();
   let mounted = false;
 
+  // Disclosure semantics, added only now that JS runs (a no-JS link must not
+  // claim aria-expanded).
   searchToggle.setAttribute("aria-controls", "site-search");
   searchToggle.setAttribute("aria-expanded", "false");
 
@@ -433,17 +580,19 @@ if (searchToggle instanceof HTMLElement && searchPanel) {
   };
 
   searchToggle.addEventListener("click", (event) => {
-    event.preventDefault();
+    event.preventDefault(); // don't navigate to /search/ — drop the panel instead
     if (searchPanel.hidden) open();
     else close();
   });
   closeBtn?.addEventListener("click", () => close());
+  // Escape closes and returns focus to the icon.
   document.addEventListener("keydown", (event) => {
     if (event.key === "Escape" && !searchPanel.hidden) close();
   });
+  // A click outside the panel (and not on the toggle) closes it.
   document.addEventListener("click", (event) => {
     if (searchPanel.hidden) return;
-    const target =  (event.target);
+    const target = /** @type {Node} */ (event.target);
     if (!searchPanel.contains(target) && !searchToggle.contains(target)) {
       close({ returnFocus: false });
     }

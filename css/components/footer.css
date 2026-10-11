@@ -1,8 +1,15 @@
+/* Site footer (final, ref ../../footer-design-final.png) — a dark band split
+   into a left panel (NMP logo + partner seals + pinned address) and a body
+   (bold nav row, About + gold CTA pills, gold social icons), with contact and
+   copyright in the bottom bar. Panel shares the footer colour; a hairline rule
+   divides it from the body. Gold accents on dark per the token rules. */
+
 .site-footer {
   --fpad: clamp(var(--space-l), 5vw, var(--space-3xl));
   padding: 0;
 }
 
+/* ── Top: panel + body ───────────────────────────────────────────────── */
 .footer-top {
   display: grid;
   grid-template-columns: 1fr;
@@ -26,6 +33,7 @@
   }
 }
 
+/* Panel — same colour as the footer; logo top, seals, pinned address bottom */
 .footer-panel {
   display: flex;
   flex-direction: column;
@@ -50,6 +58,7 @@
   flex-wrap: wrap;
 }
 
+/* The Ethnologisches Museum lockup is wide — its own full-width row. */
 .footer-panel__seals li:first-child {
   width: 100%;
   height: 6rem;
@@ -60,16 +69,22 @@
   max-height: 7rem;
 }
 
+/* German (Ethnologisches) lockup rendered as wide as the NMP logo above it. */
 .footer-panel__seals li:first-child img {
   width: 100%;
 }
 
+/* Seals whose own artwork needs a light backing to read on the dark panel. */
 .footer-seal--chip {
   background: var(--ghost-white);
   padding: 3px;
   border-radius: 8px;
 }
 
+/* A seal with a visible name line underneath (its art alone doesn't spell out
+   who it is). The seal itself renders 10% smaller than its plain siblings
+   (max-height 7rem) to leave room for the caption at a similar overall
+   footprint. */
 .footer-seal--captioned {
   display: flex;
   flex-direction: column;
@@ -110,6 +125,7 @@
   color: var(--accent-on-dark);
 }
 
+/* ── Body ────────────────────────────────────────────────────────────── */
 .footer-body {
   display: flex;
   flex-direction: column;
@@ -166,19 +182,12 @@
   text-transform: uppercase;
   letter-spacing: 0.08em;
   margin-block-end: var(--space-s);
-}
-
-.footer-heading a {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--space-2xs);
-  text-decoration: none;
   color: var(--accent-on-dark);
 }
 
-.footer-heading a:hover {
-  text-decoration: underline;
-  text-underline-offset: 0.25em;
+/* Orange heading — ID selector so nothing downstream can wash it out */
+#footer-about {
+  color: var(--accent-on-dark);
 }
 
 .footer-exhibition {
@@ -199,6 +208,11 @@
   margin-bottom: 3rem;
 }
 
+/* Right column: pills on top, social icons pinned to the bottom-right.
+   Mobile-first — until the 48rem two-column .footer-grid kicks in this is the
+   footer's last block, running full width under the About text, so the pills,
+   the social row and the contact line all centre rather than hanging off the
+   right edge against nothing. */
 .footer-side {
   display: flex;
   flex-direction: column;
@@ -241,10 +255,13 @@
   flex: none;
 }
 
+/* Gold social icons — 15% larger than the base circle */
 .footer-social {
   list-style: none;
   margin: 0;
   padding: 0;
+  /* The four icons sit as a 2×2 block on mobile. A wrapping flex row breaks
+     them 3 + 1 at this width, which reads as a stray icon rather than a set. */
   display: grid;
   grid-template-columns: repeat(2, auto);
   justify-content: center;
@@ -276,6 +293,7 @@
   height: 3rem;
 }
 
+/* Contact — sits under the social icons in the right column */
 .footer-contact {
   display: flex;
   flex-wrap: wrap;
@@ -284,11 +302,14 @@
   gap: var(--space-2xs) var(--space-m);
 }
 
+/* From the 48rem .footer-grid breakpoint the side column sits in its own
+   right-hand track, where the stack reads as a right-aligned group again. */
 @media (min-width: 48rem) {
   .footer-side {
     align-items: flex-end;
   }
 
+  /* Back to a single right-aligned row once the column is wide enough. */
   .footer-social {
     display: flex;
     flex-wrap: wrap;
@@ -309,6 +330,11 @@
   color: var(--accent-on-dark);
 }
 
+/* ── Copyright bar (compact) ─────────────────────────────────────────── */
+/* The inline padding scales with the viewport: a flat 5rem is 160px of gutter
+   on a 390px phone, which squeezed the line into the middle third and wrapped
+   it. Centred on mobile to match the side column above it, left-aligned again
+   once the footer goes two-column. */
 .site-footer__bar {
   padding: 2rem clamp(var(--space-l), 6vw, 5rem);
   border-top: 1px solid color-mix(in srgb, var(--text-on-dark) 15%, transparent);

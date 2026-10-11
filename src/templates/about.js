@@ -1,21 +1,45 @@
+// @ts-check
+// About page (content/about.json). Dark hero (title + intro standfirst) over the
+// write-up blurbs — the project, then each partner institution — and the
+// "Messages" video grid. Each message is a real poster + name/role caption; the
+// player loads only on a click — js/main.js reads data-video and swaps in a
+// <video> — so the page is complete without JS (posters + captions), and the
+// not-yet-hosted MP4 paths never reach the link checker (they live in a data-*
+// attribute, injected on intent). Video hosting is open question #10
+// (self-hosted MP4 is the default the click-to-load assumes).
+
 import { esc } from "./layout.js";
 import { renderImage } from "./media.js";
 import { renderMarkdown } from "./fragments.js";
 import { icons } from "../icons.js";
 import { pick, t } from "../i18n.js";
 
+/**
+ * @typedef {import("../types.js").Site} Site
+ * @typedef {import("../types.js").About} About
+ * @typedef {import("../types.js").AboutBlurb} AboutBlurb
+ * @typedef {import("../types.js").AboutMessage} AboutMessage
+ */
+
+// --- SEO slots (full package in feature 12) --------------------------------
+
+/** @param {Site} site */
 export function aboutTitle(site) {
   const title = t("aboutProject");
   const full = `${title} | ${pick(site.siteTitle)}`;
   return full.length <= 70 ? full : title;
 }
 
+/** @param {About} about */
 export function aboutDescription(about) {
   const plain = pick(about.intro).replace(/\s+/g, " ").trim();
   if (plain.length <= 155) return plain;
   return plain.slice(0, 152).replace(/\s+\S*$/, "") + "…";
 }
 
+// --- Institution blurbs ----------------------------------------------------
+
+/** @param {AboutBlurb} blurb */
 function renderBlurb(blurb) {
   return `<section class="about-blurb">
       <h2 class="about-blurb__heading">${esc(pick(blurb.heading))}</h2>
@@ -25,6 +49,11 @@ ${renderMarkdown(pick(blurb.body))}
     </section>`;
 }
 
+// --- Messages video grid ---------------------------------------------------
+
+/** One message card: poster + a play button that loads the player on click
+ *  (progressive enhancement). Without JS the poster + caption still stand.
+ * @param {Site} site @param {AboutMessage} message @param {number} index */
 function renderMessage(site, message, index) {
   const poster = renderImage({
     site,
@@ -33,8 +62,14 @@ function renderMessage(site, message, index) {
     loading: index < 3 ? "eager" : "lazy",
     sizes: "(min-width: 60rem) 28rem, (min-width: 40rem) 45vw, 100vw",
   });
+  // The dignitary videos ship with the site, from static/video/. They used to
+  // stream from the museum origin's phase-1 /assets/video/ tree, which kept
+  // ~210 MB out of the repo — but that tree may not outlive this rebuild's
+  // launch, and a Messages grid whose every play button 404s is worse than a
+  // heavier deploy. `message.video` is basePath-relative (rule 7 — no
+  // hardcoded domain), so it plays the same in local dev and in prod.
   const dataVideo = message.video
-    ? ` data-video="${esc(site.baseUrl)}/${esc(message.video)}"`
+    ? ` data-video="${esc(site.basePath)}${esc(message.video)}"`
     : "";
   return `<li class="message-card">
   <div class="message-card__media">
@@ -50,9 +85,18 @@ function renderMessage(site, message, index) {
 </li>`;
 }
 
+// --- Page ------------------------------------------------------------------
+
+/**
+ * @param {object} p
+ * @param {Site} p.site
+ * @param {About} p.about - parsed content/about.json
+ */
 export function renderAbout({ site, about }) {
   const blurbs = about.blurbs.map(renderBlurb).join("\n    ");
   const messages = about.messages.map((m, i) => renderMessage(site, m, i)).join("\n");
+  // Decorative hero background (the title is adjacent, so alt=""), same
+  // foot-set, scrimmed treatment as the section and Rizal-in-Germany heroes.
   const heroBg = renderImage({
     site,
     image: { src: "home/about-the-project.webp", alt: "" },

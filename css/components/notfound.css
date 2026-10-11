@@ -1,3 +1,6 @@
+/* Custom 404 — a short dark band with escape routes back into the IA. Gold on
+   chinese-black is high-contrast, so the code + links stay AA. */
+
 .notfound {
   display: flex;
   align-items: center;

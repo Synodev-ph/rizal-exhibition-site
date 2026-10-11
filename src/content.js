@@ -1,11 +1,28 @@
+// @ts-check
+// Content model: loads and validates every flat file in /content.
+// Bad content fails the build loudly — each error names the offending
+// file and field. HTML is a build artifact; these files are the source
+// of truth (spec: "Data").
+
 import { existsSync, readdirSync, readFileSync, statSync } from "node:fs";
 import path from "node:path";
 
 const KEBAB = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
+// Locale-variant Markdown: `<slug>.fil.md` / `<slug>.de.md` translate a long-form
+// essay/page. Excluded from the base .md scan (they'd fail the kebab filename
+// check); the English base file always defines the record and its route.
 const LOCALE_VARIANT_MD = /\.(?:fil|de)\.md$/;
 const IMAGE_FILE = /^[a-z0-9]+(?:-[a-z0-9]+)*\.(?:avif|jpe?g|png|webp)$/;
 const MODEL_FILE = /^[a-z0-9]+(?:-[a-z0-9]+)*\.glb$/;
+// Video paths are "video/<name>.mp4", relative to basePath: the encodes live in
+// static/, which build.js copies verbatim, rather than assets-src/ — nothing is
+// derived from them at build time, so the committed file is the shipped file.
+const VIDEO_PATH = /^video\/[a-z0-9]+(?:-[a-z0-9]+)*\.mp4$/;
+// Per-model download budget (feature 10): a GLB streams to every visitor who
+// opens the 3D view, so the build fails on anything heavier.
 const MODEL_MAX_MB = 8;
+// `TODO`/`TBD` stay case-sensitive: "todo" is an everyday Spanish word and
+// content is i18n-ready (title.es today, full ES/FIL rollout later).
 const PLACEHOLDER_PATTERNS = [
   { re: /\blorem\b/i, label: "lorem" },
   { re: /\bTODO\b/, label: "TODO" },
@@ -17,8 +34,10 @@ const PLACEHOLDER_PATTERNS = [
 
 class ContentErrors {
   constructor() {
+    /** @type {string[]} */
     this.list = [];
   }
+  /** @param {string} file @param {string} field @param {string} message */
   add(file, field, message) {
     this.list.push(`${file} → ${field}: ${message}`);
   }
@@ -30,6 +49,9 @@ class ContentErrors {
     );
   }
 }
+
+// ---------------------------------------------------------------------------
+// Field helpers. Each records an error and returns false when invalid.
 
 function isNonEmptyString(v) {
   return typeof v === "string" && v.trim() !== "";
@@ -52,6 +74,11 @@ function optString(errors, file, obj, field) {
   return true;
 }
 
+// A translatable field: either a plain non-empty string (English, or content not
+// yet translated — pick() falls back to en at render) or a locale map
+// { en, fil?, de? } with `en` required and fil/de optional non-empty strings.
+// This keeps content i18n-ready without forcing every field to be translated at
+// once (spec: "locale-keyed strings in data; fallback, never a broken build").
 function reqLocalized(errors, file, obj, field) {
   const v = obj[field];
   if (isNonEmptyString(v)) return true;
@@ -99,6 +126,7 @@ function reqArray(errors, file, obj, field) {
   return true;
 }
 
+/** Flag keys the schema doesn't know — catches typo'd field names. */
 function checkKeys(errors, file, obj, allowed, context = "") {
   for (const key of Object.keys(obj)) {
     if (!allowed.includes(key)) {
@@ -113,6 +141,10 @@ function checkKebab(errors, file, field, value) {
   }
 }
 
+/**
+ * Validate an image path like "salakot/front.webp": kebab-case segments,
+ * allowed extension, and the file must exist under assets-src/images/.
+ */
 function checkImagePath(errors, file, field, src, assetsDir) {
   const segments = src.split("/");
   const fileName = segments.pop() ?? "";
@@ -126,12 +158,39 @@ function checkImagePath(errors, file, field, src, assetsDir) {
   }
 }
 
-function validateImage(errors, file, field, img, assetsDir) {
-  if (typeof img !== "object" || img === null || Array.isArray(img)) {
-    errors.add(file, field, "must be an object { src, alt, credit?, deepZoom? }");
+/**
+ * Validate a video path like "video/rizal-intro-720p.mp4": the shape above, and
+ * the file must exist under static/.
+ *
+ * Worth checking now that these ship from the repo — while they streamed from
+ * the museum origin a typo here was unverifiable, and it still is not caught
+ * downstream: the About page's videos hang off `data-video` attributes, which
+ * linkinator does not follow, so a bad path would reach production as a play
+ * button that does nothing.
+ *
+ * `staticDir` is optional so a caller that only wants the content rules can
+ * skip the filesystem; the shape check always runs.
+ */
+function checkVideoPath(errors, file, field, src, staticDir) {
+  if (!VIDEO_PATH.test(src)) {
+    errors.add(file, field, `"${src}" is not a kebab-case video path ("video/<name>.mp4")`);
     return;
   }
-  checkKeys(errors, file, img, ["src", "alt", "credit", "deepZoom"], field);
+  if (staticDir && !existsSync(path.join(staticDir, src))) {
+    errors.add(file, field, `referenced video "${src}" not found in static/`);
+  }
+}
+
+// Crop anchors a content editor can set on an image; anything else is centred.
+const IMAGE_POSITIONS = ["top", "upper", "bottom"];
+
+/** Shared image shape: { src, alt, credit?, deepZoom?, position? }. */
+function validateImage(errors, file, field, img, assetsDir) {
+  if (typeof img !== "object" || img === null || Array.isArray(img)) {
+    errors.add(file, field, "must be an object { src, alt, credit?, deepZoom?, position? }");
+    return;
+  }
+  checkKeys(errors, file, img, ["src", "alt", "credit", "deepZoom", "position"], field);
   if (reqString(errors, file, img, "src") === false) {
     errors.add(file, `${field}.src`, "missing image source");
   } else {
@@ -146,7 +205,13 @@ function validateImage(errors, file, field, img, assetsDir) {
   if (img.deepZoom !== undefined && typeof img.deepZoom !== "boolean") {
     errors.add(file, `${field}.deepZoom`, "must be a boolean");
   }
+  if (img.position !== undefined && !IMAGE_POSITIONS.includes(img.position)) {
+    errors.add(file, `${field}.position`, `must be one of ${IMAGE_POSITIONS.join(", ")}`);
+  }
 }
+
+// ---------------------------------------------------------------------------
+// Per-schema validators.
 
 const OBJECT_KEYS = [
   "id", "section", "category", "order", "title", "objectType", "materials",
@@ -162,8 +227,15 @@ function validateObject(errors, file, obj, assetsDir) {
     checkKebab(errors, file, "category", obj.category);
   reqNumber(errors, file, obj, "order");
 
+  // Curatorial naming, not UI locale: `tl` is the object's own/vernacular name,
+  // `en` the English descriptor, `es` the historical Spanish designation. Only
+  // `en` is guaranteed — the Berlin ethnographic objects carry all three, but an
+  // artwork often has a single title, and repeating it in all three slots would
+  // print the same words three times on the page. Templates omit what is absent.
   if (typeof obj.title === "object" && obj.title !== null) {
     checkKeys(errors, file, obj.title, ["en", "tl", "es"], "title");
+    // Reported as `title.en` etc., not a bare `en` — the sub-object has no
+    // context of its own and "en: missing" reads as a top-level field.
     if (!isNonEmptyString(obj.title.en)) {
       errors.add(file, "title.en", "missing or empty — the English name is required");
     }
@@ -180,8 +252,12 @@ function validateObject(errors, file, obj, assetsDir) {
   optLocalized(errors, file, obj, "materials");
   optLocalized(errors, file, obj, "dimensions");
   optString(errors, file, obj, "accession");
+  // A draft record has no prose yet — the template renders the "pending" note
+  // instead — so `description` is only required once the flag comes off.
   (obj.draft === true ? optLocalized : reqLocalized)(errors, file, obj, "description");
   optLocalized(errors, file, obj, "condition");
+  // Who wrote the catalogue entry, when the source credits one (the Artist
+  // delivery does; the Berlin ethnographic records don't).
   optString(errors, file, obj, "author");
   checkDraft(errors, file, obj);
   reqString(errors, file, obj, "rights");
@@ -197,7 +273,7 @@ function validateObject(errors, file, obj, assetsDir) {
     if (typeof m !== "object" || m === null) {
       errors.add(file, "model3d", "must be an object { src, poster, altText }");
     } else {
-      checkKeys(errors, file, m, ["src", "poster", "altText", "credit"], "model3d");
+      checkKeys(errors, file, m, ["src", "poster", "cardPoster", "altText", "credit"], "model3d");
       if (reqString(errors, file, m, "src")) {
         const modelPath = path.join(assetsDir, "models", m.src);
         if (!MODEL_FILE.test(m.src)) {
@@ -205,6 +281,8 @@ function validateObject(errors, file, obj, assetsDir) {
         } else if (!existsSync(modelPath)) {
           errors.add(file, "model3d.src", `referenced model "${m.src}" not found in assets-src/models/`);
         } else {
+          // Budget: a GLB streams to every visitor who opens the 3D view, so cap
+          // it (spec / feature 10). 8 MB is the documented ceiling.
           const mb = statSync(modelPath).size / (1024 * 1024);
           if (mb > MODEL_MAX_MB) {
             errors.add(
@@ -217,6 +295,11 @@ function validateObject(errors, file, obj, assetsDir) {
       }
       if (reqString(errors, file, m, "poster")) {
         checkImagePath(errors, file, "model3d.poster", m.poster, assetsDir);
+      }
+      // The home 3D strip's still. Optional: without it the strip falls back to
+      // the camera-matched `poster`, which frames every object differently.
+      if (m.cardPoster !== undefined && optString(errors, file, m, "cardPoster")) {
+        checkImagePath(errors, file, "model3d.cardPoster", m.cardPoster, assetsDir);
       }
       reqString(errors, file, m, "altText");
       optString(errors, file, m, "credit");
@@ -255,11 +338,17 @@ function validatePerson(errors, file, person, assetsDir) {
     checkKebab(errors, file, "category", person.category);
   reqNumber(errors, file, person, "order");
   reqString(errors, file, person, "name");
+  // Both `role` and `bio` wait on the client's text, so a draft person needs only
+  // a name and a portrait — the template renders the "pending" note for the rest.
   const reqUnlessDraft = person.draft === true ? optLocalized : reqLocalized;
   reqUnlessDraft(errors, file, person, "role");
+  // Not every figure has published dates (Pastor Ullmer has none), so the
+  // lifeline is assembled from whichever of these two the source actually gives.
   optLocalized(errors, file, person, "lifespan");
   optLocalized(errors, file, person, "birthplace");
   reqUnlessDraft(errors, file, person, "bio");
+  // A pull-quote is only a pull-quote with its source attached — half of one is
+  // an unattributed quotation, which the reading pages must never show.
   optString(errors, file, person, "author");
   optLocalized(errors, file, person, "quote");
   optLocalized(errors, file, person, "quoteSource");
@@ -277,14 +366,21 @@ function validatePerson(errors, file, person, assetsDir) {
   }
 }
 
-const SECTION_KEYS = ["id", "title", "intro", "heroImage", "categories", "status"];
+const SECTION_KEYS = ["id", "title", "heroTitle", "intro", "heroImage", "cardImage", "heroScrim", "categories", "status"];
 
 function validateSection(errors, file, section, assetsDir) {
   checkKeys(errors, file, section, SECTION_KEYS);
   reqString(errors, file, section, "id") && checkKebab(errors, file, "id", section.id);
   reqLocalized(errors, file, section, "title");
+  optLocalized(errors, file, section, "heroTitle");
   reqLocalized(errors, file, section, "intro");
   validateImage(errors, file, "heroImage", section.heroImage, assetsDir);
+  if (section.cardImage !== undefined) {
+    validateImage(errors, file, "cardImage", section.cardImage, assetsDir);
+  }
+  if (section.heroScrim !== undefined && section.heroScrim !== "full" && section.heroScrim !== "light") {
+    errors.add(file, "heroScrim", `must be "full" or "light", got ${JSON.stringify(section.heroScrim)}`);
+  }
   if (section.status !== "live" && section.status !== "upcoming") {
     errors.add(file, "status", `must be "live" or "upcoming", got ${JSON.stringify(section.status)}`);
   }
@@ -303,12 +399,12 @@ function validateSection(errors, file, section, assetsDir) {
 
 const SITE_KEYS = [
   "siteTitle", "siteSubtitle", "exhibitionTitle", "exhibitionSubtitle", "homeTitle",
-  "baseUrl", "basePath", "language", "description", "heroCtas", "homeQuote",
+  "baseUrl", "basePath", "language", "description", "heroCtas", "home3dObjects", "homeQuote",
   "homeTeasers", "nav", "footerNav", "footerCtas",
   "footer", "contact", "partners", "social", "analytics", "copyright",
 ];
 
-function validateSite(errors, file, site, assetsDir) {
+function validateSite(errors, file, site, assetsDir, staticDir) {
   checkKeys(errors, file, site, SITE_KEYS);
   reqString(errors, file, site, "language");
   for (const field of [
@@ -329,23 +425,43 @@ function validateSite(errors, file, site, assetsDir) {
     }
   }
 
+  // Landing-page slots (all optional — the home template renders each block
+  // only when its data is present, so nothing here is invented copy).
   if (site.heroCtas !== undefined && reqArray(errors, file, site, "heroCtas")) {
     site.heroCtas.forEach((item, i) => {
-      checkKeys(errors, file, item, ["label", "href", "video"], `heroCtas[${i}]`);
+      checkKeys(errors, file, item, ["label", "href", "video", "videoSmall"], `heroCtas[${i}]`);
       reqLocalized(errors, file, item, "label");
       optString(errors, file, item, "video");
+      optString(errors, file, item, "videoSmall");
+      for (const key of ["video", "videoSmall"]) {
+        if (isNonEmptyString(item[key])) {
+          checkVideoPath(errors, file, `heroCtas[${i}].${key}`, item[key], staticDir);
+        }
+      }
+      // `video` CTAs derive their href from basePath + video (see home.js), so
+      // href is only required when there's no video to derive it from.
       if (item.video === undefined) reqString(errors, file, item, "href");
       else optString(errors, file, item, "href");
+      // The small rung is an alternative encode of `video`, never a CTA on its
+      // own — without `video` there is nothing for js/main.js to fall back to.
+      if (item.videoSmall !== undefined && item.video === undefined) {
+        errors.add(file, `heroCtas[${i}].videoSmall`, "needs a `video` (the full-size rung) beside it");
+      }
+    });
+  }
+  if (site.home3dObjects !== undefined && reqArray(errors, file, site, "home3dObjects")) {
+    site.home3dObjects.forEach((id, i) => {
+      if (!isNonEmptyString(id)) errors.add(file, `home3dObjects[${i}]`, "must be an object id string");
     });
   }
   if (site.homeQuote !== undefined) {
     const q = site.homeQuote;
     if (typeof q !== "object" || q === null || Array.isArray(q)) {
-      errors.add(file, "homeQuote", "must be an object { text, attribution, lang? }");
+      errors.add(file, "homeQuote", "must be an object { attribution, text?, lang? }");
     } else {
       checkKeys(errors, file, q, ["text", "attribution", "lang"], "homeQuote");
-      reqString(errors, file, q, "text");
       reqString(errors, file, q, "attribution");
+      optString(errors, file, q, "text");
       optString(errors, file, q, "lang");
     }
   }
@@ -389,6 +505,7 @@ function validateSite(errors, file, site, assetsDir) {
     });
   }
 
+  // Footer CTA pills — href may be an internal route, mailto:, tel:, or external.
   if (reqArray(errors, file, site, "footerCtas")) {
     site.footerCtas.forEach((item, i) => {
       checkKeys(errors, file, item, ["label", "href"], `footerCtas[${i}]`);
@@ -429,6 +546,8 @@ function validateSite(errors, file, site, assetsDir) {
       reqString(errors, file, s, "href");
     });
   }
+  // Analytics slot: keys must exist; empty strings are fine until a provider
+  // is confirmed (single snippet max — spec "Monetization").
   if (typeof site.analytics !== "object" || site.analytics === null ||
       typeof site.analytics.provider !== "string" || typeof site.analytics.id !== "string") {
     errors.add(file, "analytics", 'missing slot — expected { "provider": string, "id": string }');
@@ -456,6 +575,9 @@ function validateEssay(errors, file, essay, assetsDir) {
   }
 }
 
+// Standalone content pages (content/pages/*.md): the Jose Rizal overview and
+// Rizal in Germany. Markdown body + a small frontmatter; `personaCards` opts the
+// page into the shared landing persona-card grid (the overview uses it).
 const PAGE_KEYS = ["title", "slug", "intro", "heroImage", "bodyHeading", "author", "personaCards"];
 
 function validatePage(errors, file, page, assetsDir) {
@@ -477,9 +599,16 @@ function validatePage(errors, file, page, assetsDir) {
   }
 }
 
+// About page (content/about.json): the project write-up and the institution
+// blurbs + the "Messages" video grid. Each message is a poster (real image) +
+// name/role; the player is loaded on click from `video` — a basePath-relative
+// path to the dignitary MP4 shipped from this repo's static/video/. These were
+// streamed from the museum origin's phase-1 asset tree until that tree stopped
+// being something we can rely on surviving this rebuild's launch, so the
+// encodes now travel with the site.
 const ABOUT_KEYS = ["intro", "blurbs", "messagesHeading", "messages"];
 
-function validateAbout(errors, file, about, assetsDir) {
+function validateAbout(errors, file, about, assetsDir, staticDir) {
   if (typeof about !== "object" || about === null || Array.isArray(about)) {
     errors.add(file, "(root)", "must be an object { intro, blurbs, messagesHeading, messages }");
     return;
@@ -508,8 +637,12 @@ function validateAbout(errors, file, about, assetsDir) {
       reqString(errors, file, m, "name");
       reqLocalized(errors, file, m, "role");
       validateImage(errors, file, `messages[${i}].poster`, m.poster, assetsDir);
-      if (m.video !== undefined && !isNonEmptyString(m.video)) {
-        errors.add(file, `messages[${i}].video`, "present but empty — omit the field or give the origin-relative path to the hosted MP4 (e.g. assets/video/sll.mp4)");
+      if (m.video !== undefined) {
+        if (!isNonEmptyString(m.video)) {
+          errors.add(file, `messages[${i}].video`, "present but empty — omit the field or give the path to the shipped MP4 (e.g. video/sll.mp4)");
+        } else {
+          checkVideoPath(errors, file, `messages[${i}].video`, m.video, staticDir);
+        }
       }
     });
   }
@@ -538,12 +671,27 @@ function validateRedirects(errors, file, redirects) {
   });
 }
 
+/**
+ * `draft: true` marks a record the client has delivered assets for but not yet
+ * text. It does two things: the detail page renders a "pending" note instead of
+ * the missing prose, and the record is exempted from the placeholder scan so the
+ * stand-in copy can say plainly that it is unfinished. Everything else on the
+ * record is still validated normally, and the guard stays fully active on every
+ * record that does not carry the flag.
+ */
 function checkDraft(errors, file, rec) {
   if (rec.draft !== undefined && typeof rec.draft !== "boolean") {
     errors.add(file, "draft", "must be a boolean");
   }
 }
 
+// ---------------------------------------------------------------------------
+// Placeholder scan: no lorem/TODO/[OPEN QUESTION]/… anywhere in content.
+
+// `model3d.*` is the one legitimate place the word "placeholder" belongs: the
+// reusable stand-in GLB (feature 11c) is real, permanent, committed content
+// named `placeholder-3d.glb` — not lazy filler text — so it's exempt from the
+// "placeholder" word check specifically (lorem/TODO/TBD/etc. still apply).
 function scanPlaceholders(errors, file, value, fieldPath) {
   const inModel3d = /(^|\.)model3d(\.|$)/.test(fieldPath || "");
   if (typeof value === "string") {
@@ -562,10 +710,26 @@ function scanPlaceholders(errors, file, value, fieldPath) {
   }
 }
 
+// ---------------------------------------------------------------------------
+// Loading.
+
+// Which long-form fields a `<slug>.<locale>.md` may translate. Everything else
+// (slug, section, order, author, heroImage, category, personaCards) is
+// structural or a proper name and is always taken from the English base file,
+// so a translation can never fork a route or re-point an image.
 const ESSAY_TRANSLATABLE = ["title", "summary", "heroCaption", "body"];
 const PAGE_TRANSLATABLE = ["title", "intro", "bodyHeading", "body"];
 
+/**
+ * Read the `<base>.fil.md` / `<base>.de.md` siblings of a long-form record.
+ * Returns `{ [locale]: { field: string } }` for whichever exist — a missing
+ * translation is not an error, it just falls back to English at render time
+ * (the same progressive-rollout rule `pick()` applies to locale-keyed JSON).
+ * @param {ContentErrors} errors @param {string} contentDir @param {string} sub
+ * @param {string} base @param {string[]} translatable
+ */
 function readLocaleVariants(errors, contentDir, sub, base, translatable) {
+  /** @type {Record<string, Record<string, string>>} */
   const variants = {};
   for (const locale of ["fil", "de"]) {
     const fileName = `${base}.${locale}.md`;
@@ -581,6 +745,7 @@ function readLocaleVariants(errors, contentDir, sub, base, translatable) {
     if (!isNonEmptyString(body)) errors.add(file, "body", "translation has no body text");
     scanPlaceholders(errors, file, frontmatter, "");
     scanPlaceholders(errors, file, body, "body");
+    /** @type {Record<string, string>} */
     const fields = { body };
     for (const key of translatable) {
       if (key !== "body" && isNonEmptyString(frontmatter[key])) fields[key] = String(frontmatter[key]);
@@ -590,26 +755,35 @@ function readLocaleVariants(errors, contentDir, sub, base, translatable) {
   return variants;
 }
 
+/**
+ * Fold a record's locale variants into locale-keyed values, so templates read
+ * them through the same `pick()` every other localized field uses.
+ * @param {{ frontmatter: Record<string, any>, body: string, variants: Record<string, Record<string, string>> }} rec
+ * @param {string[]} translatable
+ */
 function localizeRecord({ frontmatter, body, variants }, translatable) {
   const out = { ...frontmatter, body };
   for (const key of translatable) {
     const en = out[key];
-    if (!isNonEmptyString(en)) continue;
+    if (!isNonEmptyString(en)) continue; // optional field absent in English
     const localized = { en: String(en) };
     for (const [locale, fields] of Object.entries(variants)) {
       if (fields[key] !== undefined) localized[locale] = fields[key];
     }
+    // Only pay for an object when a translation actually exists.
     out[key] = Object.keys(localized).length > 1 ? localized : en;
   }
   return out;
 }
 
+/** Minimal YAML frontmatter: `key: value` lines between --- fences. */
 function parseFrontmatter(errors, file, raw) {
   const match = raw.match(/^---\r?\n([\s\S]*?)\r?\n---\r?\n?([\s\S]*)$/);
   if (!match) {
     errors.add(file, "frontmatter", "missing --- YAML frontmatter block");
     return { frontmatter: {}, body: raw };
   }
+  /** @type {Record<string, string | number | boolean>} */
   const frontmatter = {};
   for (const line of match[1].split(/\r?\n/)) {
     if (!line.trim() || line.trimStart().startsWith("#")) continue;
@@ -632,6 +806,7 @@ function parseFrontmatter(errors, file, raw) {
   return { frontmatter, body: match[2].trim() };
 }
 
+/** Read every file with `ext` in contentDir/sub, enforcing kebab filenames. */
 function readDir(errors, contentDir, sub, ext) {
   const dir = path.join(contentDir, sub);
   if (!existsSync(dir)) {
@@ -656,16 +831,17 @@ function parseJson(errors, file, raw) {
   try {
     return JSON.parse(raw);
   } catch (err) {
-    errors.add(file, "(root)", `invalid JSON — ${ (err).message}`);
+    errors.add(file, "(root)", `invalid JSON — ${/** @type {Error} */ (err).message}`);
     return null;
   }
 }
 
+/** id/slug must be unique within its collection and match its filename. */
 function checkIdentity(errors, entries, idField) {
   const seen = new Map();
   for (const { file, base, data } of entries) {
     const id = data?.[idField];
-    if (!isNonEmptyString(id)) continue;
+    if (!isNonEmptyString(id)) continue; // already reported by the schema validator
     if (seen.has(id)) {
       errors.add(file, idField, `duplicate ${idField} "${id}" (also in ${seen.get(id)})`);
     } else {
@@ -677,10 +853,16 @@ function checkIdentity(errors, entries, idField) {
   }
 }
 
-// Loads and validates everything under content/; throws on any error
-export function loadContent({ contentDir, assetsDir }) {
+/**
+ * Load and validate all content. Throws with the full error list if any
+ * rule is broken; returns the parsed content when everything is valid.
+ *
+ * @param {{ contentDir: string, assetsDir: string, staticDir?: string }} dirs
+ */
+export function loadContent({ contentDir, assetsDir, staticDir }) {
   const errors = new ContentErrors();
 
+  // site.json
   const siteFile = "content/site.json";
   const siteRaw = existsSync(path.join(contentDir, "site.json"))
     ? readFileSync(path.join(contentDir, "site.json"), "utf8")
@@ -689,15 +871,18 @@ export function loadContent({ contentDir, assetsDir }) {
   if (site === null) {
     if (siteRaw === null) errors.add(siteFile, "(file)", "missing — the site cannot build without it");
   } else {
-    validateSite(errors, siteFile, site, assetsDir);
+    validateSite(errors, siteFile, site, assetsDir, staticDir);
     scanPlaceholders(errors, siteFile, site, "");
   }
 
+  // Collections.
   const load = (sub, validate) =>
     readDir(errors, contentDir, sub, ".json").map(({ file, base, raw }) => {
       const data = parseJson(errors, file, raw);
       if (data !== null) {
         validate(errors, file, data, assetsDir);
+        // A `draft` record is knowingly unfinished (see checkDraft), so its
+        // stand-in copy is allowed to say so; every other record is scanned.
         if (data.draft !== true) scanPlaceholders(errors, file, data, "");
       }
       return { file, base, data };
@@ -722,6 +907,7 @@ export function loadContent({ contentDir, assetsDir }) {
     return essay;
   });
 
+  // Standalone content pages (Markdown). Route is /<slug>/, slug === filename.
   const pages = readDir(errors, contentDir, "pages", ".md").map(({ file, base, raw }) => {
     const { frontmatter, body } = parseFrontmatter(errors, file, raw);
     const page = {
@@ -737,6 +923,7 @@ export function loadContent({ contentDir, assetsDir }) {
     return page;
   });
 
+  // About page content (single JSON file).
   const aboutFile = "content/about.json";
   let about = null;
   if (!existsSync(path.join(contentDir, "about.json"))) {
@@ -744,7 +931,7 @@ export function loadContent({ contentDir, assetsDir }) {
   } else {
     const parsed = parseJson(errors, aboutFile, readFileSync(path.join(contentDir, "about.json"), "utf8"));
     if (parsed !== null) {
-      validateAbout(errors, aboutFile, parsed, assetsDir);
+      validateAbout(errors, aboutFile, parsed, assetsDir, staticDir);
       scanPlaceholders(errors, aboutFile, parsed, "");
       about = parsed;
     }
@@ -756,6 +943,7 @@ export function loadContent({ contentDir, assetsDir }) {
   checkIdentity(errors, essays.map((e) => ({ file: e.file, base: e.base, data: e.frontmatter })), "slug");
   checkIdentity(errors, pages.map((p) => ({ file: p.file, base: p.base, data: p.frontmatter })), "slug");
 
+  // redirects.json
   const redirectsFile = "content/redirects.json";
   let redirects = [];
   if (!existsSync(path.join(contentDir, "redirects.json"))) {
@@ -768,6 +956,7 @@ export function loadContent({ contentDir, assetsDir }) {
     }
   }
 
+  // Cross-references. Ids are curated by humans and must resolve.
   const sectionsById = new Map(sections.map((s) => [s.data.id, s.data]));
   const objectIds = new Set(objects.map((o) => o.data.id));
   const personIds = new Set(people.map((p) => p.data.id));
@@ -780,6 +969,10 @@ export function loadContent({ contentDir, assetsDir }) {
     return section;
   };
 
+  // A record in a categorised section must name one of that section's tabs, or
+  // it renders only under "Introduction" and is invisible from every tab. The
+  // rule is the same whether the section tiles objects (Ethnographer, Artist)
+  // or people (Scholar), so both loops share it.
   const checkCategoryRef = (file, data, section) => {
     const categoryIds = section.categories?.map((c) => c.id) ?? [];
     if (categoryIds.length > 0) {
@@ -792,6 +985,21 @@ export function loadContent({ contentDir, assetsDir }) {
       errors.add(file, "category", `section "${section.id}" declares no categories — remove the field`);
     }
   };
+
+  // The landing page's curated 3D strip (site.home3dObjects) names objects by
+  // id, in the order they appear. Each must exist and must actually carry a
+  // `model3d` block, or the strip would advertise a 3D view that is not there.
+  if (site && Array.isArray(site.home3dObjects)) {
+    const objectsById = new Map(objects.map((o) => [o.data.id, o.data]));
+    site.home3dObjects.forEach((id, i) => {
+      const obj = objectsById.get(id);
+      if (!obj) {
+        errors.add(siteFile, `home3dObjects[${i}]`, `"${id}" does not resolve to an object in content/objects/`);
+      } else if (!obj.model3d) {
+        errors.add(siteFile, `home3dObjects[${i}]`, `"${id}" has no model3d block — the 3D strip can only show objects with one`);
+      }
+    });
+  }
 
   for (const { file, data } of objects) {
     const section = checkSectionRef(file, data);
@@ -824,6 +1032,11 @@ export function loadContent({ contentDir, assetsDir }) {
     }
   }
 
+  // UI message catalogs (content/i18n/<locale>.json): flat { key: string } maps
+  // for template micro-copy (feature 16). English (en.json) is the reference and
+  // must exist; fil/de fall back to it per-key at render (i18n.t). A missing
+  // catalog fails the build so a locale never renders with empty chrome.
+  /** @type {Record<string, Record<string, string>>} */
   const i18n = { en: {}, fil: {}, de: {} };
   for (const loc of ["en", "fil", "de"]) {
     const rel = `content/i18n/${loc}.json`;
@@ -846,6 +1059,8 @@ export function loadContent({ contentDir, assetsDir }) {
     scanPlaceholders(errors, rel, parsed, "");
     i18n[loc] = parsed;
   }
+  // Keys in fil/de but not en are typos (en is the reference); untranslated en
+  // keys are fine — they fall back at render.
   for (const loc of ["fil", "de"]) {
     for (const k of Object.keys(i18n[loc])) {
       if (!(k in i18n.en)) {

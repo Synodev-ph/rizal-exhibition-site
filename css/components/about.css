@@ -1,3 +1,7 @@
+/* About page: the write-up blurbs (narrow, centred headings) — the project,
+   then each partner institution — over the "Messages" video grid, poster cards
+   whose player loads on click. All colours/type/spacing from tokens.css. */
+
 .about-blurb {
   margin-block-end: var(--space-2xl);
   text-align: center;
@@ -13,6 +17,7 @@
   margin-block-end: var(--space-m);
 }
 
+/* Body copy reads left-aligned under the centred heading. */
 .about-blurb__body {
   text-align: start;
 }
@@ -21,6 +26,7 @@
   font-size: var(--step-0);
 }
 
+/* --- Messages video grid ----------------------------------------------- */
 .about-messages__heading {
   text-align: center;
   color: var(--heading-on-light);
@@ -35,6 +41,9 @@
   display: grid;
   gap: var(--space-l);
   grid-template-columns: 1fr;
+  /* Every card is the same size: equal-width columns (1fr) and equal-height
+     rows (auto-rows: 1fr sizes every row to the tallest), so a longer role
+     line never makes one card taller than its neighbours. */
   grid-auto-rows: 1fr;
 }
 
@@ -73,6 +82,7 @@
   object-fit: cover;
 }
 
+/* Full-cover play button over the poster; the gold disc reads as "video". */
 .message-card__play {
   position: absolute;
   inset: 0;
@@ -103,6 +113,8 @@
   box-shadow: 0 4px 12px rgb(0 0 0 / 30%);
 }
 
+/* Fills the height left under the fixed-ratio media so cards equalise cleanly
+   (grid-auto-rows: 1fr stretches the card; the caption absorbs the slack). */
 .message-card__caption {
   flex: 1 1 auto;
   display: flex;
