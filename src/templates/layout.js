@@ -1,4 +1,3 @@
-// @ts-check
 // Base page layout: <head> with per-page metadata, skip link, header nav,
 // main content slot, and footer. Every generated page goes through this.
 
@@ -65,6 +64,7 @@ function renderLangSwitch(currentPath) {
       return `      <li class="lang-switch__item"><a class="lang-switch__link" href="${esc(hrefForLocale(currentPath, l.id))}" hreflang="${esc(l.hreflang)}" lang="${esc(l.hreflang)}">${flag}<span class="visually-hidden">${esc(l.label)}</span></a></li>`;
     })
     .join("\n");
+  if (!items) return "";
   return `<nav class="lang-switch" aria-label="${esc(t("language"))}">
     <ul class="lang-switch__list">
 ${items}
