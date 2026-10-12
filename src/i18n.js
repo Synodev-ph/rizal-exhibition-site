@@ -1,4 +1,3 @@
-// @ts-check
 // Internationalisation core (build-time). The site renders one static tree per
 // locale — English at the root, Filipino under /fil/, German under /de/ — so
 // every page has its own crawlable URL and works with JS disabled (spec rule 5,
@@ -21,8 +20,9 @@
  *  BCP-47 tag used for <html lang>, <link hreflang>, and the switcher links. */
 export const LOCALES = [
   { id: "en", label: "English", short: "EN", hreflang: "en", flag: "flag-en" },
-  { id: "fil", label: "Filipino", short: "FIL", hreflang: "fil", flag: "flag-fil" },
-  { id: "de", label: "Deutsch", short: "DE", hreflang: "de", flag: "flag-de" },
+  // Translations taken down at client request — uncomment to restore.
+  // { id: "fil", label: "Filipino", short: "FIL", hreflang: "fil", flag: "flag-fil" },
+  // { id: "de", label: "Deutsch", short: "DE", hreflang: "de", flag: "flag-de" },
 ];
 
 export const DEFAULT_LOCALE = "en";
