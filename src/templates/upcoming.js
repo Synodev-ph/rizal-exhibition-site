@@ -1,16 +1,7 @@
-// @ts-check
-// Designed "upcoming" state for routes whose real template hasn't landed yet
-// (spec: missing content renders a designed coming-soon state, never
-// placeholder text). Section/content page features (03–07) replace these.
-
 import { esc } from "./layout.js";
 import { localizeHref, t } from "../i18n.js";
-
-/** @typedef {import("../types.js").Site} Site */
-
-/** @param {{title: string, site: Site}} p */
 export function renderUpcoming({ title, site }) {
-  return `<section class="band band--dark hero">
+    return `<section class="band band--dark hero">
   <div class="container">
     <p class="upcoming-badge">${esc(t("upcoming"))}</p>
     <h1>${esc(title)}</h1>

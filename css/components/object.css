@@ -1,15 +1,7 @@
-/* Object detail page: breadcrumb, gallery, metadata, prev/next pager, and the
-   "Explore Other Collection" card grid. Gallery left / metadata right on
-   desktop, stacked on mobile (360px floor). */
-
-/* Cross-document View Transitions — grid card ⇄ object hero morph. Progressive
-   enhancement: unsupported browsers just navigate; the UA disables this under
-   prefers-reduced-motion. Per-object view-transition-name is set inline. */
 @view-transition {
   navigation: auto;
 }
 
-/* --- Breadcrumb --------------------------------------------------------- */
 .breadcrumb {
   margin-bottom: var(--space-l);
 }
@@ -49,7 +41,6 @@
   color: var(--text-on-light);
 }
 
-/* --- Two-column layout -------------------------------------------------- */
 .object__layout {
   display: grid;
   gap: var(--space-xl);
@@ -62,33 +53,23 @@
     align-items: start;
   }
 
-  /* Metadata column follows the gallery on scroll for tall galleries. */
   .object__info-col {
     position: sticky;
     top: calc(var(--space-2xl));
   }
 }
 
-/* --- Gallery ------------------------------------------------------------ */
 .object-gallery__main {
   margin: 0;
   background: color-mix(in srgb, var(--black-cow) 12%, transparent);
 }
 
-/* `contain`, never `cover`: this is an exhibition — an exhibit image is never
-   cropped by its container. The box keeps a fixed ratio so the grid and gallery
-   stay on a steady rhythm; whatever the work's own proportions, it is shown
-   whole and centred, letterboxed against the frame colour. */
 .object-gallery__img {
   width: 100%;
   aspect-ratio: 4 / 3;
   object-fit: contain;
   background: var(--exhibit-frame);
-  /* Declared as a background-image, not a colour: the generated .lqip-* rules
-     are appended last in the CSS bundle and set background-color, so they beat
-     this rule's colour and the letterbox would otherwise take the image's own
-     dominant tone — a pale band around anything shot on white. Same layering
-     trick as the 3D stage below. */
+
   background-image: linear-gradient(var(--exhibit-frame-dark), var(--exhibit-frame-dark));
 }
 
@@ -119,20 +100,15 @@
 .object-gallery__thumb-img {
   width: 100%;
   aspect-ratio: 1;
-  object-fit: contain; /* a thumbnail is a picker — it must show which view it picks */
+  object-fit: contain;
   background: var(--exhibit-frame);
   background-image: linear-gradient(var(--exhibit-frame-dark), var(--exhibit-frame-dark));
 }
 
-/* --- 3D model view (feature 10) ---------------------------------------- */
-/* Slide 0 is a render (poster) of the model. The launch button covers it until
-   the visitor opens the model; js/main.js then loads <model-viewer> in place.
-   The magnifying-glass zoom button takes that model fullscreen in the dialog. */
 .object-gallery__model {
   position: relative;
 }
 
-/* The launch affordance covers the poster; clicking it loads the inline model. */
 .object-gallery__model-launch {
   position: absolute;
   inset: 0;
@@ -155,7 +131,6 @@
   background: color-mix(in srgb, var(--chinese-black) 28%, transparent);
 }
 
-/* "3D" chip, top-left: signals this slide is the model. */
 .object-gallery__badge {
   position: absolute;
   top: var(--space-s);
@@ -177,7 +152,6 @@
   height: 1.1em;
 }
 
-/* Centered "View in 3D" call to action, the cue to load the inline model. */
 .object-gallery__model-cta {
   display: inline-flex;
   align-items: center;
@@ -194,7 +168,6 @@
   color: var(--squash);
 }
 
-/* GLB streaming loader: a label + a 0→100 fill bar, over the box while it loads. */
 .object-gallery__model-loader {
   position: absolute;
   inset-inline: 0;
@@ -229,7 +202,6 @@
   transition: width 0.2s ease;
 }
 
-/* "Drag to rotate" hint, flashed for ~2s once the model has loaded. */
 .object-gallery__model-prompt {
   position: absolute;
   left: 50%;
@@ -257,7 +229,6 @@
   opacity: 1;
 }
 
-/* Two sequential hints share the pill; only the active phase shows. */
 .object-gallery__model-prompt-item {
   display: none;
   align-items: center;
@@ -268,8 +239,6 @@
   display: inline-flex;
 }
 
-/* The mouse glyph moves to signal the gesture (motion-gated): drag = sideways,
-   scroll = up/down. Each phase runs for ~1.5s. */
 @media (prefers-reduced-motion: no-preference) {
   .object-gallery__model-prompt-item.is-active .nav-icon--drag {
     animation: model-drag-hint 0.75s ease-in-out 2;
@@ -305,15 +274,10 @@
   }
 }
 
-/* Once the model loads it replaces the poster, so hide the still. (Needs an
-   author rule: `picture { display: contents }` otherwise beats UA `[hidden]`.) */
 .object-gallery__model picture[hidden] {
   display: none;
 }
 
-/* The live inline model fills the gallery box, same footprint as a photo slide
-   (.object-gallery__img). `height: auto` is required: model-viewer's own :host
-   rule sets height:150px, which would otherwise win and defeat the aspect-ratio. */
 .object-gallery__model-viewer {
   display: block;
   width: 100%;
@@ -322,21 +286,11 @@
   background: var(--model-stage-gradient);
 }
 
-/* The poster render's own background is fully transparent (it's a cutout, not
-   a photo), so the auto dominant-colour LQIP placeholder (images.js) samples
-   near-black from it and paints that behind the poster until/unless something
-   else shows through. Layer the same 3D stage gradient on top as a
-   background-image (not the `background` shorthand, which would wipe the LQIP
-   background-color the image-pipeline tests assert on) on every element that
-   paints this poster: the inline gallery slide and its "3D" thumbnail.
-   (Specificity: two classes beats the single-class `.lqip-*` rule regardless
-   of it being appended later in the bundle.) */
 .object-gallery__model .object-gallery__img,
 .object-gallery__thumb--model .object-gallery__thumb-img {
   background-image: var(--model-stage-gradient);
 }
 
-/* The 3D thumbnail carries a small corner label so it reads as the model. */
 .object-gallery__thumb--model {
   position: relative;
 }
@@ -354,7 +308,6 @@
   line-height: 1.5;
 }
 
-/* --- Metadata ----------------------------------------------------------- */
 .object__title {
   margin-bottom: var(--space-xs);
   display: flex;
@@ -408,7 +361,16 @@
   max-width: var(--measure);
 }
 
-/* Byline for a credited catalogue entry — same voice as the essay/person byline. */
+.object__model-note {
+  max-width: var(--measure);
+  margin-top: var(--space-m);
+  font-size: var(--step--1);
+  font-style: italic;
+
+  font-synthesis: style;
+  color: var(--black-cow);
+}
+
 .object__author {
   margin-top: var(--space-m);
   font-size: var(--step--1);
@@ -423,15 +385,11 @@
   color: var(--black-cow);
 }
 
-/* Stand-in shown where a record carries `draft: true` — assets delivered, text
-   still to come. Deliberately quiet and italic so it reads as a status note
-   rather than as the object's own description. Shared by object and person. */
 .text-pending {
   font-style: italic;
   color: var(--black-cow);
 }
 
-/* --- Prev/next pager (object-to-object; distinct from viewer image nav) -- */
 .object-pager {
   margin-top: var(--space-2xl);
   padding-top: var(--space-l);
@@ -479,7 +437,6 @@
   color: var(--accent-on-light);
 }
 
-/* --- Explore Other Collection grid -------------------------------------- */
 .collection__heading {
   text-align: center;
   color: var(--accent-on-light);
@@ -495,16 +452,35 @@
   padding: 0;
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(min(100%, 10rem), 1fr));
-  /* Every row takes the height of the tallest card in the grid, so cards are
-     one size throughout and the photos line up across rows — not just within
-     a row, which is all `auto` rows give you. */
+
   grid-auto-rows: 1fr;
   gap: var(--space-l);
 }
 
-/* Let a card shrink to its share of the track: without this a long unbroken
-   title (e.g. "Pagtatagumpay") sets a min-content floor and widens its column,
-   so its photo renders a few pixels taller than its neighbours'. */
+@media (min-width: 30rem) {
+  .collection .collection-grid {
+    grid-template-columns: repeat(auto-fill, 12.7rem);
+    justify-content: center;
+  }
+}
+
+@media (max-width: 29.99rem) {
+  .collection-grid {
+    grid-template-columns: 1fr;
+    grid-auto-rows: auto;
+  }
+  .collection-grid .collection-card__en {
+    min-height: 0;
+  }
+
+  .collection-grid .collection-card__en:empty {
+    display: none;
+  }
+  .collection-grid .collection-card__body {
+    min-height: 6.125rem;
+  }
+}
+
 .collection-card,
 .collection-card__link,
 .collection-card__body,
@@ -515,10 +491,7 @@
 .collection-card__link {
   text-decoration: none;
   display: grid;
-  /* The photo hugs its own fixed 3/4 box; the label panel absorbs whatever
-     height the row has left over. Without this the two rows split the spare
-     height, so a card whose neighbours carry longer titles grows a band of
-     bare LQIP below its photo and the grid's images stop lining up. */
+
   grid-template-rows: auto 1fr;
   gap: 0;
   height: 100%;
@@ -533,9 +506,9 @@
 .collection-card__img {
   width: 100%;
   aspect-ratio: 3 / 4;
-  object-fit: contain; /* see .object-gallery__img — never crop an exhibit */
+  object-fit: contain;
   background: var(--exhibit-frame);
-  /* see .object-gallery__img */
+
   background-image: linear-gradient(var(--exhibit-frame-dark), var(--exhibit-frame-dark));
   transition: transform var(--duration-slow) var(--ease);
 }
@@ -544,13 +517,9 @@
   transform: scale(1.04);
 }
 
-/* Old-paper label: a warm cream panel (squash gold tinting ghost-white) under
-   the flush-edge photo, distinct from the plain light band behind the grid. */
 .collection-card__body {
   display: grid;
-  /* Pack the label to the top of the panel. The panel is stretched to fill
-     whatever height the equal-height row leaves it, and without this the grid
-     rows share out that slack and the title drifts down the card. */
+
   align-content: start;
   gap: var(--space-2xs);
   padding: var(--space-m);
@@ -562,10 +531,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  /* The badge stays on the title's line. Allowed to wrap it drops onto a line
-     of its own as soon as the title needs two lines, which made the artist
-     cards a line taller than the ethnographer ones. The title is clamped and
-     free to shrink (min-width: 0), so there is always room beside it. */
+
   flex-wrap: nowrap;
   gap: var(--space-2xs);
 }
@@ -574,9 +540,7 @@
   font-family: var(--font-heading);
   font-size: var(--step-1);
   color: var(--heading-on-light);
-  /* Two lines, then an ellipsis: the longest titles here run to four lines and
-     set the height of every other card in the grid. The full title is still
-     the link's accessible name and is on the detail page. */
+
   display: -webkit-box;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 2;
@@ -605,22 +569,15 @@
   color: var(--black-cow);
   display: -webkit-box;
   -webkit-box-orient: vertical;
-  /* Two lines, and always two lines' worth of space. An ethnographer gloss
-     ("Hat") takes one and an artist card's is blank, while a scholar's role is
-     a full sentence that needs both — so reserving the pair here is what makes
-     a card the same size on all four section pages. Clamping to one line
-     instead would fit, but cuts the roles to "German…". Word-boundary breaks,
-     so an ellipsis never lands mid-word. */
+
   -webkit-line-clamp: 2;
   line-clamp: 2;
-  min-height: calc(2 * 1.6em); /* 1.6 = the body line-height in base.css */
+  min-height: calc(2 * 1.6em);
   overflow: hidden;
   overflow-wrap: normal;
   min-width: 0;
 }
 
-/* Cards without a second name still reserve its line, so every collection grid
-   on the site resolves to the same card height. */
 .collection-card__en:empty::before {
   content: "\00a0";
 }

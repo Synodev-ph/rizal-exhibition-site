@@ -1,5 +1,3 @@
-/* Base: fonts, reset, typography defaults, focus states, skip link. */
-
 @font-face {
   font-family: "Alice";
   font-style: normal;
@@ -44,7 +42,6 @@
     U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
 }
 
-/* Reset */
 *,
 *::before,
 *::after {
@@ -59,7 +56,7 @@ body {
   color: var(--text-on-light);
   background: var(--bg-light);
   -webkit-font-smoothing: antialiased;
-  font-synthesis: none; /* Alice has no bold/italic — never fake them */
+  font-synthesis: none;
 }
 
 img,
@@ -69,13 +66,10 @@ video {
   display: block;
 }
 
-/* The pipeline helper wraps every <img> in <picture>; keep it layout-transparent
-   so existing flex/grid rules still target the <img> as the effective child. */
 picture {
   display: contents;
 }
 
-/* Typography */
 h1,
 h2,
 h3,
@@ -113,7 +107,6 @@ address {
   font-style: normal;
 }
 
-/* Focus — always visible, colour depends on band */
 :focus-visible {
   outline: 2px solid var(--focus-ring-on-light);
   outline-offset: 2px;
@@ -124,7 +117,6 @@ address {
   outline-color: var(--focus-ring-on-dark);
 }
 
-/* Visually hidden, but exposed to assistive tech (icon-button labels, etc.) */
 .visually-hidden {
   position: absolute;
   width: 1px;
@@ -137,7 +129,6 @@ address {
   border: 0;
 }
 
-/* Skip link */
 .skip-link {
   position: absolute;
   inset-inline-start: var(--space-m);
@@ -153,16 +144,10 @@ address {
   transform: none;
 }
 
-/* Crop anchors. Any image rendered through the pipeline helper with a
-   `position` in its content data gets one of these; they only bite where the
-   layout box crops the image (object-fit: cover). Default stays centred. */
 .img-anchor-top {
   object-position: top;
 }
 
-/* Between top and centre. A wide hero band crops a landscape scene to a thin
-   horizontal slice, and a seated figure's head sits above a centred one; 15%
-   clears the hairline at every band width without baring the wall above. */
 .img-anchor-upper {
   object-position: 50% 15%;
 }
@@ -171,7 +156,6 @@ address {
   object-position: bottom;
 }
 
-/* Motion is opt-out by default */
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,

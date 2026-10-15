@@ -1,96 +1,51 @@
-// Base page layout: <head> with per-page metadata, skip link, header nav,
-// main content slot, and footer. Every generated page goes through this.
-
 import { icons } from "../icons.js";
-import {
-  LOCALES,
-  alternates,
-  getLocale,
-  hrefForLocale,
-  localizeHref,
-  pick,
-  t,
-} from "../i18n.js";
-
-/**
- * @typedef {import("../types.js").Site} Site
- * @typedef {import("../types.js").Social} Social
- */
-
-/**
- * Escape text for safe interpolation into HTML.
- * @param {unknown} text
- */
+import { LOCALES, alternates, getLocale, hrefForLocale, localizeHref, pick, t, } from "../i18n.js";
 export function esc(text) {
-  return String(text)
-    .replaceAll("&", "&amp;")
-    .replaceAll("<", "&lt;")
-    .replaceAll(">", "&gt;")
-    .replaceAll('"', "&quot;");
+    return String(text)
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;");
 }
-
-/** Search engines truncate past ~70 characters, and html-validate enforces it. */
 export const TITLE_MAX = 70;
-
-/**
- * Build a `<title>`, degrading gracefully as the name grows: suffix the site
- * title while it fits, then drop the suffix, then trim the name itself at a word
- * boundary. Some catalogue names are a full sentence ("Certificate of Membership
- * of Dr. Jose Rizal issued by …"), so the last step is not hypothetical.
- * @param {string} name @param {string} siteTitle
- */
 export function seoTitle(name, siteTitle) {
-  const full = `${name} | ${siteTitle}`;
-  if (full.length <= TITLE_MAX) return full;
-  if (name.length <= TITLE_MAX) return name;
-  return name.slice(0, TITLE_MAX - 1).replace(/\s+\S*$/, "") + "…";
+    const full = `${name} | ${siteTitle}`;
+    if (full.length <= TITLE_MAX)
+        return full;
+    if (name.length <= TITLE_MAX)
+        return name;
+    return name.slice(0, TITLE_MAX - 1).replace(/\s+\S*$/, "") + "…";
 }
-
-/**
- * Language switcher — flag-only, right of the search icon. Shows the *other*
- * locales (the active one is omitted): from English it offers Filipino + German,
- * and so on. Each is a real <a> to the same page in that locale — pure HTML/CSS,
- * so it works with JS disabled and is crawlable (spec rule 5). The flag SVG is
- * decorative (aria-hidden); the language name in a .visually-hidden span is the
- * link's accessible name, so a flag is never the only cue for assistive tech
- * (rule 10). hreflang/lang mark each link's target language.
- * @param {string} currentPath - locale-independent page path
- */
 function renderLangSwitch(currentPath) {
-  const active = getLocale();
-  const items = LOCALES.filter((l) => l.id !== active)
-    .map((l) => {
-      const flag = `<span class="lang-switch__flag" aria-hidden="true">${icons[l.flag] ?? ""}</span>`;
-      return `      <li class="lang-switch__item"><a class="lang-switch__link" href="${esc(hrefForLocale(currentPath, l.id))}" hreflang="${esc(l.hreflang)}" lang="${esc(l.hreflang)}">${flag}<span class="visually-hidden">${esc(l.label)}</span></a></li>`;
+    const active = getLocale();
+    const items = LOCALES.filter((l) => l.id !== active)
+        .map((l) => {
+        const flag = `<span class="lang-switch__flag" aria-hidden="true">${icons[l.flag] ?? ""}</span>`;
+        return `      <li class="lang-switch__item"><a class="lang-switch__link" href="${esc(hrefForLocale(currentPath, l.id))}" hreflang="${esc(l.hreflang)}" lang="${esc(l.hreflang)}">${flag}<span class="visually-hidden">${esc(l.label)}</span></a></li>`;
     })
-    .join("\n");
-  if (!items) return "";
-  return `<nav class="lang-switch" aria-label="${esc(t("language"))}">
+        .join("\n");
+    if (!items)
+        return "";
+    return `<nav class="lang-switch" aria-label="${esc(t("language"))}">
     <ul class="lang-switch__list">
 ${items}
     </ul>
   </nav>`;
 }
-
-/** @param {Site} site @param {string} currentPath */
 function renderNav(site, currentPath) {
-  const items = site.nav
-    .map((item) => {
-      const current = item.href === currentPath ? ' aria-current="page"' : "";
-      const label = pick(item.label);
-      if (item.children?.length) {
-        // A real disclosure button (not hover-only): keyboard-operable and
-        // announced with aria-expanded. The parent stays a link to its overview
-        // page; the button beside it opens the submenu. js/main.js drives it and
-        // the mobile menu; on desktop CSS also reveals on hover/focus.
-        const submenuId = `nav-submenu-${item.href.replace(/\//g, "") || "root"}`;
-        const children = item.children
-          .map((c) => {
-            const cCurrent = c.href === currentPath ? ' aria-current="page"' : "";
-            return `<li><a href="${esc(localizeHref(c.href))}"${cCurrent}>${esc(pick(c.label))}</a></li>`;
-          })
-          .join("\n");
-        return `<li class="nav-item nav-item--dropdown">
+    const items = site.nav
+        .map((item) => {
+        const current = item.href === currentPath ? ' aria-current="page"' : "";
+        const label = pick(item.label);
+        if (item.children?.length) {
+            const submenuId = `nav-submenu-${item.href.replace(/\//g, "") || "root"}`;
+            const children = item.children
+                .map((c) => {
+                const cCurrent = c.href === currentPath ? ' aria-current="page"' : "";
+                return `<li><a href="${esc(localizeHref(c.href))}"${cCurrent}>${esc(pick(c.label))}</a></li>`;
+            })
+                .join("\n");
+            return `<li class="nav-item nav-item--dropdown">
   <a href="${esc(localizeHref(item.href))}"${current}>${esc(label)}</a>
   <button class="nav-dropdown__toggle" type="button" aria-expanded="false" aria-controls="${submenuId}">
     <span class="visually-hidden">${esc(t("navShowSections", { label }))}</span>
@@ -100,23 +55,14 @@ function renderNav(site, currentPath) {
 ${children}
   </ul>
 </li>`;
-      }
-      return `<li class="nav-item"><a href="${esc(localizeHref(item.href))}"${current}>${esc(label)}</a></li>`;
+        }
+        return `<li class="nav-item"><a href="${esc(localizeHref(item.href))}"${current}>${esc(label)}</a></li>`;
     })
-    .join("\n");
-
-  // Search control: a real link to /search/, so it works with JS disabled (the
-  // search page hosts the Pagefind UI). With JS, js/main.js intercepts the click
-  // and drops the search panel below the icon instead (disclosure). The icon is
-  // decorative; .visually-hidden supplies its accessible name — the one
-  // sanctioned use (rule 10). The panel (a labelled region with a close button
-  // and the Pagefind mount) sits in a relatively-positioned wrapper so it drops
-  // straight down from the icon without touching the mobile menu's positioning.
-  const searchRoute = `${site.basePath}search/`;
-  const searchHref = localizeHref(searchRoute);
-  const searchCurrent = searchRoute === currentPath ? ' aria-current="page"' : "";
-
-  return `<nav class="site-nav" aria-label="${esc(t("mainNav"))}">
+        .join("\n");
+    const searchRoute = `${site.basePath}search/`;
+    const searchHref = localizeHref(searchRoute);
+    const searchCurrent = searchRoute === currentPath ? ' aria-current="page"' : "";
+    return `<nav class="site-nav" aria-label="${esc(t("mainNav"))}">
   <button class="site-nav__toggle" type="button" aria-expanded="false" aria-controls="site-nav-list">
     <span class="visually-hidden">${esc(t("menu"))}</span>
     <span class="site-nav__toggle-icon" aria-hidden="true">${icons.menu}${icons.close}</span>
@@ -143,59 +89,33 @@ ${items}
   ${renderLangSwitch(currentPath)}
 </nav>`;
 }
-
-/** @param {Social} s */
 function socialLink(s) {
-  const svg = icons[String(s.name).toLowerCase()];
-  return `<li><a class="footer-social__link" href="${esc(s.href)}" rel="external" aria-label="${esc(s.name)}">${svg || esc(s.name)}</a></li>`;
+    const svg = icons[String(s.name).toLowerCase()];
+    return `<li><a class="footer-social__link" href="${esc(s.href)}" rel="external" aria-label="${esc(s.name)}">${svg || esc(s.name)}</a></li>`;
 }
-
-/** @param {Site} site */
 function renderFooter(site) {
-  const {
-    footer,
-    contact,
-    partners,
-    footerNav,
-    footerCtas,
-    social,
-    copyright,
-    basePath,
-  } = site;
-
-  // partners[0] is the host (NMP) — the panel's brand lockup; the rest are the
-  // collaborator seals below it (chip: white backing to read on dark). Seals
-  // carry no visible name line: they render as one even set of circles, so the
-  // partner's name lives in the image alt, where it is announced once and shows
-  // as the tooltip on hover.
-  const [brand, ...seals] = partners ?? [];
-  const brandImg = brand
-    ? `<img class="footer-panel__logo" src="${esc(basePath + brand.logo)}" alt="${esc(brand.name)}" loading="lazy" decoding="async">`
-    : "";
-  const sealItems = seals
-    .map((p) => {
-      const name = esc(p.caption ? pick(p.caption) : p.name);
-      const img = `<img src="${esc(basePath + p.logo)}" alt="${name}" title="${name}" loading="lazy" decoding="async">`;
-      return `<li${p.chip ? ' class="footer-seal--chip"' : ""}>${img}</li>`;
+    const { footer, contact, partners, footerNav, footerCtas, social, copyright, basePath, } = site;
+    const [brand, ...seals] = partners ?? [];
+    const brandImg = brand
+        ? `<img class="footer-panel__logo" src="${esc(basePath + brand.logo)}" alt="${esc(brand.name)}" loading="lazy" decoding="async">`
+        : "";
+    const sealItems = seals
+        .map((p) => {
+        const name = esc(p.caption ? pick(p.caption) : p.name);
+        const img = `<img src="${esc(basePath + p.logo)}" alt="${name}" title="${name}" loading="lazy" decoding="async">`;
+        return `<li${p.chip ? ' class="footer-seal--chip"' : ""}>${img}</li>`;
     })
-    .join("\n");
-  const navItems = (footerNav ?? [])
-    .map((i) => `<li><a href="${esc(localizeHref(i.href))}">${esc(pick(i.label))}</a></li>`)
-    .join("\n");
-  const ctaItems = (footerCtas ?? [])
-    .map(
-      (c) =>
-        `<li><a class="footer-pill" href="${esc(localizeHref(c.href))}">${esc(pick(c.label))} ${icons.arrow}</a></li>`,
-    )
-    .join("\n");
-  const socialItems = (social ?? []).map(socialLink).join("\n");
-
-  const telHref = contact.phone.replace(/[^\d+]/g, "");
-  // Non-breaking space + hyphen so the number never wraps mid-digit
-  // (html-validate's tel-non-breaking rule).
-  const phoneDisplay = contact.phone.replace(/ /g, " ").replace(/-/g, "‑");
-
-  return `<footer class="site-footer band band--dark" data-pagefind-ignore>
+        .join("\n");
+    const navItems = (footerNav ?? [])
+        .map((i) => `<li><a href="${esc(localizeHref(i.href))}">${esc(pick(i.label))}</a></li>`)
+        .join("\n");
+    const ctaItems = (footerCtas ?? [])
+        .map((c) => `<li><a class="footer-pill" href="${esc(localizeHref(c.href))}">${esc(pick(c.label))} ${icons.arrow}</a></li>`)
+        .join("\n");
+    const socialItems = (social ?? []).map(socialLink).join("\n");
+    const telHref = contact.phone.replace(/[^\d+]/g, "");
+    const phoneDisplay = contact.phone.replace(/ /g, " ").replace(/-/g, "‑");
+    return `<footer class="site-footer band band--dark" data-pagefind-ignore>
   <div class="footer-top">
     <aside class="footer-panel">
       ${brandImg}
@@ -243,41 +163,17 @@ ${socialItems}
   </div>
 </footer>`;
 }
-
-/**
- * Render a complete HTML page.
- * @param {object} p
- * @param {Site} p.site - parsed content/site.json
- * @param {{css: string, js: string}} p.assets - hashed asset URLs
- * @param {string} p.path - page path ("/", "/ethnographer/", …)
- * @param {string} p.title - unique per page
- * @param {string} p.description - unique per page
- * @param {string} p.content - rendered <main> content
- * @param {boolean} [p.isDev] - inject live-reload client when true
- */
-export function renderPage({
-  site,
-  assets,
-  path,
-  title,
-  description,
-  content,
-  isDev = false,
-}) {
-  const locale = getLocale();
-  const origin = site.baseUrl.replace(/\/$/, "");
-  // Canonical is this page in *this* locale; the alternates advertise the same
-  // page in every locale (plus x-default → English) so search engines pair them
-  // (spec SEO package). `path` is locale-independent — the prefix is applied here.
-  const canonical = origin + hrefForLocale(path, locale);
-  const altLinks = alternates(site.baseUrl, path)
-    .map((a) => `  <link rel="alternate" hreflang="${esc(a.hreflang)}" href="${esc(a.href)}">`)
-    .join("\n");
-  const reload = isDev
-    ? `\n<script>new EventSource("/__reload").onmessage = () => location.reload();</script>`
-    : "";
-
-  return `<!DOCTYPE html>
+export function renderPage({ site, assets, path, title, description, content, isDev = false, }) {
+    const locale = getLocale();
+    const origin = site.baseUrl.replace(/\/$/, "");
+    const canonical = origin + hrefForLocale(path, locale);
+    const altLinks = alternates(site.baseUrl, path)
+        .map((a) => `  <link rel="alternate" hreflang="${esc(a.hreflang)}" href="${esc(a.href)}">`)
+        .join("\n");
+    const reload = isDev
+        ? `\n<script>new EventSource("/__reload").onmessage = () => location.reload();</script>`
+        : "";
+    return `<!DOCTYPE html>
 <html lang="${esc(locale)}">
 <head>
   <meta charset="utf-8">

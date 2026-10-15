@@ -1,7 +1,3 @@
-/* Essay reading page (minimal — feature 07 enriches). Narrow measure for the
-   prose; hero image above the body; back-link to the section. Reuses the
-   shared .breadcrumb (object.css). */
-
 .essay__header {
   margin-block-end: var(--space-xl);
 }
