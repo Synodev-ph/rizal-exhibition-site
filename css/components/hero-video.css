@@ -1,3 +1,8 @@
+/* Hero "Watch the video" dialog. Built by js/main.js on click (the CTA is a
+   real link to the file until then — no JS needed to watch it, just not in a
+   dialog). A centred, rounded card rather than the full-bleed zoom viewer
+   (viewer.css), so the two stay visually distinct. */
+
 .video-dialog {
   width: min(92vw, 60rem);
   padding: 0;
