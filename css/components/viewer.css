@@ -1,15 +1,7 @@
-/* Zoom viewer (feature 09). The gallery zoom affordance on the object page, plus
-   the full-screen <dialog> that OpenSeadragon deep zoom mounts into. The dialog
-   markup is built by js/viewer.js on intent; these rules style it. */
-
-/* --- Gallery zoom affordance -------------------------------------------- */
 .object-gallery__main {
   position: relative;
 }
 
-/* The main image opens the deep-zoom viewer on click; signal it with a
-   magnifying-glass cursor. JS binds the click; without JS the thumbnails below
-   still link to each full-resolution image. */
 .object-gallery__slides {
   cursor: zoom-in;
 }
@@ -41,10 +33,6 @@
   transform: scale(1.06);
 }
 
-/* Mobile: no full-screen zoom viewer (Victor). Hide the magnifier and drop the
-   zoom-in cursor; js/main.js also refuses to open the dialog below this width
-   (the site's 52rem mobile breakpoint). Thumbnails still swap the inline image
-   and stay real links to each full-resolution photo, so nothing is lost. */
 @media (max-width: 51.999rem) {
   .object-gallery__zoom {
     display: none;
@@ -54,7 +42,6 @@
   }
 }
 
-/* --- The viewer dialog --------------------------------------------------- */
 .viewer {
   width: 100%;
   height: 100%;
@@ -77,7 +64,6 @@
   background: rgb(0 0 0 / 0.85);
 }
 
-/* Stage: OpenSeadragon fills it; the chrome sits above as overlays. */
 .viewer__stage {
   position: relative;
   flex: 1 1 auto;
@@ -90,13 +76,10 @@
   background: #0d0d0d;
 }
 
-/* OpenSeadragon paints into a <canvas>; keep it from adding its own outline. */
 .viewer__osd .openseadragon-canvas:focus {
   outline: none;
 }
 
-/* 3D model stage (feature 10): fills the stage in place of the OSD canvas when
-   the 3D item is shown. model-viewer manages its own orbit/zoom controls. */
 .viewer__model {
   position: absolute;
   inset: 0;
@@ -113,7 +96,6 @@
   background: var(--model-stage-gradient);
 }
 
-/* Chrome buttons ---------------------------------------------------------- */
 .viewer__btn {
   position: absolute;
   z-index: 2;
@@ -154,7 +136,6 @@
   gap: var(--space-xs);
 }
 
-/* The zoom buttons live inside a flow container, so undo the absolute default. */
 .viewer__zoombar .viewer__btn {
   position: static;
 }
@@ -183,7 +164,6 @@
   display: none;
 }
 
-/* Footer: credit line + thumbnail strip on a dark bar (mockup). */
 .viewer__footer {
   flex: 0 0 auto;
   padding: var(--space-s) var(--space-m);
@@ -245,13 +225,9 @@
 .viewer__thumb img {
   width: 100%;
   height: 100%;
-  object-fit: contain; /* a picker must show which view it picks — never cropped */
+  object-fit: contain;
 }
 
-/* The 3D entry in the strip: a small corner "3D" label over its poster thumb.
-   That poster's background is transparent (a render cutout, not a photo), so
-   give it the shared 3D stage gradient instead of letting the dark footer bar
-   show through as flat black. */
 .viewer__thumb--model {
   position: relative;
 }
@@ -273,7 +249,6 @@
   line-height: 1.5;
 }
 
-/* Loading hint while a new tile source initialises. */
 .viewer.is-loading .viewer__osd::after {
   content: "";
   position: absolute;

@@ -1,9 +1,3 @@
-/* Person detail page: portrait left / biography right on desktop, stacked on
-   mobile (360px floor). Reuses the breadcrumb, prev/next pager (.object-pager),
-   and card grid (.collection-*) styles from object.css; only the portrait,
-   biography, and related-row wrappers are person-specific. */
-
-/* --- Two-column layout -------------------------------------------------- */
 .person__layout {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
@@ -17,14 +11,12 @@
     align-items: start;
   }
 
-  /* Portrait stays in view while the biography scrolls. */
   .person__portrait-col {
     position: sticky;
     top: var(--space-2xl);
   }
 }
 
-/* --- Portrait ----------------------------------------------------------- */
 .person-portrait {
   margin: 0;
   background: var(--exhibit-frame);
@@ -33,7 +25,7 @@
 .person-portrait__img {
   width: 100%;
   aspect-ratio: 3 / 4;
-  object-fit: contain; /* portraits are exhibits too — shown whole, never cropped */
+  object-fit: contain;
   background: var(--exhibit-frame);
 }
 
@@ -43,7 +35,6 @@
   color: var(--black-cow);
 }
 
-/* --- Name / role / lifespan --------------------------------------------- */
 .person__name {
   margin-bottom: var(--space-2xs);
   color: var(--heading-on-light);
@@ -63,9 +54,6 @@
   margin-bottom: var(--space-l);
 }
 
-/* Byline for a credited biography — same voice as the essay byline. It sits
-   tight under whichever line precedes it (the lifeline, or the role when the
-   person has no published dates), so the block above it gives up its gap. */
 .person__lifespan:has(+ .person__byline) {
   margin-bottom: var(--space-2xs);
 }
@@ -78,9 +66,6 @@
   color: var(--black-cow);
 }
 
-/* --- Pull-quote --------------------------------------------------------- */
-/* Rizal's words about this person, set off from the biography by an accent rule
-   rather than quote glyphs, which don't survive translation cleanly. */
 .person__quote {
   margin: 0 0 var(--space-l);
   max-width: var(--measure);
@@ -115,7 +100,6 @@
   gap: var(--space-m);
 }
 
-/* --- Related rows (objects, people) ------------------------------------- */
 .related-row {
   margin-top: var(--space-2xl);
   padding-top: var(--space-l);

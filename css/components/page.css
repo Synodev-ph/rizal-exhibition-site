@@ -1,9 +1,3 @@
-/* Standalone content pages (Jose Rizal overview, Rizal in Germany, About): the
-   dark hero band matches the section (persona) hero. A tall band with the
-   left-aligned title and standfirst set at the foot, an optional background
-   image under a scrim, over a light prose band. Colours/type/spacing from
-   tokens.css. The persona-card grid the overview appends is styled in home.css. */
-
 .page-hero {
   position: relative;
   overflow: hidden;
@@ -27,8 +21,6 @@
   z-index: 0;
 }
 
-/* Left-weighted scrim keeps the foot-set title/standfirst AA-legible over any
-   image (same technique as the section hero). */
 .page-hero__scrim {
   z-index: 1;
   background: linear-gradient(
@@ -57,7 +49,6 @@
   color: color-mix(in srgb, var(--text-on-dark) 90%, transparent);
 }
 
-/* Prose body */
 .page-body__heading {
   color: var(--heading-on-light);
   font-size: var(--section-title);
