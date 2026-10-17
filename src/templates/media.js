@@ -48,6 +48,17 @@ function entryFor(src) {
 export function imageUrl(site, src) {
     return site.basePath + entryFor(src).fullUrl;
 }
+export function ogImage(site, src) {
+    const entry = entryFor(src);
+    const origin = String(site.baseUrl || "").replace(/\/$/, "");
+    const variant = entry.fallback[0];
+    return {
+        url: origin + site.basePath + variant.file,
+        type: entry.fallbackType,
+        width: variant.w,
+        height: variant.h,
+    };
+}
 function srcset(site, variants) {
     return variants.map((v) => `${site.basePath}${v.file} ${v.w}w`).join(", ");
 }

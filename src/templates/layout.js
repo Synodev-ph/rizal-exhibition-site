@@ -163,13 +163,29 @@ ${socialItems}
   </div>
 </footer>`;
 }
-export function renderPage({ site, assets, path, title, description, content, isDev = false, }) {
+export function renderPage({ site, assets, path, title, description, content, ogImage, isDev = false, }) {
     const locale = getLocale();
     const origin = site.baseUrl.replace(/\/$/, "");
     const canonical = origin + hrefForLocale(path, locale);
     const altLinks = alternates(site.baseUrl, path)
         .map((a) => `  <link rel="alternate" hreflang="${esc(a.hreflang)}" href="${esc(a.href)}">`)
         .join("\n");
+    const og = ogImage ?? site.ogImage ?? null;
+    const socialTags = [
+        `<meta property="og:type" content="website">`,
+        `<meta property="og:site_name" content="${esc(pick(site.exhibitionTitle))}">`,
+        `<meta property="og:title" content="${esc(title)}">`,
+        `<meta property="og:description" content="${esc(description)}">`,
+        `<meta property="og:url" content="${esc(canonical)}">`,
+        og ? `<meta property="og:image" content="${esc(og.url)}">` : "",
+        og ? `<meta property="og:image:type" content="${esc(og.type)}">` : "",
+        og?.width ? `<meta property="og:image:width" content="${og.width}">` : "",
+        og?.height ? `<meta property="og:image:height" content="${og.height}">` : "",
+        `<meta name="twitter:card" content="summary_large_image">`,
+        `<meta name="twitter:title" content="${esc(title)}">`,
+        `<meta name="twitter:description" content="${esc(description)}">`,
+        og ? `<meta name="twitter:image" content="${esc(og.url)}">` : "",
+    ].filter(Boolean).join("\n  ");
     const reload = isDev
         ? `\n<script>new EventSource("/__reload").onmessage = () => location.reload();</script>`
         : "";
@@ -182,6 +198,7 @@ export function renderPage({ site, assets, path, title, description, content, is
   <meta name="description" content="${esc(description)}">
   <link rel="canonical" href="${esc(canonical)}">
 ${altLinks}
+  ${socialTags}
   <link rel="stylesheet" href="${esc(assets.css)}">
   <script type="module" src="${esc(assets.js)}" defer></script>
 </head>

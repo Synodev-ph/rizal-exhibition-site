@@ -1,12 +1,12 @@
 import { execFileSync } from "node:child_process";
 import { createHash } from "node:crypto";
-import { cpSync, mkdirSync, readdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { cpSync, existsSync, mkdirSync, readdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { loadContent } from "./src/content.js";
 import { LOCALES, localePrefix, pick, setCatalogs, setLocale, setSiteConfig, t, } from "./src/i18n.js";
 import { lintDistImages, lqipCss, processDeepZoom, processImages } from "./src/images.js";
-import { setDeepZoomManifest, setImageManifest } from "./src/templates/media.js";
+import { ogImage, setDeepZoomManifest, setImageManifest } from "./src/templates/media.js";
 import { renderPage } from "./src/templates/layout.js";
 import { renderHome } from "./src/templates/home.js";
 import { renderUpcoming } from "./src/templates/upcoming.js";
@@ -18,6 +18,7 @@ import { pageDescription, pageTitle, renderContentPage } from "./src/templates/p
 import { aboutDescription, aboutTitle, renderAbout } from "./src/templates/about.js";
 import { render404 } from "./src/templates/notfound.js";
 import { renderSearch, searchDescription, searchTitle } from "./src/templates/search.js";
+import { artistInteractivitiesDescription, artistInteractivitiesTitle, artistPuzzleDescription, artistPuzzleTitle, interactivitiesDescription, interactivitiesTitle, renderArtistInteractivities, renderArtistPuzzle, renderInteractivitiesHub, } from "./src/templates/interactivities.js";
 const root = path.dirname(fileURLToPath(import.meta.url));
 const dist = path.join(root, "dist");
 const isDev = process.env.DEV === "1";
@@ -47,6 +48,16 @@ export async function build() {
     rmSync(dist, { recursive: true, force: true });
     mkdirSync(path.join(dist, "assets"), { recursive: true });
     cpSync(path.join(root, "static"), dist, { recursive: true });
+    const interactivitiesDir = path.join(root, "interactivities");
+    if (existsSync(interactivitiesDir)) {
+        cpSync(interactivitiesDir, path.join(dist, "interactivities"), {
+            recursive: true,
+            filter: (src) => {
+                const base = path.basename(src);
+                return !base.endsWith(".md") && !base.startsWith(".");
+            },
+        });
+    }
     const imageManifest = await processImages({
         assetsDir,
         dist,
@@ -54,6 +65,7 @@ export async function build() {
         log: (m) => console.log(m),
     });
     setImageManifest(imageManifest);
+    site.ogImage = ogImage(site, "home/rizal-in-germany.webp");
     const deepZoomSources = [
         ...new Set(content.objects.flatMap((o) => o.images.filter((img) => img.deepZoom).map((img) => img.src))),
     ];
@@ -309,6 +321,47 @@ export async function build() {
             }),
         });
         pages.push({
+            out: path.join("interactivities", "index.html"),
+            html: renderPage({
+                site,
+                assets,
+                isDev,
+                path: "/interactivities/",
+                title: interactivitiesTitle(site),
+                description: interactivitiesDescription(),
+                content: renderInteractivitiesHub({ site }),
+            }),
+        });
+        pages.push({
+            out: path.join("interactivities", "artist", "index.html"),
+            html: renderPage({
+                site,
+                assets,
+                isDev,
+                path: "/interactivities/artist/",
+                title: artistInteractivitiesTitle(site),
+                description: artistInteractivitiesDescription(),
+                content: renderArtistInteractivities({ site }),
+            }),
+        });
+        const puzzleObject = objectById.get("la-venganza-de-la-madre");
+        if (puzzleObject) {
+            const puzzleScriptVersion = hash(readFileSync(path.join(root, "interactivities/artist/puzzle/la_venganza_de_la_madre/puzzle.js"), "utf8"));
+            pages.push({
+                out: path.join("interactivities", "artist", "puzzle", "la_venganza_de_la_madre", "index.html"),
+                html: renderPage({
+                    site,
+                    assets,
+                    isDev,
+                    path: "/interactivities/artist/puzzle/la_venganza_de_la_madre/",
+                    title: artistPuzzleTitle(site),
+                    description: artistPuzzleDescription(),
+                    ogImage: ogImage(site, puzzleObject.images[0].src),
+                    content: renderArtistPuzzle({ site, object: puzzleObject, scriptVersion: puzzleScriptVersion }),
+                }),
+            });
+        }
+        pages.push({
             out: "404.html",
             html: renderPage({
                 site,
@@ -328,8 +381,8 @@ export async function build() {
         }
     }
     lintDistImages(dist);
-    const pagefindBin = path.join(root, "node_modules", ".bin", "pagefind");
-    execFileSync(pagefindBin, ["--site", dist, "--quiet"], { stdio: "inherit" });
+    const pagefindBin = path.join(root, "node_modules", "pagefind", "lib", "runner", "bin.cjs");
+    execFileSync(process.execPath, [pagefindBin, "--site", dist, "--quiet"], { stdio: "inherit" });
     console.log(`Built ${written} page(s) across ${LOCALES.length} locale(s) in ${Date.now() - started} ms → dist/`);
 }
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
