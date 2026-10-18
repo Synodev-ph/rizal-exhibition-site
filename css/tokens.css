@@ -1,5 +1,7 @@
-:root {
+/* --squash (gold): accent on dark backgrounds only.
+   --falu-red: accent on light backgrounds only. */
 
+:root {
   --chinese-black: #151616;
   --black-cow: #4d4c4c;
   --ghost-white: #f8f9fb;
@@ -16,11 +18,10 @@
   --accent-on-light: var(--falu-red);
   --heading-on-light: var(--deep-cove);
   --surface-secondary: var(--black-cow);
-
   --exhibit-frame: #eceef2;
-
   --exhibit-frame-dark: #585848;
 
+  /* Alice ships in Regular 400 only. Figtree stands in for Gotham. */
   --font-heading: "Alice", "Iowan Old Style", "Times New Roman", serif;
   --font-body: "Figtree", "Avenir Next", "Segoe UI", system-ui, sans-serif;
 

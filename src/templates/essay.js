@@ -2,37 +2,39 @@ import { esc, seoTitle } from "./layout.js";
 import { renderImage } from "./media.js";
 import { renderBreadcrumb, renderMarkdown, renderPager } from "./fragments.js";
 import { localizeHref, pick, t } from "../i18n.js";
+
 export function essayTitle(essay, site) {
-    return seoTitle(pick(essay.title), pick(site.siteTitle));
+  return seoTitle(pick(essay.title), pick(site.siteTitle));
 }
+
 export function essayDescription(essay) {
-    const source = essay.summary
-        ? pick(essay.summary)
-        : (pick(essay.body).split(/\n\s*\n/).find((p) => /^\s*[^#!\s]/.test(p)) ?? "");
-    const plain = source.replace(/[*_`]|\[([^\]]*)\]\([^)]*\)/g, "$1").replace(/\s+/g, " ").trim();
-    if (plain.length <= 155)
-        return plain;
-    return plain.slice(0, 152).replace(/\s+\S*$/, "") + "…";
+  const source = essay.summary
+    ? pick(essay.summary)
+    : (pick(essay.body).split(/\n\s*\n/).find((p) => /^\s*[^#!\s]/.test(p)) ?? "");
+  const plain = source.replace(/[*_`]|\[([^\]]*)\]\([^)]*\)/g, "$1").replace(/\s+/g, " ").trim();
+  if (plain.length <= 155) return plain;
+  return plain.slice(0, 152).replace(/\s+\S*$/, "") + "…";
 }
+
 export function renderEssay({ site, essay, section, prev, next }) {
-    const hero = essay.heroImage
-        ? `<figure class="essay__hero">${renderImage({
-            site,
-            image: { src: essay.heroImage, alt: "" },
-            className: "essay__hero-img",
-            loading: "eager",
-            fetchpriority: "high",
-            sizes: "(min-width: 60rem) 55rem, 100vw",
-        })}${essay.heroCaption ? `\n      <figcaption class="essay__hero-caption">${esc(pick(essay.heroCaption))}</figcaption>` : ""}</figure>\n    `
-        : "";
-    const pager = renderPager({
-        prev,
-        next,
-        hrefFor: (e) => `/essays/${e.slug}/`,
-        nameFor: (e) => pick(e.title),
-        ariaLabel: t("moreEssays"),
-    });
-    return `<article class="essay band band--light">
+  const hero = essay.heroImage
+    ? `<figure class="essay__hero">${renderImage({
+        site,
+        image: { src: essay.heroImage, alt: "" },
+        className: "essay__hero-img",
+        loading: "eager",
+        fetchpriority: "high",
+        sizes: "(min-width: 60rem) 55rem, 100vw",
+      })}${essay.heroCaption ? `\n      <figcaption class="essay__hero-caption">${esc(pick(essay.heroCaption))}</figcaption>` : ""}</figure>\n    `
+    : "";
+  const pager = renderPager({
+    prev,
+    next,
+    hrefFor: (e) => `/essays/${e.slug}/`,
+    nameFor: (e) => pick(e.title),
+    ariaLabel: t("moreEssays"),
+  });
+  return `<article class="essay band band--light">
   <div class="container container--narrow">
     ${renderBreadcrumb({ site, section, leaf: pick(essay.title) })}
     <header class="essay__header">

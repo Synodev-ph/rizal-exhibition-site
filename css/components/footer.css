@@ -56,6 +56,7 @@
   height: 6rem;
 }
 
+/* object-fit keeps every seal at its true aspect ratio. */
 .footer-panel__seals img {
   width: 100%;
   height: auto;
@@ -159,7 +160,6 @@
 
 @container (min-width: 38rem) {
   .footer-grid {
-
     grid-template-columns: minmax(0, 1.7fr) minmax(min-content, 1fr);
     align-items: stretch;
   }
@@ -241,7 +241,6 @@
 
 @media (max-width: 47.99rem) {
   @container (max-width: 37.99rem) {
-
     .footer-side {
       min-width: 0;
     }
@@ -260,7 +259,6 @@
   list-style: none;
   margin: 0;
   padding: 0;
-
   display: grid;
   grid-template-columns: repeat(2, auto);
   justify-content: center;

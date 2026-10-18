@@ -4,8 +4,9 @@
   "category": "of-clay-and-resistance",
   "order": 3,
   "title": {
-    "en": "Wild Boar (Replica)",
-    "es": "Jabali"
+    "en": "Wild Boar",
+    "es": "Jabali",
+    "note": "Replica"
   },
   "objectType": {
     "en": "Sculpture",

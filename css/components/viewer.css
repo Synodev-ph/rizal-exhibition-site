@@ -33,6 +33,7 @@
   transform: scale(1.06);
 }
 
+/* Mobile: no fullscreen zoom viewer. */
 @media (max-width: 51.999rem) {
   .object-gallery__zoom {
     display: none;

@@ -3,7 +3,6 @@
   overflow: hidden;
   display: flex;
   align-items: flex-end;
-
   min-height: min(55vh, 32rem);
   padding-block: var(--space-3xl) var(--space-2xl);
 }

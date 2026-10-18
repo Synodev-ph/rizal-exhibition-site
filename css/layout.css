@@ -49,6 +49,7 @@
   gap: var(--space-m);
 }
 
+/* No gap: the logo file carries its own margin. */
 .site-header__brand {
   text-decoration: none;
   display: flex;
@@ -225,7 +226,6 @@
   .site-nav__toggle[aria-expanded="true"] + .site-nav__list {
     display: flex;
   }
-
   .site-nav__list a {
     display: block;
     padding-block: var(--space-xs);
@@ -236,7 +236,6 @@
     align-items: center;
     column-gap: var(--space-s);
   }
-
   .nav-dropdown__toggle {
     justify-content: center;
     width: 2.75rem;
@@ -349,3 +348,4 @@
   font-size: var(--step-1);
   max-width: 55ch;
 }
+

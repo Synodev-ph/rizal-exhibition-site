@@ -55,10 +55,9 @@ body {
   line-height: 1.6;
   color: var(--text-on-light);
   background: var(--bg-light);
-
   overflow-wrap: break-word;
   -webkit-font-smoothing: antialiased;
-  font-synthesis: none;
+  font-synthesis: none; /* Alice has no bold/italic — never fake them */
 }
 
 img,

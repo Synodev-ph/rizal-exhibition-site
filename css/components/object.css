@@ -81,7 +81,6 @@
     z-index: 2;
     margin-bottom: 0;
     padding-bottom: var(--space-l);
-
     margin-top: -1rem;
     padding-top: 1rem;
     background: var(--bg-light);
@@ -103,7 +102,7 @@
   aspect-ratio: 4 / 3;
   object-fit: contain;
   background: var(--exhibit-frame);
-
+  /* Background-image so the LQIP background-color doesn't tint the letterbox. */
   background-image: linear-gradient(var(--exhibit-frame-dark), var(--exhibit-frame-dark));
 }
 
@@ -309,10 +308,12 @@
   }
 }
 
+/* Author rule needed: picture { display: contents } overrides the UA [hidden]. */
 .object-gallery__model picture[hidden] {
   display: none;
 }
 
+/* height: auto overrides model-viewer's :host height of 150px. */
 .object-gallery__model-viewer {
   display: block;
   width: 100%;
@@ -321,6 +322,7 @@
   background: var(--model-stage-gradient);
 }
 
+/* Background-image, not the shorthand, so the LQIP colour stays underneath. */
 .object-gallery__model .object-gallery__img,
 .object-gallery__thumb--model .object-gallery__thumb-img {
   background-image: var(--model-stage-gradient);
@@ -367,6 +369,10 @@
   margin-bottom: var(--space-l);
 }
 
+.object__title-es:has(+ .object__title-note) {
+  margin-bottom: 0;
+}
+
 .object-meta {
   margin: 0 0 var(--space-l);
   display: grid;
@@ -401,7 +407,7 @@
   margin-top: var(--space-m);
   font-size: var(--step--1);
   font-style: italic;
-
+  /* No italic face is loaded; allow a synthesized slant here. */
   font-synthesis: style;
   color: var(--black-cow);
 }
@@ -488,7 +494,6 @@
   padding: 0;
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(min(100%, 10rem), 1fr));
-
   grid-auto-rows: 1fr;
   gap: var(--space-l);
 }
@@ -508,7 +513,6 @@
   .collection-grid .collection-card__en {
     min-height: 0;
   }
-
   .collection-grid .collection-card__en:empty {
     display: none;
   }
@@ -527,7 +531,6 @@
 .collection-card__link {
   text-decoration: none;
   display: grid;
-
   grid-template-rows: auto 1fr;
   gap: 0;
   height: 100%;
@@ -544,7 +547,6 @@
   aspect-ratio: 3 / 4;
   object-fit: contain;
   background: var(--exhibit-frame);
-
   background-image: linear-gradient(var(--exhibit-frame-dark), var(--exhibit-frame-dark));
   transition: transform var(--duration-slow) var(--ease);
 }
@@ -555,7 +557,6 @@
 
 .collection-card__body {
   display: grid;
-
   align-content: start;
   gap: var(--space-2xs);
   padding: var(--space-m);
@@ -567,7 +568,6 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-
   flex-wrap: nowrap;
   gap: var(--space-2xs);
 }
@@ -576,7 +576,6 @@
   font-family: var(--font-heading);
   font-size: 1.3125rem;
   color: var(--heading-on-light);
-
   display: -webkit-box;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 3;
@@ -605,10 +604,9 @@
   color: var(--black-cow);
   display: -webkit-box;
   -webkit-box-orient: vertical;
-
   -webkit-line-clamp: 2;
   line-clamp: 2;
-  min-height: calc(2 * 1.6em);
+  min-height: calc(2 * 1.6em); /* 1.6 = body line-height */
   overflow: hidden;
   overflow-wrap: normal;
   min-width: 0;

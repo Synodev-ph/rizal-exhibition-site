@@ -28,7 +28,6 @@
 }
 
 .site-search {
-
   --search-field-size: calc(1.25rem * 1.4 + 1.5rem + 2px);
 
   position: absolute;
@@ -171,7 +170,7 @@
   -webkit-line-clamp: 2;
   line-clamp: 2;
   height: auto;
-
+  /* Margin, not padding: overflow is clipped at the padding edge. */
   padding: 0;
   margin-block: calc(20px * var(--pagefind-ui-scale));
   overflow: hidden;

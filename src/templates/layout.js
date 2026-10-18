@@ -1,51 +1,62 @@
 import { icons } from "../icons.js";
-import { LOCALES, alternates, getLocale, hrefForLocale, localizeHref, pick, t, } from "../i18n.js";
+import {
+  LOCALES,
+  alternates,
+  getLocale,
+  hrefForLocale,
+  localizeHref,
+  pick,
+  t,
+} from "../i18n.js";
+
 export function esc(text) {
-    return String(text)
-        .replaceAll("&", "&amp;")
-        .replaceAll("<", "&lt;")
-        .replaceAll(">", "&gt;")
-        .replaceAll('"', "&quot;");
+  return String(text)
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;");
 }
+
+// Search engines truncate titles past ~70 characters.
 export const TITLE_MAX = 70;
+
 export function seoTitle(name, siteTitle) {
-    const full = `${name} | ${siteTitle}`;
-    if (full.length <= TITLE_MAX)
-        return full;
-    if (name.length <= TITLE_MAX)
-        return name;
-    return name.slice(0, TITLE_MAX - 1).replace(/\s+\S*$/, "") + "…";
+  const full = `${name} | ${siteTitle}`;
+  if (full.length <= TITLE_MAX) return full;
+  if (name.length <= TITLE_MAX) return name;
+  return name.slice(0, TITLE_MAX - 1).replace(/\s+\S*$/, "") + "…";
 }
+
 function renderLangSwitch(currentPath) {
-    const active = getLocale();
-    const items = LOCALES.filter((l) => l.id !== active)
-        .map((l) => {
-        const flag = `<span class="lang-switch__flag" aria-hidden="true">${icons[l.flag] ?? ""}</span>`;
-        return `      <li class="lang-switch__item"><a class="lang-switch__link" href="${esc(hrefForLocale(currentPath, l.id))}" hreflang="${esc(l.hreflang)}" lang="${esc(l.hreflang)}">${flag}<span class="visually-hidden">${esc(l.label)}</span></a></li>`;
+  const active = getLocale();
+  const items = LOCALES.filter((l) => l.id !== active)
+    .map((l) => {
+      const flag = `<span class="lang-switch__flag" aria-hidden="true">${icons[l.flag] ?? ""}</span>`;
+      return `      <li class="lang-switch__item"><a class="lang-switch__link" href="${esc(hrefForLocale(currentPath, l.id))}" hreflang="${esc(l.hreflang)}" lang="${esc(l.hreflang)}">${flag}<span class="visually-hidden">${esc(l.label)}</span></a></li>`;
     })
-        .join("\n");
-    if (!items)
-        return "";
-    return `<nav class="lang-switch" aria-label="${esc(t("language"))}">
+    .join("\n");
+  if (!items) return "";
+  return `<nav class="lang-switch" aria-label="${esc(t("language"))}">
     <ul class="lang-switch__list">
 ${items}
     </ul>
   </nav>`;
 }
+
 function renderNav(site, currentPath) {
-    const items = site.nav
-        .map((item) => {
-        const current = item.href === currentPath ? ' aria-current="page"' : "";
-        const label = pick(item.label);
-        if (item.children?.length) {
-            const submenuId = `nav-submenu-${item.href.replace(/\//g, "") || "root"}`;
-            const children = item.children
-                .map((c) => {
-                const cCurrent = c.href === currentPath ? ' aria-current="page"' : "";
-                return `<li><a href="${esc(localizeHref(c.href))}"${cCurrent}>${esc(pick(c.label))}</a></li>`;
-            })
-                .join("\n");
-            return `<li class="nav-item nav-item--dropdown">
+  const items = site.nav
+    .map((item) => {
+      const current = item.href === currentPath ? ' aria-current="page"' : "";
+      const label = pick(item.label);
+      if (item.children?.length) {
+        const submenuId = `nav-submenu-${item.href.replace(/\//g, "") || "root"}`;
+        const children = item.children
+          .map((c) => {
+            const cCurrent = c.href === currentPath ? ' aria-current="page"' : "";
+            return `<li><a href="${esc(localizeHref(c.href))}"${cCurrent}>${esc(pick(c.label))}</a></li>`;
+          })
+          .join("\n");
+        return `<li class="nav-item nav-item--dropdown">
   <a href="${esc(localizeHref(item.href))}"${current}>${esc(label)}</a>
   <button class="nav-dropdown__toggle" type="button" aria-expanded="false" aria-controls="${submenuId}">
     <span class="visually-hidden">${esc(t("navShowSections", { label }))}</span>
@@ -55,14 +66,16 @@ function renderNav(site, currentPath) {
 ${children}
   </ul>
 </li>`;
-        }
-        return `<li class="nav-item"><a href="${esc(localizeHref(item.href))}"${current}>${esc(label)}</a></li>`;
+      }
+      return `<li class="nav-item"><a href="${esc(localizeHref(item.href))}"${current}>${esc(label)}</a></li>`;
     })
-        .join("\n");
-    const searchRoute = `${site.basePath}search/`;
-    const searchHref = localizeHref(searchRoute);
-    const searchCurrent = searchRoute === currentPath ? ' aria-current="page"' : "";
-    return `<nav class="site-nav" aria-label="${esc(t("mainNav"))}">
+    .join("\n");
+
+  const searchRoute = `${site.basePath}search/`;
+  const searchHref = localizeHref(searchRoute);
+  const searchCurrent = searchRoute === currentPath ? ' aria-current="page"' : "";
+
+  return `<nav class="site-nav" aria-label="${esc(t("mainNav"))}">
   <button class="site-nav__toggle" type="button" aria-expanded="false" aria-controls="site-nav-list">
     <span class="visually-hidden">${esc(t("menu"))}</span>
     <span class="site-nav__toggle-icon" aria-hidden="true">${icons.menu}${icons.close}</span>
@@ -89,33 +102,51 @@ ${items}
   ${renderLangSwitch(currentPath)}
 </nav>`;
 }
+
 function socialLink(s) {
-    const svg = icons[String(s.name).toLowerCase()];
-    return `<li><a class="footer-social__link" href="${esc(s.href)}" rel="external" aria-label="${esc(s.name)}">${svg || esc(s.name)}</a></li>`;
+  const svg = icons[String(s.name).toLowerCase()];
+  return `<li><a class="footer-social__link" href="${esc(s.href)}" rel="external" aria-label="${esc(s.name)}">${svg || esc(s.name)}</a></li>`;
 }
+
 function renderFooter(site) {
-    const { footer, contact, partners, footerNav, footerCtas, social, copyright, basePath, } = site;
-    const [brand, ...seals] = partners ?? [];
-    const brandImg = brand
-        ? `<img class="footer-panel__logo" src="${esc(basePath + brand.logo)}" alt="${esc(brand.name)}" loading="lazy" decoding="async">`
-        : "";
-    const sealItems = seals
-        .map((p) => {
-        const name = esc(p.caption ? pick(p.caption) : p.name);
-        const img = `<img src="${esc(basePath + p.logo)}" alt="${name}" title="${name}" loading="lazy" decoding="async">`;
-        return `<li${p.chip ? ' class="footer-seal--chip"' : ""}>${img}</li>`;
+  const {
+    footer,
+    contact,
+    partners,
+    footerNav,
+    footerCtas,
+    social,
+    copyright,
+    basePath,
+  } = site;
+
+  const [brand, ...seals] = partners ?? [];
+  const brandImg = brand
+    ? `<img class="footer-panel__logo" src="${esc(basePath + brand.logo)}" alt="${esc(brand.name)}" loading="lazy" decoding="async">`
+    : "";
+  const sealItems = seals
+    .map((p) => {
+      const name = esc(p.caption ? pick(p.caption) : p.name);
+      const img = `<img src="${esc(basePath + p.logo)}" alt="${name}" title="${name}" loading="lazy" decoding="async">`;
+      return `<li${p.chip ? ' class="footer-seal--chip"' : ""}>${img}</li>`;
     })
-        .join("\n");
-    const navItems = (footerNav ?? [])
-        .map((i) => `<li><a href="${esc(localizeHref(i.href))}">${esc(pick(i.label))}</a></li>`)
-        .join("\n");
-    const ctaItems = (footerCtas ?? [])
-        .map((c) => `<li><a class="footer-pill" href="${esc(localizeHref(c.href))}">${esc(pick(c.label))} ${icons.arrow}</a></li>`)
-        .join("\n");
-    const socialItems = (social ?? []).map(socialLink).join("\n");
-    const telHref = contact.phone.replace(/[^\d+]/g, "");
-    const phoneDisplay = contact.phone.replace(/ /g, " ").replace(/-/g, "‑");
-    return `<footer class="site-footer band band--dark" data-pagefind-ignore>
+    .join("\n");
+  const navItems = (footerNav ?? [])
+    .map((i) => `<li><a href="${esc(localizeHref(i.href))}">${esc(pick(i.label))}</a></li>`)
+    .join("\n");
+  const ctaItems = (footerCtas ?? [])
+    .map(
+      (c) =>
+        `<li><a class="footer-pill" href="${esc(localizeHref(c.href))}">${esc(pick(c.label))} ${icons.arrow}</a></li>`,
+    )
+    .join("\n");
+  const socialItems = (social ?? []).map(socialLink).join("\n");
+
+  const telHref = contact.phone.replace(/[^\d+]/g, "");
+  // Non-breaking hyphen keeps the phone number on one line.
+  const phoneDisplay = contact.phone.replace(/ /g, " ").replace(/-/g, "‑");
+
+  return `<footer class="site-footer band band--dark" data-pagefind-ignore>
   <div class="footer-top">
     <aside class="footer-panel">
       ${brandImg}
@@ -163,33 +194,27 @@ ${socialItems}
   </div>
 </footer>`;
 }
-export function renderPage({ site, assets, path, title, description, content, ogImage, isDev = false, }) {
-    const locale = getLocale();
-    const origin = site.baseUrl.replace(/\/$/, "");
-    const canonical = origin + hrefForLocale(path, locale);
-    const altLinks = alternates(site.baseUrl, path)
-        .map((a) => `  <link rel="alternate" hreflang="${esc(a.hreflang)}" href="${esc(a.href)}">`)
-        .join("\n");
-    const og = ogImage ?? site.ogImage ?? null;
-    const socialTags = [
-        `<meta property="og:type" content="website">`,
-        `<meta property="og:site_name" content="${esc(pick(site.exhibitionTitle))}">`,
-        `<meta property="og:title" content="${esc(title)}">`,
-        `<meta property="og:description" content="${esc(description)}">`,
-        `<meta property="og:url" content="${esc(canonical)}">`,
-        og ? `<meta property="og:image" content="${esc(og.url)}">` : "",
-        og ? `<meta property="og:image:type" content="${esc(og.type)}">` : "",
-        og?.width ? `<meta property="og:image:width" content="${og.width}">` : "",
-        og?.height ? `<meta property="og:image:height" content="${og.height}">` : "",
-        `<meta name="twitter:card" content="summary_large_image">`,
-        `<meta name="twitter:title" content="${esc(title)}">`,
-        `<meta name="twitter:description" content="${esc(description)}">`,
-        og ? `<meta name="twitter:image" content="${esc(og.url)}">` : "",
-    ].filter(Boolean).join("\n  ");
-    const reload = isDev
-        ? `\n<script>new EventSource("/__reload").onmessage = () => location.reload();</script>`
-        : "";
-    return `<!DOCTYPE html>
+
+export function renderPage({
+  site,
+  assets,
+  path,
+  title,
+  description,
+  content,
+  isDev = false,
+}) {
+  const locale = getLocale();
+  const origin = site.baseUrl.replace(/\/$/, "");
+  const canonical = origin + hrefForLocale(path, locale);
+  const altLinks = alternates(site.baseUrl, path)
+    .map((a) => `  <link rel="alternate" hreflang="${esc(a.hreflang)}" href="${esc(a.href)}">`)
+    .join("\n");
+  const reload = isDev
+    ? `\n<script>new EventSource("/__reload").onmessage = () => location.reload();</script>`
+    : "";
+
+  return `<!DOCTYPE html>
 <html lang="${esc(locale)}">
 <head>
   <meta charset="utf-8">
@@ -198,7 +223,6 @@ export function renderPage({ site, assets, path, title, description, content, og
   <meta name="description" content="${esc(description)}">
   <link rel="canonical" href="${esc(canonical)}">
 ${altLinks}
-  ${socialTags}
   <link rel="stylesheet" href="${esc(assets.css)}">
   <script type="module" src="${esc(assets.js)}" defer></script>
 </head>

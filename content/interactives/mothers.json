@@ -1,0 +1,7 @@
+{
+  "id": "mothers",
+  "type": "puzzle",
+  "object": "la-venganza-de-la-madre",
+  "image": "la-venganza-de-la-madre/front.webp",
+  "sizes": [3, 4, 5]
+}
