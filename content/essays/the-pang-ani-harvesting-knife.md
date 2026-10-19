@@ -4,9 +4,11 @@ slug: the-pang-ani-harvesting-knife
 section: ethnographer
 summary: The finger-bladed pang-ani, used to harvest rice panicle by panicle across the Philippines, and Rizal's own agricultural interests from Calamba to his Dapitan farm.
 heroImage: pang-ani/front.webp
+heroImageAlt: "Pang-ani harvesting knife with a curved iron blade and wooden handle."
 order: 7
 author: Ma. Denisse Cayetano
 category: daily-life
+seoDescription: "The finger-bladed pang-ani cuts rice panicle by panicle; this essay follows the tool and Rizal's own agricultural interests."
 ---
 
 The finger-bladed knife is a farming tool used in rice harvesting in the Philippines and other parts of Southeast Asia. Traditionally, it is used to cut panicles one by one. This knife is composed of a crescent-shaped metal blade attached crosswise to a wooden handle made of bamboo or hardwood. It is used by holding it in the right hand while holding the rice stalk in the left. The knife is called rakem in Ilokano, rakam in Isneg, lakom in Kalinga, lakem in Bontoc and Lepanto Kanakanay, yatab in Tagalog, gata in Bikol, and kayog in Hiligaynon and Bisaya.

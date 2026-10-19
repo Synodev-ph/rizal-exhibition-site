@@ -3,6 +3,8 @@ title: Rizal in Germany
 slug: rizal-in-germany
 intro: José Rizal traveled to Germany to pursue his specialization in ophthalmology. Little did he know that his stay, particularly in Berlin, would soon open his eyes to a broader perspective and worldview. From finishing Noli Me Tángere to engaging with leading scientists, Rizal came to understand his identity more clearly.
 heroImage: home/rizal-in-germany.webp
+heroImageAlt: "Bronze statue of José Rizal."
+seoDescription: "José Rizal lived in Germany from 1886 to 1887, finishing Noli Me Tángere and joining Berlin's scientific circles; this page traces that formative stay."
 ---
 
 The Filipino physician, polymath, and hero José Rizal lived in Germany from February 1886 to May 1887, primarily to pursue his specialization in ophthalmology. While there, he completed his seminal novel Noli Me Tángere, published in Berlin in March 1887. He also immersed himself in the intellectual life of the city, engaging with the Berlin Society of Anthropology, Ethnology, and Prehistory and the Berlin Geographical Society, attending lectures, meeting leading scientists, including Rudolf Virchow, and presenting and publishing a paper on Tagalog poetry.

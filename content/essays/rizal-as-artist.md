@@ -3,9 +3,11 @@ title: A Realist's Art: The Creative Life of the Hero
 slug: rizal-as-artist
 section: artist
 heroImage: sections/artist.webp
+heroImageAlt: "Pencil self-portrait of José Rizal."
 heroCaption: Self-portrait by José Rizal
 order: 2
 author: Nicole Lasquety
+seoDescription: "Rizal's sculptures, portraits, and sketches are National Cultural Treasures; this essay follows the artist's life from childhood maquettes to Dapitan."
 ---
 
 Despite their designation as National Cultural Treasures, José Rizal's artworks often receive less attention than his many other accomplishments. Yet one cannot separate the artist from the hero who, by age five, was already modeling clay and wax, carving wood, and learning to write. Raised in an environment that nurtured imagination, young Rizal created his own maquettes, a practice he carried into his years in Dapitan, where he made objects that were both functional and playful.

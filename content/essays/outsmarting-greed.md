@@ -3,9 +3,11 @@ title: Outsmarting Greed: The Monkey and the Turtle
 slug: outsmarting-greed
 section: artist
 heroImage: the-monkey-and-the-tortoise/front.webp
+heroImageAlt: "Title page of The Monkey and the Tortoise, written and illustrated by José Rizal."
 order: 10
 author: Mariah Camille Calanno
 category: strokes-sketches-and-satire
+seoDescription: "Rizal wrote and illustrated 'The Monkey and the Tortoise' for an autograph album; this essay reads the fable's wit and philosophy."
 ---
 
 Out of the many creative outputs that Rizal made in his lifetime, the story of the Monkey and the Tortoise is one of his distinct works. Not only did Rizal write the story in English, but it was also sketched to look like a comic strip. It was supposed to be just a banter to his pal and Juan Luna’s wife, Paz Pardo de Tavera, when she asked Rizal to write in her autograph album before the pages ran out (Craig 1913, 160), but it turned out to be something more philosophical than just a simple children’s story.
@@ -20,6 +22,4 @@ Craig, Austin. Lineage, Life and Labors of Jose Rizal. Manila: Philippine Educat
 
 Rizal, José. “Two Eastern Fables,” Trübner’s Record vol. 1, no. 3 (July 1889).
 
-Diaz de Rivera, Lina. “The enduring relevance of
-
-Jose Rizal’s retelling of The Monkey and the Turtle,” The RAP Journal, vol. 34, no. 1 (November 2011).
+Diaz de Rivera, Lina. “The enduring relevance of Jose Rizal’s retelling of The Monkey and the Turtle,” The RAP Journal, vol. 34, no. 1 (November 2011).

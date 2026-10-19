@@ -1,5 +1,6 @@
 {
   "id": "pairs",
+  "seoDescription": { "en": "Match works by José Rizal with objects he collected in this memory game drawn from the exhibition's art and ethnographic collection." },
   "type": "match",
   "draft": true,
   "sizes": [6, 9, 12],

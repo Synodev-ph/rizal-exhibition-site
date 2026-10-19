@@ -4,9 +4,11 @@ slug: betel-chewing-and-implements
 section: ethnographer
 summary: Betel chewing's social and ceremonial role across the Philippines, and the kalikut betel mortar and areca-shell tooth cleaner Rizal included among his 1888 donation.
 heroImage: kalikut/front.webp
+heroImageAlt: "Wooden betel mortar (kalikut) with a carved handle and brass trim."
 order: 6
 author: Jessica Marquinez
 category: daily-life
+seoDescription: "This essay explores betel chewing's social and ceremonial role in the Philippines and the kalikut mortar Rizal sent to Berlin."
 ---
 
 Betel chewing is very common in the Philippines and its neighboring Southeast Asian countries, as the areca palm, the source of the betel nut, is naturally abundant in the region. It became a part of local culture in some areas of the country, as it plays a significant role in socialization to this day.

@@ -3,9 +3,11 @@ title: Conveying and Creating: Rizal’s Artistic Pursuits
 slug: conveying-and-creating
 section: artist
 heroImage: sections/artist.webp
+heroImageAlt: "Pencil self-portrait of José Rizal."
 heroCaption: Self-portrait by José Rizal
 order: 1
 author: Gemma Cruz-Araneta
+seoDescription: "Rizal chose the pen, yet his letters and travel notes brim with sketches; this essay follows the drawings that accompanied his writing life."
 ---
 
 Rizal chose the pen rather than the paint brush or the sculptor’s chisel. Yet, his travel notes and letters to home had sketches of people, landscapes, whatever he considered memorable. He illustrated the Tagalog translation of Hans Christien Andersen’s fairy tales he made for his nephews and nieces. He drew a self-portrait and sent it to Ferdinand Blumentritt ; there are two extant portraits of his sisters Saturnina and Lucia. He drew his nipa house in Dapitan and the oracle, Sybilla Cumaná.

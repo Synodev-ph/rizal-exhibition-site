@@ -1,5 +1,6 @@
 {
   "id": "mothers",
+  "seoDescription": { "en": "Solve a sliding puzzle of La Venganza de la Madre, Rizal's terracotta allegory of a mother dog defending her puppy from a crocodile." },
   "type": "puzzle",
   "object": "la-venganza-de-la-madre",
   "image": "la-venganza-de-la-madre/front.webp",

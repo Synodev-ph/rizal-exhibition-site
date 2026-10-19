@@ -4,9 +4,11 @@ slug: philippine-weaving-in-the-time-of-rizal
 section: ethnographer
 summary: From the 1887 Madrid Exposición to Rizal's own donated barong, baro't saya, and Mindanao ikat and tritik cloths, a survey of Philippine weaving traditions and the plant fibers behind them.
 heroImage: tritik/front.webp
+heroImageAlt: "Patterned red tritik upper garment."
 order: 4
 author: Marites Tauro, Danette Jennifer Megalbio, and Jane Maren Dasal
 category: clothing
+seoDescription: "From the 1887 Madrid Exposición to Rizal's donated barong and Mindanao textiles, this essay surveys Philippine weaving and its plant fibers."
 ---
 
 As Dr. Rizal acquainted himself with the intellectual circles in Germany in 1887 with Maximo Viola's help, the Philippines was also being introduced to the European continent's other side, albeit in a different manner.

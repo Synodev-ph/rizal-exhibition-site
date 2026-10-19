@@ -4,8 +4,10 @@ slug: rizal-as-ethnographer
 section: ethnographer
 summary: In 1888 Rizal mailed 21 ethnographic objects from London to Berlin, a material argument for Philippine skill, artistry, and cultural richness, offered into an emerging European science of anthropology.
 heroImage: essays/rizal-as-ethnographer.webp
+heroImageAlt: "Close-up of Rizal’s salakot decorated with metallic flowers on a stand."
 order: 1
 author: Dr. Maria Cristina Martinez-Juan
+seoDescription: "In 1888 Rizal sent 21 ethnographic objects from London to Berlin; this essay reads the donation as an argument for Philippine cultural richness."
 ---
 
 In 1888, José Rizal mailed a small but remarkable group of 21 ethnographic objects from London to the Königliches Museum für Völkerkunde, today the Ethnologisches Museum Berlin, during the early months of his second trip to Europe. The box arrived in July, addressed not to museum director Adolf Bastian, but to Fedor Jagor, whose book on the Philippines he had admired since youth and even learned German to read. The donation was a direct outcome of the heady months Rizal spent in Germany in 1886–1887, years marked by exhilarating intellectual encounters and his first sustained exposure to the emerging science of anthropology. During this period, he also recognized the power of material culture as evidence: tangible proof of cultural complexity, technological skill, and historical depth.

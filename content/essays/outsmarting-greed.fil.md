@@ -15,6 +15,4 @@ Craig, Austin. Lineage, Life and Labors of Jose Rizal. Manila: Philippine Educat
 
 Rizal, José. “Two Eastern Fables,” Trübner’s Record vol. 1, no. 3 (July 1889).
 
-Diaz de Rivera, Lina. “The enduring relevance of
-
-Jose Rizal’s retelling of The Monkey and the Turtle,” The RAP Journal, vol. 34, no. 1 (November 2011).
+Diaz de Rivera, Lina. “The enduring relevance of Jose Rizal’s retelling of The Monkey and the Turtle,” The RAP Journal, vol. 34, no. 1 (November 2011).

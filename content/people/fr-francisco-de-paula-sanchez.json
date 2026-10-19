@@ -1,9 +1,15 @@
 {
   "id": "fr-francisco-de-paula-sanchez",
+  "seoDescription": { "en": "Jesuit priest and Ateneo professor Francisco de Paula Sanchez witnessed Rizal's early genius and encouraged his education and writing." },
   "section": "scholar",
   "category": "teachers-and-mentors",
   "order": 15,
   "name": "Fr. Francisco de Paula Sanchez",
+  "role": {
+    "en": "Jesuit priest and educator; Rizal's professor at the Ateneo Municipal de Manila",
+    "fil": "Paring Heswita at guro; propesor ni Rizal sa Ateneo Municipal de Manila",
+    "de": "Jesuit und Lehrer; Rizals Professor am Ateneo Municipal de Manila"
+  },
   "lifespan": {
     "en": "12 January 1849 - 21 July 1928"
   },

@@ -8,7 +8,7 @@ export function pageTitle(page, site) {
 }
 
 export function pageDescription(page) {
-  const plain = String(pick(page.intro) || pick(page.body)).replace(/\s+/g, " ").trim();
+  const plain = String(pick(page.seoDescription) || pick(page.intro) || pick(page.body)).replace(/\s+/g, " ").trim();
   if (plain.length <= 155) return plain;
   return plain.slice(0, 152).replace(/\s+\S*$/, "") + "…";
 }
@@ -17,7 +17,7 @@ function renderHero(site, page) {
   const bg = page.heroImage
     ? renderImage({
         site,
-        image: { src: page.heroImage, alt: "" },
+        image: { src: page.heroImage, alt: page.heroImageAlt },
         className: "page-hero__bg",
         loading: "eager",
         fetchpriority: "high",

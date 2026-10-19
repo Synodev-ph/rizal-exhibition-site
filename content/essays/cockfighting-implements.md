@@ -4,9 +4,11 @@ slug: cockfighting-implements
 section: ethnographer
 summary: Cockfighting's deep roots in Filipino culture, as Rizal portrayed it in Noli Me Tángere, and the cuerda para atar el gallo (a rope, bone, and tortoiseshell tether) he donated to Berlin.
 heroImage: chicken-stake/front.webp
+heroImageAlt: "Coiled chicken stake (tahid) with a carved bone lock."
 order: 9
 author: Leodivico Masuli II
 category: daily-life
+seoDescription: "Cockfighting's deep roots in Filipino culture, as Rizal portrayed it in Noli Me Tángere, and the tether he donated to Berlin."
 ---
 
 In Noli Me Tángere, Rizal portrayed cockfighting as a social gathering. Sunday afternoons were incomplete without cockfighting during that time. People, regardless of social status, gathered and participated. Cockfighting drew people from all social classes, from the wealthy to the poor, and even the guardia civil and clergymen, all hoping to win. It represented both aspirations and pleasures: the desire to get rich easily and the amusement they derived from every blow of battling roosters. Women rarely participated in cockfighting, making it an almost exclusively male gathering; mostly, women sold cigars, foodstuffs, and other goods, and served as collectors at the pintu, or entrance.

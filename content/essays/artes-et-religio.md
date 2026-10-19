@@ -3,9 +3,11 @@ title: Artes et Religio: Sculpting the Sacred Heart of Jesus in Ateneo Municipal
 slug: artes-et-religio
 section: artist
 heroImage: sacred-heart-of-jesus/front.webp
+heroImageAlt: "Wooden Sacred Heart of Jesus statue with Christ’s hand over his heart."
 order: 6
 author: Jane Maren Dasal
 category: of-clay-and-resistance
+seoDescription: "Before formal training, the young Rizal modeled birds and butterflies in clay and wax; this essay traces his early sculpting and the Sacred Heart."
 ---
 
 Even before studying in Manila, the young Pepe had already shown an interest in sculpting. He started making models of birds and butterflies made of clay and wax as play time in his childhood home in Calamba. He eventually carved with a pen knife despite no formal training.
@@ -28,6 +30,4 @@ Joaquin, N. Rizal in Saga: A Life for Student Fans. Pasig: Milflores Publishing,
 
 Palma, C.M. Sculptor. Pasig: Reyes Publishing.
 
-Visit to the Ateneo de Manila University Archives,
-
-2020. February 24, 2026.
+Visit to the Ateneo de Manila University Archives, 2020. February 24, 2026.

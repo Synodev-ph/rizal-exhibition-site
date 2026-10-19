@@ -8,9 +8,9 @@ export function essayTitle(essay, site) {
 }
 
 export function essayDescription(essay) {
-  const source = essay.summary
+  const source = pick(essay.seoDescription) || (essay.summary
     ? pick(essay.summary)
-    : (pick(essay.body).split(/\n\s*\n/).find((p) => /^\s*[^#!\s]/.test(p)) ?? "");
+    : (pick(essay.body).split(/\n\s*\n/).find((p) => /^\s*[^#!\s]/.test(p)) ?? ""));
   const plain = source.replace(/[*_`]|\[([^\]]*)\]\([^)]*\)/g, "$1").replace(/\s+/g, " ").trim();
   if (plain.length <= 155) return plain;
   return plain.slice(0, 152).replace(/\s+\S*$/, "") + "…";
@@ -20,7 +20,7 @@ export function renderEssay({ site, essay, section, prev, next }) {
   const hero = essay.heroImage
     ? `<figure class="essay__hero">${renderImage({
         site,
-        image: { src: essay.heroImage, alt: "" },
+        image: { src: essay.heroImage, alt: essay.heroImageAlt },
         className: "essay__hero-img",
         loading: "eager",
         fetchpriority: "high",

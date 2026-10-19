@@ -11,7 +11,7 @@ export function aboutTitle(site) {
 }
 
 export function aboutDescription(about) {
-  const plain = pick(about.intro).replace(/\s+/g, " ").trim();
+  const plain = (pick(about.seoDescription) || pick(about.intro)).replace(/\s+/g, " ").trim();
   if (plain.length <= 155) return plain;
   return plain.slice(0, 152).replace(/\s+\S*$/, "") + "…";
 }
@@ -55,7 +55,7 @@ export function renderAbout({ site, about }) {
   const messages = about.messages.map((m, i) => renderMessage(site, m, i)).join("\n");
   const heroBg = renderImage({
     site,
-    image: { src: "home/about-the-project.webp", alt: "" },
+    image: about.heroImage,
     className: "page-hero__bg",
     loading: "eager",
     fetchpriority: "high",

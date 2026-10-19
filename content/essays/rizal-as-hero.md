@@ -4,8 +4,10 @@ slug: rizal-as-hero
 section: hero
 summary: Rizal's unwavering commitment to truth, education, and reform, and his martyrdom at Bagumbayan, are preserved today across the shrines and collections that keep his legacy alive.
 heroImage: essays/rizal-as-hero.webp
+heroImageAlt: "Martyrdom of José Rizal."
 order: 1
 author: Bryan Anthony Paraiso and Eufemio Agbayani III
+seoDescription: "Rizal's writings challenged colonial injustice, and his execution at Bagumbayan sealed his legacy; this essay traces his heroism and martyrdom."
 ---
 
 José Rizal's heroism was rooted in his unwavering commitment to truth, education, and reform. Through his writings, most notably Noli Me Tángere and El Filibusterismo, he exposed the injustices of colonial rule and inspired a movement for change. His advocacy for peaceful reform and intellectual empowerment set him apart as a visionary leader. Yet, his martyrdom on December 30, 1896, when he faced execution at Bagumbayan, sealed his place in history. Rizal's death was not in vain; it ignited the flames of revolution and united Filipinos in the struggle for independence. His life reminds us that true heroism lies in selfless service and courage in the face of oppression.

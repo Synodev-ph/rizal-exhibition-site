@@ -4,9 +4,11 @@ slug: unveiling-the-lambong
 section: ethnographer
 summary: Rizal's donated lambong, a dark violet silk veil, traced through 19th-century paintings, colonial-era accounts, and a Holy Week tradition that still lays lambong cloth in the path of Palm Sunday processions today.
 heroImage: lambong/front.webp
+heroImageAlt: "Lambong veil in deep violet with light blue rectangular cloth."
 order: 3
 author: Dr. Marrianne Ubalde-Baclor
 category: clothing
+seoDescription: "Rizal's donated lambong, a dark violet silk veil, is traced through 19th-century paintings, colonial accounts, and Holy Week traditions."
 ---
 
 In his 1888 letter to Adolf Bastian regarding his donation of Philippine materials, Rizal listed a velo de mujer, which probably refers to this piece, commonly known as lambong or veil. This lambong that Rizal donated to his colleagues in Germany resembles what women wore in the 1800s, as paintings by Jose Honorato Lozano (ca. 1822–1825), Manila and its Environs: A Scene in Town, and Filipino 19th-century painter Justiniano Asuncion (1816–1901) depict. In these paintings, the artists depicted the veil as dark violet or blue, or blue-black, lustrous with a silky texture and appearance. Two small pompoms made of cotton thread protruded from the head when women wore the veil, and two elongated, rabbit-foot-like pieces of cloth draped from the crown. A light blue rectangular cloth, made from linen or cotton, was possibly obtained from trading with Arab or Chinese merchants. The lambong's color almost always complemented the dark color of the tapis (overskirt), suggesting one of its vital functions: as cover.

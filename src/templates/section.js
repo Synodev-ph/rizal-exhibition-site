@@ -9,7 +9,7 @@ export function sectionTitle(section, site) {
 }
 
 export function sectionDescription(section) {
-  const plain = pick(section.intro).replace(/\s+/g, " ").trim();
+  const plain = (pick(section.seoDescription) || pick(section.intro)).replace(/\s+/g, " ").trim();
   if (plain.length <= 155) return plain;
   return plain.slice(0, 152).replace(/\s+\S*$/, "") + "…";
 }

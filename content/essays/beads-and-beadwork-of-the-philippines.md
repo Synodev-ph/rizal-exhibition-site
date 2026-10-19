@@ -4,9 +4,11 @@ slug: beads-and-beadwork-of-the-philippines
 section: ethnographer
 summary: Heirloom beads from the Cordillera to the beaded belts and sashes of Mindanao's non-Islamic groups, including the bakus-style sash Rizal donated to the Ethnological Museum of Berlin.
 heroImage: bakus/front.webp
+heroImageAlt: "Beaded bakus with red and black patterns."
 order: 5
 author: Catherine Alice Ramos
 category: clothing
+seoDescription: "From Cordillera heirloom beads to Mindanao beaded sashes, this essay surveys Philippine beadwork and the bakus Rizal donated to Berlin."
 ---
 
 The Philippines holds a highly diverse tangible and intangible cultural heritage, passed down through generations. This heritage includes traditional ornaments, common in different ethnolinguistic groups, which people often make from natural plant materials, animal bones and teeth, animal hair, shells, glass, and stones. People make some of these ornaments from beads.

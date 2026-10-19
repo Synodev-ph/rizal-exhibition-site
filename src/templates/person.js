@@ -22,7 +22,7 @@ export function personTitle(person, site) {
 }
 
 export function personDescription(person) {
-  const source = pick(person.bio) || pick(person.role) || person.name;
+  const source = pick(person.seoDescription) || pick(person.bio) || pick(person.role) || person.name;
   const plain = source.replace(/\s+/g, " ").trim();
   if (plain.length <= 155) return plain;
   return plain.slice(0, 152).replace(/\s+\S*$/, "") + "…";

@@ -42,6 +42,4 @@ Sacred Heart Catholic Church. “St. Anthony of Padua.” Accessed on March 7, 2
 
 Sánchez, Cayetano. “The Franciscans in the Life and Works of Jose Rizal.” Philippine Quarterly of Culture and Society 11, no. 1 (1983): 1-56.
 
-Stracke, Richard. “Saint Anthony of Padua: The
-
-Iconography.” ChristianIconography. Info. Augusta University. Modified on February 24, 2023. https://www.christianiconography.info/anthonyPadua.html#child
+Stracke, Richard. “Saint Anthony of Padua: The Iconography.” ChristianIconography. Info. Augusta University. Modified on February 24, 2023. https://www.christianiconography.info/anthonyPadua.html#child

@@ -25,8 +25,4 @@ Domingo, Benjamin B. Rizal in Germany. Second edition. Foreign Service Institute
 
 Tabios, Hanah. “National Museum Honors Rizal With Rare Exhibition.” Manila Bulletin, 18 June 2020, mb.com.ph/2020/06/19/national-museum-honors-rizal-with-rare-exhibition.
 
-Team, It. The Philippine Embassy in Berlin. 22
-
-December 2017,
-
-philippine-embassy.de/2017/12/22/ rizals-life-in-berlin-remembered.
+Team, It. The Philippine Embassy in Berlin. 22 December 2017, philippine-embassy.de/2017/12/22/rizals-life-in-berlin-remembered.

@@ -3,9 +3,11 @@ title: Heldenreise: Dr. Jose Rizal’s time in Germany
 slug: heldenreise
 section: artist
 heroImage: sketch-of-fritz-ullmer/front.webp
+heroImageAlt: "Heidelberg sketch of Fritz Ullmer’s head with notes in German."
 order: 11
 author: Eruel Olvina
 category: strokes-sketches-and-satire
+seoDescription: "Germany became Rizal's second home in Europe; this essay follows his hero's journey through Heidelberg, Leipzig, and Berlin."
 ---
 
 Germany, or Deutschland to its citizens, played an important role in the life of our hero Dr. Jose Rizal. It became his second home in Europe during the time when it was challenging for an extranjero like him to adapt to and familiarize with the way of living in another country. This new feeling made Rizal feel like a newborn child as he is going to learn a lot of new things before his eyes, and will unveil a side of him that will leave his countrymen in awe.
@@ -34,6 +36,4 @@ Ocampo, Ambeth R. “Rizal Andersen, Christmas Tree.” Philippine Daily Inquire
 
 Paz Policarpio-Mendez. “The Wilhelmsfeld Story of Jose Rizal.” In Adventures in Rizaliana. National Historical Institute, 1978.
 
-Sorilla, Franz IV. “Appreciate the connection between
-
-Calamba and Frankfurt at the National Library of the Philippines”. Tatler Asia. September 12, 2025. https://www.tatlerasia.com/lifestyle/arts/from-calamba-to-frankfurt-national-library
+Sorilla, Franz IV. “Appreciate the connection between Calamba and Frankfurt at the National Library of the Philippines”. Tatler Asia. September 12, 2025. https://www.tatlerasia.com/lifestyle/arts/from-calamba-to-frankfurt-national-library

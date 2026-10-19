@@ -29,7 +29,7 @@ export function objectName(object) {
 }
 
 export function objectDescription(object) {
-  const plain = pick(object.description).replace(/\s+/g, " ").trim();
+  const plain = (pick(object.seoDescription) || pick(object.description)).replace(/\s+/g, " ").trim();
   if (plain.length <= 155) return plain;
   return plain.slice(0, 152).replace(/\s+\S*$/, "") + "…";
 }

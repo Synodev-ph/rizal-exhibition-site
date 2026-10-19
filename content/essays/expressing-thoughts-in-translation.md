@@ -3,9 +3,11 @@ title: Expressing Thoughts in Translation: From Wilhelm Tell to Guillermo
 slug: expressing-thoughts-in-translation
 section: artist
 heroImage: guillermo-tell/front.webp
+heroImageAlt: "Cover of Guillermo Tell, Rizal’s Tagalog translation, with the title written in ink."
 order: 8
 author: Danilo Ellamil, Jr.
 category: poetry-and-retellings
+seoDescription: "In 1886 Rizal translated Schiller's Wilhelm Tell into Tagalog; this essay reads Guillermo Tell as a deliberate act of language and politics."
 ---
 
 There is a tendency to remember José Rizal primarily through his novels, especially Noli Me Tangere and El Filibusterismo. Yet in 1886, while in Germany and in the final stages of revising the Noli, Rizal was immersed in a different kind of labor: translating the Wilhelm Tell by Friedrich Schiller into Tagalog, which he titled Guillermo Tell. This translation, often treated as a minor footnote, reveals a more deliberate and complex engagement with language, readership, and political imagination.
@@ -38,6 +40,4 @@ Guillermo, Ramon. Translation and Revolution: A Study of Jose Rizal’s Guillerm
 
 _______________ Das Erlöschen der Natur: European Revolutionary Discourse in 19th Century Tagalog Translation. University of Hamburg, 2005.
 
-Wirth, Christa. “Reading Rizal: Wilhelm Tell and Texts
-
-of Revolution in the Colonial Philippines.” Postcolonial Studies, 2021.
+Wirth, Christa. “Reading Rizal: Wilhelm Tell and Texts of Revolution in the Colonial Philippines.” Postcolonial Studies, 2021.

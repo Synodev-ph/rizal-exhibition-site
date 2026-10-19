@@ -4,9 +4,11 @@ slug: salakot-from-commonfolk-to-elite
 section: ethnographer
 summary: How the everyday salakot hat, worn for practicality by commoners, was adopted by the principalia as a status symbol embellished with silver and tortoiseshell, including the one Rizal called "it belonged to me."
 heroImage: salakot/front.webp
+heroImageAlt: "Domed salakot decorated with metallic flowers on a stand."
 order: 2
 author: Reann Clarisse Robes
 category: clothing
+seoDescription: "How the everyday salakot became a status symbol for the principalia, including the silver-embellished hat Rizal called his own."
 ---
 
 Clothing serves as a form of identity and is generally utilitarian, depending on the wearer's day-to-day activities. In the 19th-century Philippines, clothing changed as Spaniards influenced it and as Filipinos responded to societal trends. Generally, due to humidity, people wear loose, comfortable clothes regardless of social status. Additionally, Filipinos wear the salakot, a common wide-brimmed Filipino hat, to protect themselves from rain or intense heat when they are in the fields or at sea. It varies in material, size, and shape, ranging from helmets to conical, pointed, or rounded mushroom shapes. The French visitor to the Philippines in the mid-1880s, Jean Mallat, described it as "shaped like an umbrella." For example, Ilocano traders who sell their textiles in their region typically wear loose shirts, mid-calf salaual (lower garment), anajao raincoats, and a small salakot with a string to secure and keep the headgear in place.

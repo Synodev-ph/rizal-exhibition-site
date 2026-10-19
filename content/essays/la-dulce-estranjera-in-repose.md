@@ -3,9 +3,11 @@ title: La Dulce Estranjera in Repose: Josephine Sleeping
 slug: la-dulce-estranjera-in-repose
 section: artist
 heroImage: josephine-sleeping/front.webp
+heroImageAlt: "Josephine Sleeping, a reclining sculpture of a woman wrapped in cloth."
 order: 5
 author: Nicole Lasquety
 category: of-clay-and-resistance
+seoDescription: "Rizal called Josephine Bracken his dulce estranjera; this essay explores her place in his life and the sleeping sculpture he made in Dapitan."
 ---
 
 “If Rizal can be said to have ever loved anyone else but the Filipino Nation, then it must be said that he loved Josephine; he was her husband twice over, her open lover in defiance of all his innate propriety and sensibility; she was the one woman with whom he shared that most jealously prized of all his possessions, his name, and also his heart’s intimacies.”

@@ -34,6 +34,4 @@ Guillermo, Ramon. Translation and Revolution: A Study of Jose Rizal’s Guillerm
 
 _______________ Das Erlöschen der Natur: European Revolutionary Discourse in 19th Century Tagalog Translation. University of Hamburg, 2005.
 
-Wirth, Christa. “Reading Rizal: Wilhelm Tell and Texts
-
-of Revolution in the Colonial Philippines.” Postcolonial Studies, 2021.
+Wirth, Christa. “Reading Rizal: Wilhelm Tell and Texts of Revolution in the Colonial Philippines.” Postcolonial Studies, 2021.

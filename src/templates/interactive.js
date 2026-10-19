@@ -49,6 +49,8 @@ export function interactiveTitle({ site, interactive, objectById }) {
 }
 
 export function interactiveDescription({ interactive, objectById }) {
+  const seo = pick(interactive.seoDescription);
+  if (seo) return seo;
   if (interactive.type === "match") return t("matchDescription");
   const object = (objectById.get(interactive.object ?? ""));
   const lead = objectLead(object);
@@ -318,7 +320,7 @@ export function interactiveHubTitle(site) {
 }
 
 export function interactiveHubDescription() {
-  return t("interactivesIntro");
+  return t("interactivesMetaDescription");
 }
 
 function hubCardContent(p) {

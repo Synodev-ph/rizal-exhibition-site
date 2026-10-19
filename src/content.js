@@ -167,7 +167,7 @@ function validateImage(errors, file, field, img, assetsDir) {
 
 const OBJECT_KEYS = [
   "id", "section", "category", "order", "title", "objectType", "materials",
-  "dimensions", "accession", "description", "condition", "images", "rights",
+  "dimensions", "accession", "description", "seoDescription", "condition", "images", "rights",
   "model3d", "related", "featured", "hotspots", "author", "draft",
 ];
 
@@ -198,6 +198,7 @@ function validateObject(errors, file, obj, assetsDir) {
   optLocalized(errors, file, obj, "dimensions");
   optString(errors, file, obj, "accession");
   (obj.draft === true ? optLocalized : reqLocalized)(errors, file, obj, "description");
+  optLocalized(errors, file, obj, "seoDescription");
   optLocalized(errors, file, obj, "condition");
   optString(errors, file, obj, "author");
   checkDraft(errors, file, obj);
@@ -265,7 +266,7 @@ function validateObject(errors, file, obj, assetsDir) {
 
 const PERSON_KEYS = [
   "id", "section", "category", "order", "name", "role", "lifespan", "birthplace", "portrait",
-  "author", "quote", "quoteSource", "bio", "relatedObjects", "relatedPeople", "draft",
+  "author", "quote", "quoteSource", "bio", "seoDescription", "relatedObjects", "relatedPeople", "draft",
 ];
 
 function validatePerson(errors, file, person, assetsDir) {
@@ -281,6 +282,7 @@ function validatePerson(errors, file, person, assetsDir) {
   optLocalized(errors, file, person, "lifespan");
   optLocalized(errors, file, person, "birthplace");
   reqUnlessDraft(errors, file, person, "bio");
+  optLocalized(errors, file, person, "seoDescription");
   optString(errors, file, person, "author");
   optLocalized(errors, file, person, "quote");
   optLocalized(errors, file, person, "quoteSource");
@@ -298,7 +300,7 @@ function validatePerson(errors, file, person, assetsDir) {
   }
 }
 
-const SECTION_KEYS = ["id", "title", "heroTitle", "intro", "heroImage", "cardImage", "heroScrim", "categories", "status"];
+const SECTION_KEYS = ["id", "title", "heroTitle", "intro", "seoDescription", "heroImage", "cardImage", "heroScrim", "categories", "status"];
 
 function validateSection(errors, file, section, assetsDir) {
   checkKeys(errors, file, section, SECTION_KEYS);
@@ -306,6 +308,7 @@ function validateSection(errors, file, section, assetsDir) {
   reqLocalized(errors, file, section, "title");
   optLocalized(errors, file, section, "heroTitle");
   reqLocalized(errors, file, section, "intro");
+  optLocalized(errors, file, section, "seoDescription");
   validateImage(errors, file, "heroImage", section.heroImage, assetsDir);
   if (section.cardImage !== undefined) {
     validateImage(errors, file, "cardImage", section.cardImage, assetsDir);
@@ -331,7 +334,7 @@ function validateSection(errors, file, section, assetsDir) {
 
 const SITE_KEYS = [
   "siteTitle", "siteSubtitle", "exhibitionTitle", "exhibitionSubtitle", "homeTitle",
-  "baseUrl", "basePath", "language", "description", "heroCtas", "home3dObjects", "homeQuote", "homeSocialImage",
+  "baseUrl", "basePath", "language", "description", "seoDescription", "heroCtas", "home3dObjects", "homeQuote", "homeSocialImage",
   "homeTeasers", "nav", "footerNav", "footerCtas",
   "footer", "contact", "partners", "social", "analytics", "copyright",
 ];
@@ -345,6 +348,7 @@ function validateSite(errors, file, site, assetsDir, staticDir) {
   ]) {
     reqLocalized(errors, file, site, field);
   }
+  optLocalized(errors, file, site, "seoDescription");
 
   if (reqString(errors, file, site, "baseUrl")) {
     if (!/^https:\/\/[^/]+$/.test(site.baseUrl)) {
@@ -480,7 +484,7 @@ function validateSite(errors, file, site, assetsDir, staticDir) {
   }
 }
 
-const ESSAY_KEYS = ["title", "slug", "section", "summary", "heroImage", "heroCaption", "order", "author", "category"];
+const ESSAY_KEYS = ["title", "slug", "section", "summary", "seoDescription", "heroImage", "heroImageAlt", "heroCaption", "order", "author", "category"];
 
 function validateEssay(errors, file, essay, assetsDir) {
   const fm = essay.frontmatter;
@@ -489,6 +493,7 @@ function validateEssay(errors, file, essay, assetsDir) {
   reqString(errors, file, fm, "slug") && checkKebab(errors, file, "slug", fm.slug);
   reqString(errors, file, fm, "section");
   optString(errors, file, fm, "summary");
+  optLocalized(errors, file, fm, "seoDescription");
   reqString(errors, file, fm, "author");
   reqNumber(errors, file, fm, "order");
   optString(errors, file, fm, "category");
@@ -496,12 +501,15 @@ function validateEssay(errors, file, essay, assetsDir) {
   if (reqString(errors, file, fm, "heroImage")) {
     checkImagePath(errors, file, "heroImage", fm.heroImage, assetsDir);
   }
+  if (!isNonEmptyString(fm.heroImageAlt)) {
+    errors.add(file, "heroImageAlt", "missing or empty alt text for heroImage");
+  }
   if (!isNonEmptyString(essay.body)) {
     errors.add(file, "body", "essay has no body text");
   }
 }
 
-const INTERACTIVE_KEYS = ["id", "type", "object", "image", "cards", "sizes", "draft", "cardTitle"];
+const INTERACTIVE_KEYS = ["id", "type", "object", "image", "cards", "sizes", "draft", "cardTitle", "seoDescription"];
 export const INTERACTIVE_TYPES = ["puzzle", "match"];
 
 function validateInteractive(errors, file, item, assetsDir) {
@@ -509,6 +517,7 @@ function validateInteractive(errors, file, item, assetsDir) {
   if (item.draft !== undefined && typeof item.draft !== "boolean") errors.add(file, "draft", "must be a boolean");
   if (item.cardTitle !== undefined && !isNonEmptyString(item.cardTitle)) errors.add(file, "cardTitle", "must be a non-empty string");
   reqString(errors, file, item, "id") && checkKebab(errors, file, "id", item.id);
+  optLocalized(errors, file, item, "seoDescription");
   if (reqString(errors, file, item, "type") && !INTERACTIVE_TYPES.includes(item.type)) {
     errors.add(file, "type", `"${item.type}" is not a known type (${INTERACTIVE_TYPES.join(", ")})`);
   }
@@ -539,7 +548,7 @@ function validateInteractive(errors, file, item, assetsDir) {
   }
 }
 
-const PAGE_KEYS = ["title", "slug", "intro", "heroImage", "bodyHeading", "author", "personaCards"];
+const PAGE_KEYS = ["title", "slug", "intro", "seoDescription", "heroImage", "heroImageAlt", "bodyHeading", "author", "personaCards"];
 
 function validatePage(errors, file, page, assetsDir) {
   const fm = page.frontmatter;
@@ -547,10 +556,14 @@ function validatePage(errors, file, page, assetsDir) {
   reqString(errors, file, fm, "title");
   reqString(errors, file, fm, "slug") && checkKebab(errors, file, "slug", fm.slug);
   optString(errors, file, fm, "intro");
+  optLocalized(errors, file, fm, "seoDescription");
   optString(errors, file, fm, "bodyHeading");
   optString(errors, file, fm, "author");
   if (fm.heroImage !== undefined && reqString(errors, file, fm, "heroImage")) {
     checkImagePath(errors, file, "heroImage", fm.heroImage, assetsDir);
+    if (!isNonEmptyString(fm.heroImageAlt)) {
+      errors.add(file, "heroImageAlt", "missing or empty alt text for heroImage");
+    }
   }
   if (fm.personaCards !== undefined && typeof fm.personaCards !== "boolean") {
     errors.add(file, "personaCards", "must be a boolean");
@@ -560,7 +573,7 @@ function validatePage(errors, file, page, assetsDir) {
   }
 }
 
-const ABOUT_KEYS = ["intro", "blurbs", "messagesHeading", "messages"];
+const ABOUT_KEYS = ["heroImage", "intro", "seoDescription", "blurbs", "messagesHeading", "messages"];
 
 function validateAbout(errors, file, about, assetsDir, staticDir) {
   if (typeof about !== "object" || about === null || Array.isArray(about)) {
@@ -568,7 +581,9 @@ function validateAbout(errors, file, about, assetsDir, staticDir) {
     return;
   }
   checkKeys(errors, file, about, ABOUT_KEYS);
+  validateImage(errors, file, "heroImage", about.heroImage, assetsDir);
   reqLocalized(errors, file, about, "intro");
+  optLocalized(errors, file, about, "seoDescription");
   reqLocalized(errors, file, about, "messagesHeading");
   if (reqArray(errors, file, about, "blurbs")) {
     about.blurbs.forEach((b, i) => {
@@ -649,8 +664,8 @@ function scanPlaceholders(errors, file, value, fieldPath) {
   }
 }
 
-const ESSAY_TRANSLATABLE = ["title", "summary", "heroCaption", "body"];
-const PAGE_TRANSLATABLE = ["title", "intro", "bodyHeading", "body"];
+const ESSAY_TRANSLATABLE = ["title", "summary", "seoDescription", "heroCaption", "body"];
+const PAGE_TRANSLATABLE = ["title", "intro", "seoDescription", "bodyHeading", "body"];
 
 function readLocaleVariants(errors, contentDir, sub, base, translatable) {
   const variants = {};

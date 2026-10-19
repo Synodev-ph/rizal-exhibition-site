@@ -30,6 +30,4 @@ Ocampo, Ambeth R. “Rizal Andersen, Christmas Tree.” Philippine Daily Inquire
 
 Paz Policarpio-Mendez. “The Wilhelmsfeld Story of Jose Rizal.” In Adventures in Rizaliana. National Historical Institute, 1978.
 
-Sorilla, Franz IV. “Appreciate the connection between
-
-Calamba and Frankfurt at the National Library of the Philippines”. Tatler Asia. September 12, 2025. https://www.tatlerasia.com/lifestyle/arts/from-calamba-to-frankfurt-national-library
+Sorilla, Franz IV. “Appreciate the connection between Calamba and Frankfurt at the National Library of the Philippines”. Tatler Asia. September 12, 2025. https://www.tatlerasia.com/lifestyle/arts/from-calamba-to-frankfurt-national-library

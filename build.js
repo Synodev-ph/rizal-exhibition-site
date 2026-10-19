@@ -142,7 +142,7 @@ export async function build() {
         isDev,
         path: "/",
         title: pick(site.homeTitle),
-        description: pick(site.description),
+        description: pick(site.seoDescription) || pick(site.description),
         image: site.homeSocialImage ? ogImage(site, site.homeSocialImage) : undefined,
         content: renderHome({ site, sections: content.sections, objects: content.objects, interactives: content.interactives }),
       }),
@@ -330,7 +330,7 @@ export async function build() {
         path: `/essays/${essay.slug}/`,
         title: essayTitle(essay, site),
         description: essayDescription(essay),
-        image: ogImage(site, { src: essay.heroImage, alt: pick(essay.title) }),
+        image: ogImage(site, { src: essay.heroImage, alt: essay.heroImageAlt }),
         content: renderEssay({ site, essay, section, prev, next }),
       }),
     });
@@ -348,7 +348,7 @@ export async function build() {
         title: pageTitle(contentPage, site),
         description: pageDescription(contentPage),
         image: contentPage.heroImage
-          ? ogImage(site, { src: contentPage.heroImage, alt: pageTitle(contentPage, site) })
+          ? ogImage(site, { src: contentPage.heroImage, alt: contentPage.heroImageAlt })
           : undefined,
         content: renderContentPage({ site, page: contentPage, sections: content.sections }),
       }),
@@ -431,7 +431,7 @@ export async function build() {
       isDev,
       path: "/404.html",
       title: `${t("pageNotFound")} — ${pick(site.siteTitle)}`,
-      description: "The page you were looking for could not be found on the José Rizal Digital Exhibition.",
+      description: "The page you were looking for could not be found. Return to the José Rizal Digital Exhibition to explore the collection.",
       content: render404({ site }),
     }),
   });

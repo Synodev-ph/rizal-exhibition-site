@@ -3,9 +3,11 @@ title: An Ode to the Filipino Youth: A La Juventud Filipina
 slug: an-ode-to-the-filipino-youth
 section: artist
 heroImage: diploma-de-honor/front.webp
+heroImageAlt: "Framed Diploma de Honor awarded to José Rizal for “A la juventud Filipina.”"
 order: 7
 author: Mariah Camille Calanno
 category: poetry-and-retellings
+seoDescription: "Rizal's 'A La Juventud Filipina' won the 1879 Liceo Artístico contest; this essay traces the poem, its influences, and its call to Filipino youth."
 ---
 
 Rizal is famously known for his last literary work Mi Ultimo Adios (My Last Farewell) which he wrote on the day of his execution. But unbeknownst to many, apart from possibly having a natural talent with rhymes, Rizal’s genius in writing poetry is highly influenced by her mother Doña Teodora and the sessions on reading literary pieces and reciting poems at the Ateneo Municipal (Villaroel 1984, 138-141). Craig (1913, 107) narrates how Rizal brings his compositions to Calamba for his mother to critique, and how the works of Romantic poets like Zorilla (who wrote themes on patriotism by looking back on Spain’s history) influenced his own works like the Junta al Pasig, a zarzuela he wrote while he was studying at the University of Santo Tomas.

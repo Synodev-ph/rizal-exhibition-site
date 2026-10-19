@@ -23,6 +23,4 @@ Joaquin, N. Rizal in Saga: A Life for Student Fans. Pasig: Milflores Publishing,
 
 Palma, C.M. Sculptor. Pasig: Reyes Publishing.
 
-Visit to the Ateneo de Manila University Archives,
-
-2020. February 24, 2026.
+Visit to the Ateneo de Manila University Archives, 2020. February 24, 2026.

@@ -4,9 +4,11 @@ slug: the-sulpakan-fire-piston
 section: ethnographer
 summary: The sulpakan fire piston Rizal sent to Berlin and to Ferdinand Blumentritt, an ancient Southeast Asian fire-making technology, and Rizal's argument against colonial dismissals of Filipino ingenuity.
 heroImage: sulpakan/front.webp
+heroImageAlt: "Sulpakan fire piston made of carabao horn."
 order: 8
 author: Danilo Ellamil, Jr.
 category: daily-life
+seoDescription: "The sulpakan is an ancient Southeast Asian fire piston, not a Rizal invention; this essay traces the object Rizal sent to Berlin."
 ---
 
 The sulpakan, a Tagalog portable fire piston, represents an ingenious fire-making technology rooted in Southeast Asia and the Pacific Islands. Contrary to the common online belief that José Rizal invented the object, historical and ethnographic evidence shows that the fire piston is an ancient tool widely used throughout Southeast Asia, long before Rizal's time. Fire pistons were traditionally made of bamboo, horn, ivory, bone, metal, and hardwood, and were used by various ethnolinguistic groups across the Philippines.

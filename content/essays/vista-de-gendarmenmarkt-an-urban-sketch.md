@@ -3,9 +3,11 @@ title: Vista de Gendarmenmarkt en Berlin: An Urban Sketch through the Eyes of an
 slug: vista-de-gendarmenmarkt-an-urban-sketch
 section: artist
 heroImage: vista-de-gendarmenmarkt/front.webp
+heroImageAlt: "Vista de Gendarmenmarkt en Berlin, a framed pencil drawing of the square and its domed cathedral."
 order: 9
 author: Nicole Lasquety
 category: strokes-sketches-and-satire
+seoDescription: "Rizal sketched Berlin's Gendarmenmarkt during his German sojourn; this essay reads the drawing through the eyes of a colonial visitor."
 ---
 
 Vista de Gendarmenmarkt en Berlin was made during Dr. Rizal’s sojourn in Germany’s capital. The drawing captures a view of a public square where the Schauspielhaus (Concert Hall), the Französischer Dom (French Cathedral), and the Deutscher Dom (German Cathedral) are located.
@@ -30,8 +32,4 @@ Domingo, Benjamin B. Rizal in Germany. Second edition. Foreign Service Institute
 
 Tabios, Hanah. “National Museum Honors Rizal With Rare Exhibition.” Manila Bulletin, 18 June 2020, mb.com.ph/2020/06/19/national-museum-honors-rizal-with-rare-exhibition.
 
-Team, It. The Philippine Embassy in Berlin. 22
-
-December 2017,
-
-philippine-embassy.de/2017/12/22/ rizals-life-in-berlin-remembered.
+Team, It. The Philippine Embassy in Berlin. 22 December 2017, philippine-embassy.de/2017/12/22/rizals-life-in-berlin-remembered.

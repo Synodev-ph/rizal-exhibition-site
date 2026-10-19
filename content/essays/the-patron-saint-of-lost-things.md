@@ -3,9 +3,11 @@ title: The Patron Saint of Lost Things: The San Antonio de Padua Statuette of Jo
 slug: the-patron-saint-of-lost-things
 section: artist
 heroImage: san-antonio-de-padua/front.webp
+heroImageAlt: "San Antonio de Padua statue holding the Infant Jesus, both missing their heads."
 order: 4
 author: Reann Clarisse A. Robes
 category: of-clay-and-resistance
+seoDescription: "Spanish reducción policy placed the church at the center of town; this essay reads Rizal's San Antonio statuette against that history."
 ---
 
 When tracing back the narrative of the infiltration of Spanish colonial rule, it has always been described as successful through the reduccion, a Spanish colonial policy that establishes the church at the center of the town and “civilized society”. This was made possible through the decree of King Phillip of Spain, who assigned religious orders to certain territories to preach the Catholic faith. They were tasked to establish pueblos, and all new Christian converts and unbaptized individuals were required to build their houses around the church.
@@ -46,6 +48,4 @@ Sacred Heart Catholic Church. “St. Anthony of Padua.” Accessed on March 7, 2
 
 Sánchez, Cayetano. “The Franciscans in the Life and Works of Jose Rizal.” Philippine Quarterly of Culture and Society 11, no. 1 (1983): 1-56.
 
-Stracke, Richard. “Saint Anthony of Padua: The
-
-Iconography.” ChristianIconography. Info. Augusta University. Modified on February 24, 2023. https://www.christianiconography.info/anthonyPadua.html#child
+Stracke, Richard. “Saint Anthony of Padua: The Iconography.” ChristianIconography. Info. Augusta University. Modified on February 24, 2023. https://www.christianiconography.info/anthonyPadua.html#child

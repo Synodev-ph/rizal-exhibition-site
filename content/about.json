@@ -1,4 +1,9 @@
 {
+  "seoDescription": { "en": "This digital exhibition traces 21 Philippine objects Rizal sent to Berlin in 1888 and the international partnership that brought their story to light." },
+  "heroImage": {
+    "src": "home/about-the-project.webp",
+    "alt": "Conservators examining an artifact at a work table."
+  },
   "intro": {
     "en": "This digital exhibition reflects on Rizal's life, offering a glimpse into his many facets beyond the renowned hero: a gifted artist, an ethnographer championing Filipino culture, and an exceptional scholar.",
     "fil": "Ang digital na eksibisyong ito ay nagninilay sa buhay ni Rizal, na nagbibigay ng sulyap sa kanyang maraming aspeto higit pa sa kilalang bayani: isang mahusay na artista, isang etnograpong nagtataguyod ng kulturang Filipino, at isang pambihirang iskolar.",
