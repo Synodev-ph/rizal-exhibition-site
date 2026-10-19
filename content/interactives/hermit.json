@@ -1,6 +1,7 @@
 {
   "id": "hermit",
   "seoDescription": { "en": "Solve a sliding puzzle of Rizal's San Pablo El Ermitano, a terracotta gift to Fr. Pablo Pastells during their debate over faith." },
+  "ogImageAlt": "Piece It Together: San Pablo El Ermitano, Dedicated to Fr. Pablo Pastells, S.J. How fast can you solve the puzzle?",
   "type": "puzzle",
   "object": "san-pablo-el-ermitano",
   "image": "san-pablo-el-ermitano/front.webp",

@@ -391,7 +391,8 @@ export async function build() {
         path: `/interactive/${interactive.id}/`,
         title: interactiveTitle(p),
         description: interactiveDescription(p),
-        image: cover ? ogImage(site, { src: cover, alt: interactiveTitle(p) }) : undefined,
+        ogDescription: interactive.ogImageAlt,
+        image: cover ? ogImage(site, { src: cover, alt: interactive.ogImageAlt ?? interactiveTitle(p) }) : undefined,
         content: renderInteractive(p),
       }),
     });

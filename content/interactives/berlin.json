@@ -1,6 +1,7 @@
 {
   "id": "berlin",
   "seoDescription": { "en": "Solve a sliding puzzle of José Rizal's Vista de Gendarmenmarkt en Berlin, a pencil sketch of the Berlin square made during his stay in Germany." },
+  "ogImageAlt": "Piece It Together: Vista de Gendarmenmarkt en Berlin. How fast can you solve the puzzle?",
   "type": "puzzle",
   "object": "vista-de-gendarmenmarkt",
   "image": "vista-de-gendarmenmarkt/front.webp",

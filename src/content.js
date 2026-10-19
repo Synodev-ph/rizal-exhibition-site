@@ -509,7 +509,7 @@ function validateEssay(errors, file, essay, assetsDir) {
   }
 }
 
-const INTERACTIVE_KEYS = ["id", "type", "object", "image", "cards", "sizes", "draft", "cardTitle", "seoDescription"];
+const INTERACTIVE_KEYS = ["id", "type", "object", "image", "cards", "sizes", "draft", "cardTitle", "seoDescription", "ogImageAlt"];
 export const INTERACTIVE_TYPES = ["puzzle", "match"];
 
 function validateInteractive(errors, file, item, assetsDir) {
@@ -518,6 +518,7 @@ function validateInteractive(errors, file, item, assetsDir) {
   if (item.cardTitle !== undefined && !isNonEmptyString(item.cardTitle)) errors.add(file, "cardTitle", "must be a non-empty string");
   reqString(errors, file, item, "id") && checkKebab(errors, file, "id", item.id);
   optLocalized(errors, file, item, "seoDescription");
+  optString(errors, file, item, "ogImageAlt");
   if (reqString(errors, file, item, "type") && !INTERACTIVE_TYPES.includes(item.type)) {
     errors.add(file, "type", `"${item.type}" is not a known type (${INTERACTIVE_TYPES.join(", ")})`);
   }

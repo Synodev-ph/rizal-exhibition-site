@@ -222,11 +222,13 @@ export function renderPage({
   path,
   title,
   description,
+  ogDescription,
   content,
   image,
   isDev = false,
 }) {
   const locale = getLocale();
+  const socialDescription = ogDescription ?? description;
   const origin = site.baseUrl.replace(/\/$/, "");
   const canonical = origin + hrefForLocale(path, locale);
   const altLinks = alternates(site.baseUrl, path)
@@ -239,7 +241,7 @@ export function renderPage({
     `  <meta property="og:site_name" content="${esc(pick(site.exhibitionSubtitle))}">`,
     `  <meta property="og:locale" content="${esc(OG_LOCALES[locale] ?? locale)}">`,
     `  <meta property="og:title" content="${esc(title)}">`,
-    `  <meta property="og:description" content="${esc(description)}">`,
+    `  <meta property="og:description" content="${esc(socialDescription)}">`,
     `  <meta property="og:url" content="${esc(canonical)}">`,
     `  <meta property="og:image" content="${esc(shareImage.url)}">`,
     `  <meta property="og:image:type" content="${esc(shareImage.type)}">`,
@@ -249,7 +251,7 @@ export function renderPage({
     `  <meta name="twitter:card" content="summary_large_image">`,
     twitter ? `  <meta name="twitter:site" content="${esc(twitter)}">` : "",
     `  <meta name="twitter:title" content="${esc(title)}">`,
-    `  <meta name="twitter:description" content="${esc(description)}">`,
+    `  <meta name="twitter:description" content="${esc(socialDescription)}">`,
     `  <meta name="twitter:image" content="${esc(shareImage.url)}">`,
     `  <meta name="twitter:image:alt" content="${esc(shareImage.alt)}">`,
   ].filter(Boolean).join("\n");
