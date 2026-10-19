@@ -12,7 +12,7 @@ import {
 import { esc, seoTitle, TITLE_MAX } from "./layout.js";
 import { imageUrl, modelUrl, renderImage, viewerImage, viewerModel } from "./media.js";
 import { icons } from "../icons.js";
-import { pick, t } from "../i18n.js";
+import { localizeHref, pick, t } from "../i18n.js";
 
 export function objectTitle(object, site) {
   const siteTitle = pick(site.siteTitle);
@@ -39,7 +39,7 @@ function jsonScript(className, data) {
   return `<script type="application/json" class="${className}">${json}</script>`;
 }
 
-function renderGallery(site, object) {
+function renderGallery(site, object, puzzles) {
   const model = object.model3d;
   const hasModel = Boolean(model);
 
@@ -82,7 +82,7 @@ function renderGallery(site, object) {
       sizes: "5rem",
     });
     thumbItems.push(
-      `<li><a class="object-gallery__thumb object-gallery__thumb--model" href="${esc(imageUrl(site, model.poster))}" aria-current="true" data-slide="0"><span class="object-gallery__thumb-badge" aria-hidden="true">3D</span>${posterThumb}<span class="visually-hidden">${esc(t("model3dLabel"))}</span></a></li>`,
+      `<li><a class="object-gallery__thumb object-gallery__thumb--model" href="${esc(imageUrl(site, model.poster))}" aria-current="true" data-slide="0"><span class="object-gallery__thumb-badge" aria-hidden="true">${icons.cube}3D</span>${posterThumb}<span class="visually-hidden">${esc(t("model3dLabel"))}</span></a></li>`,
     );
   }
 
@@ -113,6 +113,19 @@ function renderGallery(site, object) {
       `<li><a class="object-gallery__thumb" href="${esc(imageUrl(site, img.src))}"${current} data-slide="${idx}">${thumb}</a></li>`,
     );
   });
+
+  for (const puzzle of puzzles) {
+    const img = object.images.find((i) => i.src === puzzle.image) ?? object.images[0];
+    const thumb = renderImage({
+      site,
+      image: { ...img, alt: "" },
+      className: "object-gallery__thumb-img",
+      sizes: "5rem",
+    });
+    thumbItems.push(
+      `<li><a class="object-gallery__thumb object-gallery__thumb--puzzle" href="${esc(localizeHref(`/interactive/${puzzle.id}/`))}"><span class="object-gallery__thumb-badge" aria-hidden="true">${icons.grid}${esc(t("puzzleBadge"))}</span>${thumb}<span class="visually-hidden">${esc(t("puzzlePlayLabel"))}</span></a></li>`,
+    );
+  }
 
   const firstCredit = hasModel ? model.credit ?? null : object.images[0].credit ?? null;
   const anyCredit = (hasModel && Boolean(model.credit)) || object.images.some((img) => img.credit);
@@ -169,6 +182,7 @@ export function renderObject({
   next,
   explore,
   relatedPeople = [],
+  puzzles = [],
 }) {
   const peopleCards = relatedPeople.map((p) => personCard(site, p));
   const vtNames = [
@@ -184,7 +198,7 @@ export function renderObject({
     ${renderBreadcrumb({ site, section, leaf: lead.name, leafLang: lead.lang })}
     <div class="object__layout">
       <div class="object__gallery-col">
-        ${renderGallery(site, object)}
+        ${renderGallery(site, object, puzzles)}
       </div>
       <div class="object__info-col">
         <h1 class="object__title" data-pagefind-weight="10">

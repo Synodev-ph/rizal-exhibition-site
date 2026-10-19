@@ -60,6 +60,18 @@ export function imageUrl(site, src) {
   return site.basePath + entryFor(src).fullUrl;
 }
 
+export function ogImage(site, image) {
+  const entry = entryFor(image.src);
+  const fallback = entry.fallback[0];
+  return {
+    url: site.baseUrl.replace(/\/$/, "") + site.basePath + fallback.file,
+    width: fallback.w,
+    height: fallback.h,
+    type: entry.fallbackType,
+    alt: image.alt ?? "",
+  };
+}
+
 function srcset(site, variants) {
   return variants.map((v) => `${site.basePath}${v.file} ${v.w}w`).join(", ");
 }

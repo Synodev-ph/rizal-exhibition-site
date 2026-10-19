@@ -19,6 +19,8 @@ Sa maraming dekada, nanatili ang estatwilya sa pangangalaga ng kapatid ni Rizal,
 
 Gayunman, hindi nagtapos ang kuwento sa nagwaging taya: ang tanging nagtatayang naroroon sa Leon Gallery, si Direktor Heneral Jeremy Barns, ay tumawag sa legal na karapatan ng unang pagtanggi ng Pambansang Museo ng Pilipinas sa ilalim ng Batas Republika 11333, na nagbigay-daan sa pagtumbas sa nagwaging taya at pagkamit sa eskultura para sa National Fine Arts Collection (GMA Integrated News, “National Museum Acquires Jose Rizal’s Josephine Sleeping’”). Tinitiyak ng pagkakamit na ito ang nararapat na puwang ng estatwilya sa koleksyon ng National Museum of Fine Arts, kasama ang iba pang akdang sining ni Rizal.
 
+## Mga Sanggunian
+
 GMA Integrated News. “Jose Rizal’s Sculpture of Josephine Bracken to Be Unveiled at National Museum on Rizal Day.” GMA News Online, 28 December 2024, www.gmanetwork.com/news/lifestyle/artandculture/931211/jose-rizal-s-sculpture-of-josephine-bracken-to-be-unveiled-at-national-museum-on-rizal-day/story/
 
 “National Museum Acquires Jose Rizal’s ‘Josephine Sleeping.’” GMA News Online, 10 December 2024, www.gmanetwork.com/news/lifestyle/artandculture/929599/national-museum-acquires-jose-rizal-s-josephine-sleeping/story

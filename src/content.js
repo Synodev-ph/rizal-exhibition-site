@@ -331,7 +331,7 @@ function validateSection(errors, file, section, assetsDir) {
 
 const SITE_KEYS = [
   "siteTitle", "siteSubtitle", "exhibitionTitle", "exhibitionSubtitle", "homeTitle",
-  "baseUrl", "basePath", "language", "description", "heroCtas", "home3dObjects", "homeQuote",
+  "baseUrl", "basePath", "language", "description", "heroCtas", "home3dObjects", "homeQuote", "homeSocialImage",
   "homeTeasers", "nav", "footerNav", "footerCtas",
   "footer", "contact", "partners", "social", "analytics", "copyright",
 ];
@@ -404,6 +404,9 @@ function validateSite(errors, file, site, assetsDir, staticDir) {
       optString(errors, file, t, "accent");
       if (t.image !== undefined) validateImage(errors, file, `homeTeasers[${i}].image`, t.image, assetsDir);
     });
+  }
+  if (site.homeSocialImage !== undefined) {
+    validateImage(errors, file, "homeSocialImage", site.homeSocialImage, assetsDir);
   }
 
   if (reqArray(errors, file, site, "nav")) {
@@ -498,14 +501,32 @@ function validateEssay(errors, file, essay, assetsDir) {
   }
 }
 
-const INTERACTIVE_KEYS = ["id", "type", "object", "image", "sizes"];
-export const INTERACTIVE_TYPES = ["puzzle"];
+const INTERACTIVE_KEYS = ["id", "type", "object", "image", "cards", "sizes", "draft", "cardTitle"];
+export const INTERACTIVE_TYPES = ["puzzle", "match"];
 
 function validateInteractive(errors, file, item, assetsDir) {
   checkKeys(errors, file, item, INTERACTIVE_KEYS);
+  if (item.draft !== undefined && typeof item.draft !== "boolean") errors.add(file, "draft", "must be a boolean");
+  if (item.cardTitle !== undefined && !isNonEmptyString(item.cardTitle)) errors.add(file, "cardTitle", "must be a non-empty string");
   reqString(errors, file, item, "id") && checkKebab(errors, file, "id", item.id);
   if (reqString(errors, file, item, "type") && !INTERACTIVE_TYPES.includes(item.type)) {
     errors.add(file, "type", `"${item.type}" is not a known type (${INTERACTIVE_TYPES.join(", ")})`);
+  }
+  if (item.type === "match") {
+    const cards = Array.isArray(item.cards) ? item.cards : [];
+    if (cards.length < 2) errors.add(file, "cards", "must list at least 2 { object, image } entries");
+    cards.forEach((card, i) => {
+      const key = `cards[${i}]`;
+      if (!isNonEmptyString(card?.object)) errors.add(file, `${key}.object`, "required");
+      if (!isNonEmptyString(card?.image)) errors.add(file, `${key}.image`, "required");
+      else checkImagePath(errors, file, `${key}.image`, card.image, assetsDir);
+    });
+    if (item.sizes !== undefined) {
+      const ok = Array.isArray(item.sizes) && item.sizes.length > 0 &&
+        item.sizes.every((n) => Number.isInteger(n) && n >= 2 && n <= cards.length);
+      if (!ok) errors.add(file, "sizes", `must be a non-empty array of pair counts from 2 to ${cards.length}`);
+    }
+    return;
   }
   reqString(errors, file, item, "object");
   if (reqString(errors, file, item, "image")) {
@@ -722,7 +743,7 @@ function parseJson(errors, file, raw) {
   try {
     return JSON.parse(raw);
   } catch (err) {
-    errors.add(file, "(root)", `invalid JSON — ${ (err).message}`);
+    errors.add(file, "(root)", `invalid JSON — ${(err).message}`);
     return null;
   }
 }
@@ -897,6 +918,14 @@ export function loadContent({ contentDir, assetsDir, staticDir }) {
     if (isNonEmptyString(data.object) && !objectIds.has(data.object)) {
       errors.add(file, "object", `"${data.object}" does not resolve to an object in content/objects/`);
     }
+    (Array.isArray(data.cards) ? data.cards : []).forEach((card, i) => {
+      if (!isNonEmptyString(card?.object)) return;
+      const obj = objects.find((o) => o.data.id === card.object)?.data;
+      if (!obj) errors.add(file, `cards[${i}].object`, `"${card.object}" does not resolve to an object in content/objects/`);
+      else if (!obj.images?.some((img) => img.src === card.image)) {
+        errors.add(file, `cards[${i}].image`, `"${card.image}" is not one of ${card.object}'s images`);
+      }
+    });
   }
 
   for (const { file, frontmatter } of essays) {

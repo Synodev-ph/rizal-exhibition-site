@@ -1,6 +1,7 @@
 import { icons } from "../icons.js";
 import { objectLead, orderedPersonas, personaCard } from "./fragments.js";
 import { esc } from "./layout.js";
+import { hubInteractives } from "./interactive.js";
 import { renderImage } from "./media.js";
 import { localizeHref, pick, t } from "../i18n.js";
 
@@ -70,7 +71,7 @@ function render3dGallery(site, objects) {
   const byId = new Map(models.map((o) => [o.id, o]));
   const curated = (site.home3dObjects ?? [])
     .map((id) => byId.get(id))
-    .filter( (o) => Boolean(o));
+    .filter((o) => Boolean(o));
   const cards = curated.length
     ? curated.slice(0, HOME_3D_CARDS)
     : Array.from({ length: HOME_3D_CARDS }, (_, i) => models[i % models.length]);
@@ -81,6 +82,46 @@ function render3dGallery(site, objects) {
       <p class="models3d__intro">${esc(t("home3dIntro"))}</p>
       <ul class="models3d__scroller">
 ${cards.map((obj) => model3dCard(site, obj)).join("\n")}
+      </ul>
+    </section>
+  </div>
+</div>`;
+}
+
+function interactiveCard(site, interactive, obj) {
+  const image = obj.images.find((img) => img.src === interactive.image) ?? { src: interactive.image ?? "", alt: "" };
+  const media = renderImage({
+    site,
+    image: { ...image, alt: "" },
+    className: "models3d__img models3d__img--cover",
+    sizes: "min(18rem, 78vw)",
+  });
+  const lead = objectLead(obj);
+  return `<li class="models3d__item">
+  <a class="models3d__link" href="${esc(localizeHref(`/interactive/${interactive.id}/`))}">
+    <span class="models3d__media">${media}
+      <span class="models3d__badge" aria-hidden="true">${icons.grid}${esc(t("puzzleBadge"))}</span>
+    </span>
+    <span class="models3d__body">
+      <span class="models3d__native"${lead.lang ? ` lang="${lead.lang}"` : ""}>${esc(interactive.cardTitle ?? lead.name)}</span>
+    </span>
+  </a>
+</li>`;
+}
+
+function renderInteractives(site, interactives, objects) {
+  const byId = new Map(objects.map((o) => [o.id, o]));
+  const cards = hubInteractives(interactives, byId)
+    .filter((i) => i.type === "puzzle" && byId.has(i.object ?? ""))
+    .map((i) => interactiveCard(site, i, (byId.get(i.object ?? ""))));
+  if (!cards.length) return "";
+  return `<div class="band home-3d home-interactives">
+  <div class="container">
+    <section class="models3d" aria-labelledby="interactives-h">
+      <h2 class="models3d__heading" id="interactives-h">${esc(t("homeInteractivesHeading"))}</h2>
+      <p class="models3d__intro">${esc(t("homeInteractivesIntro"))}</p>
+      <ul class="models3d__scroller">
+${cards.join("\n")}
       </ul>
     </section>
   </div>
@@ -143,10 +184,11 @@ function renderQuote(site) {
 </div>`;
 }
 
-export function renderHome({ site, sections = [], objects = [] }) {
+export function renderHome({ site, sections = [], objects = [], interactives = [] }) {
   return [
     renderHero(site),
     render3dGallery(site, objects),
+    renderInteractives(site, interactives, objects),
     renderPersonas(site, sections),
     renderQuote(site),
     renderTeasers(site),

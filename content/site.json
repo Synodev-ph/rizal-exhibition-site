@@ -24,7 +24,7 @@
     "fil": "Ang Bayani, Artista, at Etnograpo: Digital na Eksibisyon ni José Rizal",
     "de": "Der Held, Künstler und Ethnograf: Digitale Ausstellung zu José Rizal"
   },
-  "baseUrl": "https://rizal.nationalmuseum.gov.ph",
+  "baseUrl": "https://dpay34ct32459.cloudfront.net",
   "basePath": "/",
   "language": "en",
   "description": {
@@ -102,6 +102,10 @@
       }
     }
   ],
+  "homeSocialImage": {
+    "src": "home/rizal-in-germany.webp",
+    "alt": "Bronze statue of José Rizal holding a rolled document before forested hills in Germany"
+  },
   "nav": [
     {
       "label": { "en": "Home", "fil": "Tahanan", "de": "Startseite" },

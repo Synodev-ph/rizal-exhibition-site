@@ -102,7 +102,7 @@ if (nav) {
   });
 
   document.addEventListener("click", (event) => {
-    if (!nav.contains( (event.target))) closeDropdowns();
+    if (!nav.contains((event.target))) closeDropdowns();
   });
 }
 
@@ -254,7 +254,7 @@ for (const cta of document.querySelectorAll(".hero-btn[data-video]")) {
 const gallery = document.querySelector(".object-gallery[data-viewer]");
 if (gallery) {
   const slides = [...gallery.querySelectorAll(".object-gallery__slide")];
-  const thumbs = [...gallery.querySelectorAll(".object-gallery__thumb")];
+  const thumbs = [...gallery.querySelectorAll(".object-gallery__thumb[data-slide]")];
   const caption = gallery.querySelector("[data-gallery-credit]");
   const zoomBtn = gallery.querySelector("[data-viewer-zoom]");
   let current = 0;
@@ -497,6 +497,11 @@ if (searchToggle instanceof HTMLElement && searchPanel) {
 const puzzleRoot = document.querySelector("[data-puzzle]");
 if (puzzleRoot instanceof HTMLElement) {
   import("./puzzle.js").then(({ initPuzzle }) => initPuzzle(puzzleRoot));
+}
+
+const matchRoot = document.querySelector("[data-match]");
+if (matchRoot instanceof HTMLElement) {
+  import("./match.js").then(({ initMatch }) => initMatch(matchRoot));
 }
 
 export {};

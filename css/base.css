@@ -60,6 +60,12 @@ body {
   font-synthesis: none; /* Alice has no bold/italic — never fake them */
 }
 
+/* No italic face is loaded; allow a synthesized slant for emphasis. */
+em,
+i {
+  font-synthesis: style;
+}
+
 img,
 video {
   max-width: 100%;

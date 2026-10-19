@@ -134,6 +134,11 @@
   background-image: var(--model-stage-gradient);
 }
 
+.models3d__img--cover {
+  aspect-ratio: 3 / 2;
+  object-fit: cover;
+}
+
 .models3d__link:hover .models3d__img,
 .models3d__link:focus-visible .models3d__img {
   transform: scale(1.04);
@@ -168,6 +173,10 @@
   font-family: var(--font-heading);
   font-size: 1.3125rem;
   color: var(--heading-on-light);
+}
+
+.home-interactives .models3d__native {
+  letter-spacing: -0.02em;
 }
 
 .models3d__type {

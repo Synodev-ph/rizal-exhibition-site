@@ -1,0 +1,7 @@
+{
+  "id": "berlin",
+  "type": "puzzle",
+  "object": "vista-de-gendarmenmarkt",
+  "image": "vista-de-gendarmenmarkt/front.webp",
+  "sizes": [3, 4, 5]
+}

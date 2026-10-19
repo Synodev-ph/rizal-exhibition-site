@@ -20,6 +20,27 @@ export function esc(text) {
 // Search engines truncate titles past ~70 characters.
 export const TITLE_MAX = 70;
 
+const OG_LOCALES = { en: "en_US", fil: "fil_PH", de: "de_DE" };
+
+function defaultSocialImage(site) {
+  return {
+    url: site.baseUrl.replace(/\/$/, "") + site.basePath + "img/hero-poster.webp",
+    width: 1280,
+    height: 720,
+    type: "image/webp",
+    alt: `${pick(site.exhibitionTitle)} — ${pick(site.exhibitionSubtitle)}`,
+  };
+}
+
+function twitterHandle(site) {
+  const account = (site.social ?? []).find((s) =>
+    /(?:^|[/.])(?:twitter|x)\.com\//i.test(s.href),
+  );
+  if (!account) return "";
+  const match = account.href.match(/(?:twitter|x)\.com\/([^/?#]+)/i);
+  return match ? `@${match[1]}` : "";
+}
+
 export function seoTitle(name, siteTitle) {
   const full = `${name} | ${siteTitle}`;
   if (full.length <= TITLE_MAX) return full;
@@ -202,6 +223,7 @@ export function renderPage({
   title,
   description,
   content,
+  image,
   isDev = false,
 }) {
   const locale = getLocale();
@@ -210,6 +232,27 @@ export function renderPage({
   const altLinks = alternates(site.baseUrl, path)
     .map((a) => `  <link rel="alternate" hreflang="${esc(a.hreflang)}" href="${esc(a.href)}">`)
     .join("\n");
+  const shareImage = image ?? defaultSocialImage(site);
+  const twitter = twitterHandle(site);
+  const socialTags = [
+    `  <meta property="og:type" content="website">`,
+    `  <meta property="og:site_name" content="${esc(pick(site.exhibitionSubtitle))}">`,
+    `  <meta property="og:locale" content="${esc(OG_LOCALES[locale] ?? locale)}">`,
+    `  <meta property="og:title" content="${esc(title)}">`,
+    `  <meta property="og:description" content="${esc(description)}">`,
+    `  <meta property="og:url" content="${esc(canonical)}">`,
+    `  <meta property="og:image" content="${esc(shareImage.url)}">`,
+    `  <meta property="og:image:type" content="${esc(shareImage.type)}">`,
+    `  <meta property="og:image:width" content="${shareImage.width}">`,
+    `  <meta property="og:image:height" content="${shareImage.height}">`,
+    `  <meta property="og:image:alt" content="${esc(shareImage.alt)}">`,
+    `  <meta name="twitter:card" content="summary_large_image">`,
+    twitter ? `  <meta name="twitter:site" content="${esc(twitter)}">` : "",
+    `  <meta name="twitter:title" content="${esc(title)}">`,
+    `  <meta name="twitter:description" content="${esc(description)}">`,
+    `  <meta name="twitter:image" content="${esc(shareImage.url)}">`,
+    `  <meta name="twitter:image:alt" content="${esc(shareImage.alt)}">`,
+  ].filter(Boolean).join("\n");
   const reload = isDev
     ? `\n<script>new EventSource("/__reload").onmessage = () => location.reload();</script>`
     : "";
@@ -223,6 +266,7 @@ export function renderPage({
   <meta name="description" content="${esc(description)}">
   <link rel="canonical" href="${esc(canonical)}">
 ${altLinks}
+${socialTags}
   <link rel="stylesheet" href="${esc(assets.css)}">
   <script type="module" src="${esc(assets.js)}" defer></script>
 </head>

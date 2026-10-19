@@ -92,14 +92,17 @@ ${crumbs}
 </nav>`;
 }
 
-export function renderPager({ prev, next, hrefFor, nameFor, nameLang, ariaLabel }) {
+export function renderPager({ prev, next, hrefFor, nameFor, nameLang, langFor, ariaLabel }) {
   if (!prev && !next) return "";
-  const langAttr = nameLang ? ` lang="${esc(nameLang)}"` : "";
+  const langAttr = (item) => {
+    const lang = langFor ? langFor(item) : nameLang;
+    return lang ? ` lang="${esc(lang)}"` : "";
+  };
   const link = (item, dir, label) =>
     item
       ? `<a class="object-pager__link object-pager__link--${dir}" href="${esc(localizeHref(hrefFor(item)))}" rel="${dir}">
     <span class="object-pager__dir">${esc(label)}</span>
-    <span class="object-pager__name"${langAttr}>${esc(nameFor(item))}</span>
+    <span class="object-pager__name"${langAttr(item)}>${esc(nameFor(item))}</span>
   </a>`
       : "";
   return `<nav class="object-pager" aria-label="${esc(ariaLabel)}">

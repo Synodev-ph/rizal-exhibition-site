@@ -1,0 +1,8 @@
+{
+  "id": "hermit",
+  "type": "puzzle",
+  "object": "san-pablo-el-ermitano",
+  "image": "san-pablo-el-ermitano/front.webp",
+  "cardTitle": "San Pablo El Ermitano",
+  "sizes": [3, 4, 5]
+}

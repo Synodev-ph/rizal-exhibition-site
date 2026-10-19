@@ -161,12 +161,17 @@
 }
 
 .essay-card {
+  position: relative;
   display: grid;
   gap: var(--space-2xs);
   padding: var(--space-m);
   border: 1px solid color-mix(in srgb, var(--chinese-black) 15%, transparent);
   border-radius: 10px;
   background: white;
+}
+
+.essay-card:hover {
+  border-color: color-mix(in srgb, var(--chinese-black) 35%, transparent);
 }
 
 .essay-card__title {
@@ -203,7 +208,14 @@
   color: var(--accent-on-light);
 }
 
-.essay-card__more:hover {
+.essay-card__more::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+}
+
+.essay-card:hover .essay-card__more {
   text-decoration: underline;
 }
 

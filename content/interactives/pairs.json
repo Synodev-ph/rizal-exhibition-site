@@ -1,0 +1,20 @@
+{
+  "id": "pairs",
+  "type": "match",
+  "draft": true,
+  "sizes": [6, 9, 12],
+  "cards": [
+    { "object": "bust-of-ricardo-carnicero", "image": "bust-of-ricardo-carnicero/front.webp" },
+    { "object": "head-of-dapitan-girl", "image": "head-of-dapitan-girl/front.webp" },
+    { "object": "oyang-dapitana", "image": "oyang-dapitana/front.webp" },
+    { "object": "prometheus-bound", "image": "prometheus-bound/front.webp" },
+    { "object": "sacred-heart-of-jesus", "image": "sacred-heart-of-jesus/front.webp" },
+    { "object": "six-frame-cartoon", "image": "six-frame-cartoon/front.webp" },
+    { "object": "triumph-of-science-over-death", "image": "triumph-of-science-over-death/front.webp" },
+    { "object": "bakus", "image": "bakus/worn.webp" },
+    { "object": "salakot", "image": "salakot/front.webp" },
+    { "object": "saya-husi", "image": "saya-husi/front.webp" },
+    { "object": "patadion", "image": "patadion/front.webp" },
+    { "object": "trousers", "image": "trousers/back.webp" }
+  ]
+}

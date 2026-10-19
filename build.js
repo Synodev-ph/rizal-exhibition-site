@@ -15,7 +15,7 @@ import {
   t,
 } from "./src/i18n.js";
 import { lintDistImages, lqipCss, processDeepZoom, processImages } from "./src/images.js";
-import { setDeepZoomManifest, setImageManifest } from "./src/templates/media.js";
+import { ogImage, setDeepZoomManifest, setImageManifest } from "./src/templates/media.js";
 import { renderPage } from "./src/templates/layout.js";
 import { renderHome } from "./src/templates/home.js";
 import { renderUpcoming } from "./src/templates/upcoming.js";
@@ -29,6 +29,7 @@ import { render404 } from "./src/templates/notfound.js";
 import { renderSearch, searchDescription, searchTitle } from "./src/templates/search.js";
 import {
   interactiveDescription,
+  hubInteractives,
   interactiveHubDescription,
   interactiveHubTitle,
   interactiveTitle,
@@ -117,11 +118,13 @@ export async function build() {
   const jsFile = `assets/main-${hash(js)}.js`;
   writeFileSync(path.join(dist, jsFile), js);
 
-  // main.js imports ./viewer.js and ./puzzle.js by literal path, so they are emitted unhashed.
+  // main.js imports ./viewer.js and the game modules by literal path, so they are emitted unhashed.
   const viewerJs = readFileSync(path.join(root, "js/viewer.js"), "utf8");
   writeFileSync(path.join(dist, "assets/viewer.js"), viewerJs);
 
-  writeFileSync(path.join(dist, "assets/puzzle.js"), readFileSync(path.join(root, "js/puzzle.js"), "utf8"));
+  for (const name of ["game", "puzzle", "match"]) {
+    writeFileSync(path.join(dist, `assets/${name}.js`), readFileSync(path.join(root, `js/${name}.js`), "utf8"));
+  }
 
   const assets = { css: site.basePath + cssFile, js: site.basePath + jsFile };
 
@@ -140,7 +143,8 @@ export async function build() {
         path: "/",
         title: pick(site.homeTitle),
         description: pick(site.description),
-        content: renderHome({ site, sections: content.sections, objects: content.objects }),
+        image: site.homeSocialImage ? ogImage(site, site.homeSocialImage) : undefined,
+        content: renderHome({ site, sections: content.sections, objects: content.objects, interactives: content.interactives }),
       }),
     },
   ];
@@ -168,6 +172,7 @@ export async function build() {
 
   const sectionById = new Map(content.sections.map((s) => ([s.id, s])));
   const objectById = new Map(content.objects.map((o) => ([o.id, o])));
+  const hubList = hubInteractives(content.interactives, objectById);
 
   const peopleByObject = new Map();
   for (const person of content.people) {
@@ -221,6 +226,7 @@ export async function build() {
         path: routePath,
         title: objectTitle(object, site),
         description: objectDescription(object),
+        image: ogImage(site, object.images[0]),
         content: renderObject({
           site,
           object,
@@ -229,6 +235,7 @@ export async function build() {
           next,
           explore,
           relatedPeople: (peopleByObject.get(object.id) ?? []).sort((a, b) => a.order - b.order),
+          puzzles: hubList.filter((i) => i.type === "puzzle" && i.object === object.id),
         }),
       }),
     });
@@ -269,6 +276,7 @@ export async function build() {
         path: routePath,
         title: personTitle(person, site),
         description: personDescription(person),
+        image: ogImage(site, person.portrait),
         content: renderPerson({ site, person, section, prev, next, relatedObjects, relatedPeople }),
       }),
     });
@@ -295,6 +303,7 @@ export async function build() {
         path: routePath,
         title: sectionTitle(section, site),
         description: sectionDescription(section),
+        image: ogImage(site, section.heroImage),
         content: renderSection({
           site,
           section,
@@ -321,6 +330,7 @@ export async function build() {
         path: `/essays/${essay.slug}/`,
         title: essayTitle(essay, site),
         description: essayDescription(essay),
+        image: ogImage(site, { src: essay.heroImage, alt: pick(essay.title) }),
         content: renderEssay({ site, essay, section, prev, next }),
       }),
     });
@@ -337,6 +347,9 @@ export async function build() {
         path: routePath,
         title: pageTitle(contentPage, site),
         description: pageDescription(contentPage),
+        image: contentPage.heroImage
+          ? ogImage(site, { src: contentPage.heroImage, alt: pageTitle(contentPage, site) })
+          : undefined,
         content: renderContentPage({ site, page: contentPage, sections: content.sections }),
       }),
     });
@@ -353,13 +366,22 @@ export async function build() {
       description: interactiveHubDescription(),
       content: renderInteractiveHub({
         site,
-        items: content.interactives.map((interactive) => ({ interactive, object: objectById.get(interactive.object) })),
+        interactives: content.interactives,
+        objectById,
+        sectionById,
       }),
     }),
   });
 
   for (const interactive of content.interactives) {
-    const object = objectById.get(interactive.object);
+    const idx = hubList.indexOf(interactive);
+    const n = hubList.length;
+    const prev = idx >= 0 && n > 1 ? hubList[(idx - 1 + n) % n] : undefined;
+    const next = idx >= 0 && n > 1 ? hubList[(idx + 1) % n] : undefined;
+    const p = { site, interactive, objectById, sectionById, prev, next };
+    const cover = interactive.type === "match"
+      ? interactive.cards?.[0]?.image
+      : interactive.image;
     pages.push({
       out: path.join("interactive", interactive.id, "index.html"),
       html: renderPage({
@@ -367,9 +389,10 @@ export async function build() {
         assets,
         isDev,
         path: `/interactive/${interactive.id}/`,
-        title: interactiveTitle(interactive, object, site),
-        description: interactiveDescription(interactive, object),
-        content: renderInteractive({ site, interactive, object, section: sectionById.get(object.section) }),
+        title: interactiveTitle(p),
+        description: interactiveDescription(p),
+        image: cover ? ogImage(site, { src: cover, alt: interactiveTitle(p) }) : undefined,
+        content: renderInteractive(p),
       }),
     });
   }
@@ -425,8 +448,8 @@ export async function build() {
   lintDistImages(dist);
 
   // Pagefind indexes the built HTML into dist/pagefind/.
-  const pagefindBin = path.join(root, "node_modules", ".bin", "pagefind");
-  execFileSync(pagefindBin, ["--site", dist, "--quiet"], { stdio: "inherit" });
+  const pagefindBin = path.join(root, "node_modules", "pagefind", "lib", "runner", "bin.cjs");
+  execFileSync(process.execPath, [pagefindBin, "--site", dist, "--quiet"], { stdio: "inherit" });
 
   console.log(`Built ${written} page(s) across ${LOCALES.length} locale(s) in ${Date.now() - started} ms → dist/`);
 }

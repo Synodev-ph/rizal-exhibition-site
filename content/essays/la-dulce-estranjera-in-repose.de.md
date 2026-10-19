@@ -19,6 +19,8 @@ Jahrzehntelang blieb die Statuette in der Obhut von Rizals Schwester Narcisa Riz
 
 Doch die Geschichte endete nicht mit dem Rekordgebot: Als einziger in der Leon Gallery anwesender Bieter machte Generaldirektor Jeremy Barns das gesetzliche Vorkaufsrecht des Nationalmuseums der Philippinen nach dem Republic Act 11333 geltend, das es dem Museum erlaubte, das Höchstgebot zu erreichen und die Skulptur für die National Fine Arts Collection zu erwerben (GMA Integrated News, „National Museum Acquires Jose Rizal’s Josephine Sleeping’“). Dieser Erwerb sichert der Statuette ihren rechtmäßigen Platz in der Sammlung des National Museum of Fine Arts, neben weiteren Werken Rizals.
 
+## Literatur
+
 GMA Integrated News. “Jose Rizal’s Sculpture of Josephine Bracken to Be Unveiled at National Museum on Rizal Day.” GMA News Online, 28 December 2024, www.gmanetwork.com/news/lifestyle/artandculture/931211/jose-rizal-s-sculpture-of-josephine-bracken-to-be-unveiled-at-national-museum-on-rizal-day/story/
 
 “National Museum Acquires Jose Rizal’s ‘Josephine Sleeping.’” GMA News Online, 10 December 2024, www.gmanetwork.com/news/lifestyle/artandculture/929599/national-museum-acquires-jose-rizal-s-josephine-sleeping/story
