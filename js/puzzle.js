@@ -1,5 +1,4 @@
-// Sliding puzzle. The empty square is cell 0; shuffling uses legal moves from
-// the solved state, so the board is always solvable.
+// Sliding puzzle.
 
 import { bindDialogs, bindShare, clearShareStatus, Confetti, formatTime } from "./game.js";
 
@@ -117,7 +116,7 @@ class SlidingPuzzle {
     this.dialog?.addEventListener("close", () => this.confetti.stop());
     this.root.querySelector("[data-puzzle-again]")?.addEventListener("click", () => this.newGame());
 
-    bindShare(this.root, () => ({ time: formatTime(this.seconds), moves: this.moves }));
+    bindShare(this.root, () => ({ time: formatTime(this.seconds), moves: this.moves, solved: this.solved }));
   }
 
   onKey(e) {

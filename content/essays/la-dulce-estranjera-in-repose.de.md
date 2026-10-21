@@ -1,5 +1,5 @@
 ---
-title: La Dulce Estranjera in Ruhe: Josephine Sleeping
+title: La Dulce Extranjera in Ruhe: Josephine Sleeping
 summary: Rizals zarte Dapitan-Skulptur von Josephine Bracken, der Frau, die er seine dulce estranjera nannte, und der lange Weg, der sie ins Nationalmuseum führte.
 ---
 

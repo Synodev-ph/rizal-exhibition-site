@@ -429,6 +429,10 @@
   max-width: var(--measure);
 }
 
+.object__description > h2 {
+  margin-block: var(--space-xl) var(--space-s);
+}
+
 .object__model-note {
   max-width: var(--measure);
   margin-top: var(--space-m);

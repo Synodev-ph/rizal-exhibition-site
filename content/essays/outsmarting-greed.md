@@ -1,5 +1,5 @@
 ---
-title: Outsmarting Greed: The Monkey and the Turtle
+title: Outsmarting Greed: The Monkey and the Tortoise
 slug: outsmarting-greed
 section: artist
 heroImage: the-monkey-and-the-tortoise/front.webp

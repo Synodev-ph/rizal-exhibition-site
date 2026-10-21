@@ -1,22 +1,25 @@
 {
   "id": "head-of-dapitan-girl",
-  "seoDescription": { "en": "A terracotta relief of a child's head signed RIZAL, this replica reflects Rizal's portrait sculpture from his Dapitan exile." },
+  "seoDescription": { "en": "A marble sculpture of a child's head signed RIZAL, this replica reflects Rizal's portrait sculpture from his Dapitan exile." },
   "section": "artist",
   "category": "of-clay-and-resistance",
   "order": 7,
   "title": {
-    "en": "Head of Dapitan Girl (Replica)"
+    "en": "Head of Dapitan Girl",
+    "note": "Replica"
   },
   "objectType": {
     "en": "Sculpture",
     "fil": "Eskultura",
     "de": "Skulptur"
   },
-  "draft": true,
+  "description": {
+    "en": "Proud of his Malay roots, Rizal made sculptures of a Dapitan girl and boy. This marble sculpture with a wooden backing is currently on display at the Silid Pamana of the Museo ni Jose Rizal Fort Santiago in Manila, while a clay model is on display at the National Historical Commission of the Philippines - Museo ni Jose Rizal Dapitan in Zamboanga del Norte. Of the clay sculptures, only the model head of the Dapitan girl survives to this day, while the head of the Dapitan boy is believed to have been destroyed during the 1945 Battle of Manila.\n\nInitial sources believed that there was only one relief made by Rizal. But upon comparison, the main difference is in their hairstyles—with the girl having a pusod (bun) and the boy having bangs on his forehead.\n\n## References\n\nNHCP Museo ni Jose Rizal Dapitan. “Model Head of Dapitan Girl” Facebook, February 28, 2022. https://www.facebook.com/photo/?fbid=508437050698522&set=pcb.508441524031408.\n\nPalma, Celestino. Jose Rizal, Sculptor. Reyes Publishing, 2020."
+  },
   "images": [
     {
       "src": "head-of-dapitan-girl/front.webp",
-      "alt": "Terracotta relief of a child's head, signed RIZAL, mounted on white backing in a red velvet frame",
+      "alt": "Marble sculpture of a child's head, signed RIZAL, mounted on white backing in a red velvet frame",
       "deepZoom": true
     },
     {

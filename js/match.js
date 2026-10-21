@@ -67,7 +67,7 @@ class MatchGame {
     bindDialogs([this.dialog, this.infoDialog]);
     this.dialog?.addEventListener("close", () => this.confetti.stop());
     this.root.querySelector("[data-puzzle-again]")?.addEventListener("click", () => this.newGame());
-    bindShare(this.root, () => ({ time: formatTime(this.seconds), moves: this.moves }));
+    bindShare(this.root, () => ({ time: formatTime(this.seconds), moves: this.moves, solved: this.solved }));
     this.board.addEventListener("keydown", (e) => this.onKey(e));
   }
 

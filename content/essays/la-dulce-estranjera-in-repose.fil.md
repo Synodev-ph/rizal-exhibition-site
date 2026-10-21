@@ -1,5 +1,5 @@
 ---
-title: La Dulce Estranjera sa Pamamahinga: Josephine Sleeping
+title: La Dulce Extranjera sa Pamamahinga: Josephine Sleeping
 summary: Ang maalalahaning eskultura ni Rizal sa Dapitan ni Josephine Bracken, ang babaeng tinawag niyang kanyang dulce estranjera, at ang mahabang landas na naghatid nito sa Pambansang Museo.
 ---
 

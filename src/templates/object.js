@@ -17,7 +17,7 @@ import { localizeHref, pick, t } from "../i18n.js";
 export function objectTitle(object, site) {
   const siteTitle = pick(site.siteTitle);
   const lead = objectName(object);
-  if (objectLead(object).lang) {
+  if (objectLead(object).lang && object.title.en) {
     const rich = `${lead} · ${object.title.en} | ${siteTitle}`;
     if (rich.length <= TITLE_MAX) return rich;
   }
@@ -134,7 +134,7 @@ function renderGallery(site, object, puzzles) {
     : "";
 
   const zoomBtn = `<button class="object-gallery__zoom" type="button" data-viewer-zoom>
-      ${icons.zoom}<span class="visually-hidden">${esc(t("zoomInto", { name: object.title.en }))}</span>
+      ${icons.zoom}<span class="visually-hidden">${esc(t("zoomInto", { name: objectName(object) }))}</span>
     </button>`;
 
   const thumbs =
@@ -204,8 +204,8 @@ export function renderObject({
         <h1 class="object__title" data-pagefind-weight="10">
           ${
             lead.lang
-              ? `<span class="object__title-native" lang="${lead.lang}">${esc(lead.name)}</span>\n          <span class="object__title-en">${esc(object.title.en)}</span>`
-              : `<span class="object__title-native">${esc(object.title.en)}</span>`
+              ? `<span class="object__title-native" lang="${lead.lang}">${esc(lead.name)}</span>${object.title.en ? `\n          <span class="object__title-en">${esc(object.title.en)}</span>` : ""}`
+              : `<span class="object__title-native">${esc(lead.name)}</span>`
           }
         </h1>${object.title.es && lead.lang !== "es" ? `\n        <p class="object__title-es" lang="es">${esc(object.title.es)}</p>` : ""}${object.title.note ? `\n        <p class="object__title-es object__title-note">${esc(object.title.note)}</p>` : ""}
 ${

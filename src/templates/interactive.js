@@ -54,7 +54,7 @@ export function interactiveDescription({ interactive, objectById }) {
   if (interactive.type === "match") return t("matchDescription");
   const object = (objectById.get(interactive.object ?? ""));
   const lead = objectLead(object);
-  return oneStop(lead.lang
+  return oneStop(object.title.en
     ? t("puzzleDescription", { title: lead.name, subtitle: object.title.en })
     : t("puzzleDescriptionEn", { title: lead.name }));
 }
@@ -181,7 +181,7 @@ function renderPuzzle(p) {
   ${breadcrumb(site, title, langAttr)}
   <div class="puzzle__layout">
     <div class="puzzle__heading">
-      <h1 class="puzzle__title"${langAttr}>${esc(title)}</h1>${lead.lang ? `\n      <p class="puzzle__subtitle">${esc(object.title.en)}</p>` : ""}
+      <h1 class="puzzle__title"${langAttr}>${esc(title)}</h1>${lead.lang && object.title.en ? `\n      <p class="puzzle__subtitle">${esc(object.title.en)}</p>` : ""}
     </div>
     <div class="puzzle__stage">
       <div class="puzzle__frame">

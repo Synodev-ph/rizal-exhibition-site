@@ -1,5 +1,3 @@
-// Shared by the interactive games: clock format, dialogs, share buttons, confetti.
-
 export const formatTime = (seconds) => `${Math.floor(seconds / 60)}:${String(seconds % 60).padStart(2, "0")}`;
 
 const isMobile = () =>
@@ -19,31 +17,40 @@ export function bindDialogs(dialogs) {
 
 export function bindShare(root, getStats) {
   const msg = root.dataset;
+  const copyLink = (url, btn) => {
+    navigator.clipboard?.writeText(url).catch(() => {});
+    const status = btn.closest("dialog")
+      ? root.querySelector("[data-dialog-share-status]")
+      : root.querySelector("[data-puzzle-share-status]");
+    if (status) status.textContent = msg.msgShareCopied ?? "";
+  };
   for (const btn of root.querySelectorAll("[data-puzzle-share]")) {
     if (!(btn instanceof HTMLElement)) continue;
     if (btn.dataset.puzzleShare === "instagram" && !isMobile()) btn.hidden = true;
     btn.addEventListener("click", () => {
+      clearShareStatus(root);
       const url = document.querySelector('link[rel="canonical"]')?.href ?? window.location.href;
-      const { time, moves } = getStats();
+      const { time, moves, solved } = getStats();
       const text = (msg.msgShareText ?? "").replace("{time}", time).replace("{moves}", String(moves));
+      const nativeShareData = solved ? { title: msg.msgShareTitle, text, url } : { url };
       const popup = "noopener,noreferrer,width=640,height=640";
       const platform = btn.dataset.puzzleShare;
-      if (platform === "facebook") {
+      if (platform === "instagram" || (platform === "facebook" && isMobile())) {
+        if (typeof navigator.share === "function") {
+          navigator.share(nativeShareData).catch((err) => {
+            if (err?.name !== "AbortError") copyLink(url, btn);
+          });
+        } else {
+          copyLink(url, btn);
+        }
+      } else if (platform === "facebook") {
         window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`, "_blank", popup);
       } else if (platform === "x") {
         window.open(
-          `https://twitter.com/intent/tweet?url=${encodeURIComponent(url)}&text=${encodeURIComponent(text)}`,
+          `https://twitter.com/intent/tweet?url=${encodeURIComponent(url)}${solved ? `&text=${encodeURIComponent(text)}` : ""}`,
           "_blank",
           popup,
         );
-      } else if (typeof navigator.share === "function") {
-        navigator.share({ title: msg.msgShareTitle, text, url }).catch(() => {});
-      } else {
-        navigator.clipboard?.writeText(url).catch(() => {});
-        const status = btn.closest("dialog")
-          ? root.querySelector("[data-dialog-share-status]")
-          : root.querySelector("[data-puzzle-share-status]");
-        if (status) status.textContent = msg.msgShareCopied ?? "";
       }
     });
   }

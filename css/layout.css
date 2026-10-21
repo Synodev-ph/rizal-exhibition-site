@@ -49,7 +49,6 @@
   gap: var(--space-m);
 }
 
-/* No gap: the logo file carries its own margin. */
 .site-header__brand {
   text-decoration: none;
   display: flex;

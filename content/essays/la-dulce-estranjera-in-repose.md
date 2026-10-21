@@ -1,5 +1,5 @@
 ---
-title: La Dulce Estranjera in Repose: Josephine Sleeping
+title: La Dulce Extranjera in Repose: Josephine Sleeping
 slug: la-dulce-estranjera-in-repose
 section: artist
 heroImage: josephine-sleeping/front.webp

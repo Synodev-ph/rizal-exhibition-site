@@ -181,8 +181,8 @@ function validateObject(errors, file, obj, assetsDir) {
 
   if (typeof obj.title === "object" && obj.title !== null) {
     checkKeys(errors, file, obj.title, ["en", "tl", "es", "note"], "title");
-    if (!isNonEmptyString(obj.title.en)) {
-      errors.add(file, "title.en", "missing or empty — the English name is required");
+    if (!["en", "tl", "es"].some((slot) => isNonEmptyString(obj.title[slot]))) {
+      errors.add(file, "title", "missing or empty — provide an English, Tagalog, or Spanish title");
     }
     for (const slot of ["tl", "es", "note"]) {
       if (obj.title[slot] !== undefined && !isNonEmptyString(obj.title[slot])) {

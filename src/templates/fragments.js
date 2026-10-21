@@ -145,7 +145,7 @@ export function objects3dFirst(objects) {
 export function objectLead(obj) {
   if (obj.title.tl) return { name: obj.title.tl, lang: "tl" };
   if (obj.section === "artist" && obj.title.es) return { name: obj.title.es, lang: "es" };
-  return { name: obj.title.en };
+  return { name: obj.title.en ?? obj.title.es ?? obj.title.tl };
 }
 
 export function objectCard(site, obj) {
@@ -162,7 +162,7 @@ export function objectCard(site, obj) {
     media,
     title: lead.name,
     titleLang: lead.lang,
-    subtitle: lead.lang ? obj.title.en : (obj.title.note ?? ""),
+    subtitle: lead.lang ? (obj.title.en ?? "") : (obj.title.note ?? ""),
     subtitleLang: undefined,
     has3d: Boolean(obj.model3d),
   });
