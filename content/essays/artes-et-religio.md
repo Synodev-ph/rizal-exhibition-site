@@ -4,6 +4,7 @@ slug: artes-et-religio
 section: artist
 heroImage: sacred-heart-of-jesus/front.webp
 heroImageAlt: "Wooden Sacred Heart of Jesus statue with Christ’s hand over his heart."
+heroImageFit: contain
 order: 6
 author: Jane Maren Dasal
 category: of-clay-and-resistance

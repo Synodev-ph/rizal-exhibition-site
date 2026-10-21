@@ -25,6 +25,11 @@
   object-fit: cover;
 }
 
+.essay__hero--contain .essay__hero-img {
+  object-fit: contain;
+  background-color: var(--exhibit-frame-dark);
+}
+
 .essay__hero-caption {
   margin-block-start: var(--space-xs);
   font-size: var(--step--1);

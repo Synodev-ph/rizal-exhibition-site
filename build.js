@@ -68,6 +68,7 @@ export async function build() {
     })
   );
   const site = content.site;
+  const publicObjects = content.objects.filter((object) => object.unpublished !== true);
 
   setSiteConfig(site);
   setCatalogs(content.i18n);
@@ -87,7 +88,7 @@ export async function build() {
 
   const deepZoomSources = [
     ...new Set(
-      content.objects.flatMap((o) => o.images.filter((img) => img.deepZoom).map((img) => img.src)),
+      publicObjects.flatMap((o) => o.images.filter((img) => img.deepZoom).map((img) => img.src)),
     ),
   ];
   const dzManifest = await processDeepZoom({
@@ -100,7 +101,7 @@ export async function build() {
   setDeepZoomManifest(dzManifest);
 
   const modelSources = [
-    ...new Set(content.objects.flatMap((o) => (o.model3d ? [o.model3d.src] : []))),
+    ...new Set(publicObjects.flatMap((o) => (o.model3d ? [o.model3d.src] : []))),
   ];
   if (modelSources.length) {
     const modelsOut = path.join(dist, "media/models");
@@ -144,7 +145,7 @@ export async function build() {
         title: pick(site.homeTitle),
         description: pick(site.seoDescription) || pick(site.description),
         image: site.homeSocialImage ? ogImage(site, site.homeSocialImage) : undefined,
-        content: renderHome({ site, sections: content.sections, objects: content.objects, interactives: content.interactives }),
+        content: renderHome({ site, sections: content.sections, objects: publicObjects, interactives: content.interactives }),
       }),
     },
   ];
@@ -171,8 +172,9 @@ export async function build() {
   }
 
   const sectionById = new Map(content.sections.map((s) => ([s.id, s])));
-  const objectById = new Map(content.objects.map((o) => ([o.id, o])));
-  const hubList = hubInteractives(content.interactives, objectById);
+  const objectById = new Map(publicObjects.map((o) => ([o.id, o])));
+  const publicInteractives = content.interactives.filter((i) => !i.object || objectById.has(i.object));
+  const hubList = hubInteractives(publicInteractives, objectById);
 
   const peopleByObject = new Map();
   for (const person of content.people) {
@@ -184,7 +186,7 @@ export async function build() {
   }
 
   const objectsBySection = new Map();
-  for (const obj of content.objects) {
+  for (const obj of publicObjects) {
     const list = objectsBySection.get(obj.section) ?? [];
     list.push(obj);
     objectsBySection.set(obj.section, list);
@@ -193,7 +195,7 @@ export async function build() {
     list.sort((a, b) => a.order - b.order);
   }
 
-  for (const object of content.objects) {
+  for (const object of publicObjects) {
     const section = sectionById.get(object.section);
     const siblings = objectsBySection.get(object.section);
     const idx = siblings.findIndex((o) => o.id === object.id);
@@ -366,14 +368,14 @@ export async function build() {
       description: interactiveHubDescription(),
       content: renderInteractiveHub({
         site,
-        interactives: content.interactives,
+        interactives: publicInteractives,
         objectById,
         sectionById,
       }),
     }),
   });
 
-  for (const interactive of content.interactives) {
+  for (const interactive of publicInteractives) {
     const idx = hubList.indexOf(interactive);
     const n = hubList.length;
     const prev = idx >= 0 && n > 1 ? hubList[(idx - 1 + n) % n] : undefined;

@@ -17,8 +17,9 @@ export function essayDescription(essay) {
 }
 
 export function renderEssay({ site, essay, section, prev, next }) {
+  const heroFit = essay.heroImageFit === "contain" ? " essay__hero--contain" : "";
   const hero = essay.heroImage
-    ? `<figure class="essay__hero">${renderImage({
+    ? `<figure class="essay__hero${heroFit}">${renderImage({
         site,
         image: { src: essay.heroImage, alt: essay.heroImageAlt },
         className: "essay__hero-img",

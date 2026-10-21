@@ -45,5 +45,6 @@
   "related": [
     "diploma-bachelor-of-arts"
   ],
-  "featured": false
+  "featured": false,
+  "unpublished": true
 }

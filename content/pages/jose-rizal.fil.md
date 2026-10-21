@@ -7,7 +7,7 @@ Ang Bayani, Artista, at Etnograpo: Si José Rizal sa Pilipinas at sa Alemanya ay
 
 Nasa gitna ng eksibisyon ang temang Si Rizal bilang Etnograpo, na nagtatampok ng 21 bagay na Pilipino na ipinagkaloob niya noong 1888 sa Ethnologisches Museum Berlin (dating Museo ng Etnolohiya ng Berlin). Inilunsad ng Pambansang Museo ng Pilipinas (NMP) ang bahaging pantemang ito noong ika-30 ng Disyembre 2025 upang gunitain ang ika-129 na anibersaryo ng pagkamartir ni Rizal.
 
-Magiging bukas ang temang Si Rizal bilang Artista sa ika-19 ng Hunyo 2026, bilang pagdiriwang ng kanyang ika-165 na kaarawan. Ilalahad nito ang mga likhang sining ni at tungkol kay Rizal mula sa Pambansang Koleksiyon ng Sining Biswal ng NMP, sa Pambansang Komisyong Pangkasaysayan ng Pilipinas, at sa piling pribadong koleksiyon.
+Magiging bukas ang temang Si Rizal bilang Artista sa ika-25 ng Oktubre 2026. Ilalahad nito ang mga likhang sining ni at tungkol kay Rizal mula sa Pambansang Koleksiyon ng Sining Biswal ng NMP, sa Pambansang Komisyong Pangkasaysayan ng Pilipinas, at sa piling pribadong koleksiyon.
 
 Bubuksan ang temang Si Rizal bilang Bayani sa ika-30 ng Disyembre 2026, na tanda ng ika-130 anibersaryo ng kanyang kamatayan. Itatampok nito ang mga personal na kagamitang nakalagak sa Museo ni José Rizal sa Calamba, Dapitan, at Fort Santiago, kasama ang kanyang mga orihinal na manuskritong iniingatan sa Pambansang Aklatan ng Pilipinas.
 

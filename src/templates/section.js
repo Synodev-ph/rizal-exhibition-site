@@ -113,6 +113,7 @@ ${collection.entries.map((e) => e.card).join("\n")}
 
 function renderCategoryView(section, essays, collection) {
   const withEssays = essays.length > 0;
+  const introEssays = essays.filter((e) => !e.category);
 
   const tabs = [
     { id: "section-intro", label: pick(section.title) },
@@ -124,7 +125,7 @@ ${tabs.map((tab) => `        <li><a class="section-tabs__link" href="#${tab.id}"
       </ul>
     </nav>`;
 
-  const introPanel = renderCategoryPanel("section-intro", pick(section.title), essays, collection, withEssays);
+  const introPanel = renderCategoryPanel("section-intro", pick(section.title), introEssays, collection, withEssays);
 
   const categoryPanels = section.categories
     .map((c) =>

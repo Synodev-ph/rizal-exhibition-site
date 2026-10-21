@@ -7,7 +7,7 @@ Der Held, der Künstler und der Ethnograf: José Rizal auf den Philippinen und i
 
 Im Mittelpunkt der Ausstellung steht das Thema Rizal als Ethnograf mit den 21 philippinischen Objekten, die er 1888 dem Ethnologischen Museum Berlin (vormals Berliner Museum für Völkerkunde) schenkte. Das Nationalmuseum der Philippinen (NMP) eröffnete diesen Themenbereich am 30. Dezember 2025 zum Gedenken an den 129. Jahrestag von Rizals Martyrium.
 
-Das Thema Rizal als Künstler wird am 19. Juni 2026 zugänglich sein, anlässlich seines 165. Geburtstages. Es zeigt Werke von und über Rizal aus der Nationalen Sammlung der Bildenden Künste des NMP, der Nationalen Historischen Kommission der Philippinen sowie ausgewählten Privatsammlungen.
+Das Thema Rizal als Künstler wird am 25. Oktober 2026 zugänglich sein. Es zeigt Werke von und über Rizal aus der Nationalen Sammlung der Bildenden Künste des NMP, der Nationalen Historischen Kommission der Philippinen sowie ausgewählten Privatsammlungen.
 
 Das Thema Rizal als Held geht am 30. Dezember 2026 online, zum 130. Jahrestag seines Todes. Es zeigt persönliche Gegenstände, die im Museo ni José Rizal in Calamba, Dapitan und Fort Santiago bewahrt werden, zusammen mit seinen Originalmanuskripten in der Nationalbibliothek der Philippinen.
 

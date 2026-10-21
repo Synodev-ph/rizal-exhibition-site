@@ -4,6 +4,7 @@ slug: expressing-thoughts-in-translation
 section: artist
 heroImage: guillermo-tell/front.webp
 heroImageAlt: "Cover of Guillermo Tell, Rizal’s Tagalog translation, with the title written in ink."
+heroImageFit: contain
 order: 8
 author: Danilo Ellamil, Jr.
 category: poetry-and-retellings

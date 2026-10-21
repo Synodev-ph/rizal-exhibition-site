@@ -168,7 +168,7 @@ function validateImage(errors, file, field, img, assetsDir) {
 const OBJECT_KEYS = [
   "id", "section", "category", "order", "title", "objectType", "materials",
   "dimensions", "accession", "description", "seoDescription", "condition", "images", "rights",
-  "model3d", "related", "featured", "hotspots", "author", "draft",
+  "model3d", "related", "featured", "hotspots", "author", "draft", "unpublished",
 ];
 
 function validateObject(errors, file, obj, assetsDir) {
@@ -202,6 +202,9 @@ function validateObject(errors, file, obj, assetsDir) {
   optLocalized(errors, file, obj, "condition");
   optString(errors, file, obj, "author");
   checkDraft(errors, file, obj);
+  if (obj.unpublished !== undefined && typeof obj.unpublished !== "boolean") {
+    errors.add(file, "unpublished", "must be a boolean");
+  }
   reqString(errors, file, obj, "rights");
   reqBool(errors, file, obj, "featured");
 
@@ -484,7 +487,8 @@ function validateSite(errors, file, site, assetsDir, staticDir) {
   }
 }
 
-const ESSAY_KEYS = ["title", "slug", "section", "summary", "seoDescription", "heroImage", "heroImageAlt", "heroCaption", "order", "author", "category"];
+const ESSAY_KEYS = ["title", "slug", "section", "summary", "seoDescription", "heroImage", "heroImageAlt", "heroImageFit", "heroCaption", "order", "author", "category"];
+const ESSAY_HERO_FITS = ["cover", "contain"];
 
 function validateEssay(errors, file, essay, assetsDir) {
   const fm = essay.frontmatter;
@@ -498,6 +502,9 @@ function validateEssay(errors, file, essay, assetsDir) {
   reqNumber(errors, file, fm, "order");
   optString(errors, file, fm, "category");
   optString(errors, file, fm, "heroCaption");
+  if (fm.heroImageFit !== undefined && !ESSAY_HERO_FITS.includes(fm.heroImageFit)) {
+    errors.add(file, "heroImageFit", `must be one of ${ESSAY_HERO_FITS.join(", ")}`);
+  }
   if (reqString(errors, file, fm, "heroImage")) {
     checkImagePath(errors, file, "heroImage", fm.heroImage, assetsDir);
   }

@@ -13,7 +13,7 @@ The Hero, Artist, and Ethnographer: José Rizal in the Philippines and in German
 
 Central to the exhibition is the theme of Rizal as an Ethnographer, featuring the 21 Philippine objects he donated in 1888 to the Ethnologisches Museum Berlin (formerly the Berlin Museum of Ethnology). The National Museum of the Philippines (NMP) launched this thematic area on December 30, 2025, to commemorate the 129th anniversary of Rizal's martyrdom.
 
-The Rizal as an Artist theme will be accessible on June 19, 2026, in celebration of his 165th birth anniversary. It will present artworks by and about Rizal from the National Fine Arts Collection of the NMP, the National Historical Commission of the Philippines, and select private collections.
+The Rizal as an Artist theme will be accessible on October 25, 2026. It will present artworks by and about Rizal from the National Fine Arts Collection of the NMP, the National Historical Commission of the Philippines, and select private collections.
 
 The Rizal as a Hero theme will go live on December 30, 2026, marking the 130th anniversary of his death. It will feature personal paraphernalia enshrined at the Museo ni José Rizal in Calamba, Dapitan, and Fort Santiago, together with his original manuscripts preserved at the National Library of the Philippines.
 
